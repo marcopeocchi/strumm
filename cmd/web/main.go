@@ -1,6 +1,8 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"log"
 	"net/http"
 
@@ -13,10 +15,22 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	//go:embed ui/dist
+	app embed.FS
+)
+
 func main() {
 	db, err := gorm.Open(sqlite.Open("data.db"))
 	if err != nil {
 		log.Fatalln(err)
+	}
+
+	build, _ := fs.Sub(app, "ui/dist")
+
+	sh := middlewares.SpaHandler{
+		Entrypoint: "index.html",
+		Filesystem: &build,
 	}
 
 	r := chi.NewRouter()
@@ -43,6 +57,8 @@ func main() {
 			r.Get("/search/genre/{genre}", searchContainer.FindTrackByGenre())
 		})
 	})
+
+	r.Get("/*", sh.Handler())
 
 	http.ListenAndServe(":8080", r)
 }
