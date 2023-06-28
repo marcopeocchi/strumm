@@ -44,6 +44,17 @@ func (r *Repository) FindAlbumByGenre(ctx context.Context, genre string) (*[]dom
 	return m, nil
 }
 
+func (r *Repository) FindAlbumByArtist(ctx context.Context, artist string) (*[]domain.Album, error) {
+	m := new([]domain.Album)
+
+	err := r.db.WithContext(ctx).Where("artist = ?", artist).Find(m).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
 func (r *Repository) FindAlbumByTitleLike(ctx context.Context, titleLike string) (*[]domain.Album, error) {
 	m := new([]domain.Album)
 
@@ -81,6 +92,17 @@ func (r *Repository) FindTrackByGenre(ctx context.Context, genre string) (*[]dom
 	m := new([]domain.Track)
 
 	err := r.db.WithContext(ctx).Where("genre = ?", genre).Find(m).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
+func (r *Repository) FindTrackByArtist(ctx context.Context, artist string) (*[]domain.Track, error) {
+	m := new([]domain.Track)
+
+	err := r.db.WithContext(ctx).Where("artist = ?", artist).Find(m).Error
 	if err != nil {
 		return nil, err
 	}

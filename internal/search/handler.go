@@ -76,6 +76,26 @@ func (h *Handler) FindAlbumByGenre() http.HandlerFunc {
 	}
 }
 
+func (h *Handler) FindAlbumByArtist() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		artist := chi.URLParam(r, "artist")
+
+		album, err := h.service.FindAlbumByArtist(r.Context(), artist)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		err = json.NewEncoder(w).Encode(album)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+}
+
 func (h *Handler) FindAlbumByTitleLike() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
@@ -147,7 +167,27 @@ func (h *Handler) FindTrackByGenre() http.HandlerFunc {
 
 		genre := chi.URLParam(r, "genre")
 
-		track, err := h.service.FindAlbumByGenre(r.Context(), genre)
+		track, err := h.service.FindTrackByGenre(r.Context(), genre)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		err = json.NewEncoder(w).Encode(track)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+}
+
+func (h *Handler) FindTrackByArtist() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		artist := chi.URLParam(r, "artist")
+
+		track, err := h.service.FindTrackByArtist(r.Context(), artist)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -167,7 +207,7 @@ func (h *Handler) FindTrackByTitleLike() http.HandlerFunc {
 
 		title := chi.URLParam(r, "title")
 
-		track, err := h.service.FindAlbumByTitleLike(r.Context(), title)
+		track, err := h.service.FindTrackByTitleLike(r.Context(), title)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

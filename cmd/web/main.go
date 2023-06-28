@@ -47,7 +47,7 @@ func main() {
 			r.Get("/search/id/{id}", searchContainer.FindAlbumByID())
 			r.Get("/search/like/{title}", searchContainer.FindAlbumByTitleLike())
 			r.Get("/search/title/{title}", searchContainer.FindAlbumByTitle())
-			r.Get("/search/genre/{genre}", searchContainer.FindAlbumByGenre())
+			r.Get("/search/artist/{artist}", searchContainer.FindAlbumByArtist())
 		})
 
 		r.Route("/track", func(r chi.Router) {
@@ -55,6 +55,7 @@ func main() {
 			r.Get("/search/like/{title}", searchContainer.FindTrackByTitleLike())
 			r.Get("/search/title/{title}", searchContainer.FindTrackByTitle())
 			r.Get("/search/genre/{genre}", searchContainer.FindTrackByGenre())
+			r.Get("/search/artist/{artist}", searchContainer.FindTrackByArtist())
 		})
 	})
 
