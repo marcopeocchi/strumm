@@ -44,6 +44,7 @@ func main() {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
 
 		r.Route("/album", func(r chi.Router) {
+			r.Get("/latest", searchContainer.Latest())
 			r.Get("/search/id/{id}", searchContainer.FindAlbumByID())
 			r.Get("/search/like/{title}", searchContainer.FindAlbumByTitleLike())
 			r.Get("/search/title/{title}", searchContainer.FindAlbumByTitle())

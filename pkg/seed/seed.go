@@ -36,6 +36,8 @@ func seedTracks(db *gorm.DB, root string) {
 
 		modelAlbum := domain.Album{
 			Title:   tags.Album(),
+			Artist:  tags.AlbumArtist(),
+			Year:    tags.Year(),
 			Picture: "",
 		}
 

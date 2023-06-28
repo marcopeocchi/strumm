@@ -66,6 +66,17 @@ func (r *Repository) FindAlbumByTitleLike(ctx context.Context, titleLike string)
 	return m, nil
 }
 
+func (r *Repository) Latest(ctx context.Context) (*[]domain.Album, error) {
+	m := new([]domain.Album)
+
+	err := r.db.WithContext(ctx).Order("updated_at DESC").Limit(48).Find(m).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
 func (r *Repository) FindTrackByID(ctx context.Context, id uint) (domain.Track, error) {
 	m := domain.Track{}
 

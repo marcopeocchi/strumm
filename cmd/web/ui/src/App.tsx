@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Bottom from './components/Bottom'
+import Navbar from './components/Navbar'
+import Sidebar from './components/Sidebar'
+import {
+  LayoutGrid,
+  Shuffle,
+  Disc3,
+  Mic2,
+  Music2,
+  Settings,
+  ServerCog,
+} from 'lucide-react'
+import Home from './views/Home'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Navbar />
+      <div className='flex flex-row'>
+        <Sidebar.Container>
+          <Sidebar.Section title="Discover">
+            <Sidebar.Action icon={<Shuffle size={16} />}>
+              Random
+            </Sidebar.Action>
+            <Sidebar.Action icon={<LayoutGrid size={16} />}>
+              Explore
+            </Sidebar.Action>
+          </Sidebar.Section>
+          <Sidebar.Section title="Library">
+            <Sidebar.Action icon={<Disc3 size={16} />}>
+              Albums
+            </Sidebar.Action>
+            <Sidebar.Action icon={<Mic2 size={16} />}>
+              Artists
+            </Sidebar.Action>
+            <Sidebar.Action icon={<Music2 size={16} />}>
+              Songs
+            </Sidebar.Action>
+          </Sidebar.Section>
+          <Sidebar.Section title="Settings">
+            <Sidebar.Action icon={<Settings size={16} />}>
+              Client settings
+            </Sidebar.Action>
+            <Sidebar.Action icon={<ServerCog size={16} />}>
+              Server settings
+            </Sidebar.Action>
+          </Sidebar.Section>
+        </Sidebar.Container>
+        <Home></Home>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Bottom />
     </>
   )
 }
-
-export default App

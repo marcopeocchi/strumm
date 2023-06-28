@@ -47,6 +47,8 @@ type SearchRepository interface {
 	FindAlbumByArtist(ctx context.Context, genre string) (*[]Album, error)
 	FindAlbumByTitleLike(ctx context.Context, titleLike string) (*[]Album, error)
 
+	Latest(ctx context.Context) (*[]Album, error)
+
 	FindTrackByID(ctx context.Context, id uint) (Track, error)
 	FindTrackByTitle(ctx context.Context, title string) (Track, error)
 	FindTrackByGenre(ctx context.Context, genre string) (*[]Track, error)
@@ -62,6 +64,8 @@ type SearchService interface {
 	FindAlbumByArtist(ctx context.Context, genre string) (*[]AlbumEntity, error)
 	FindAlbumByTitleLike(ctx context.Context, titleLike string) (*[]AlbumEntity, error)
 
+	Latest(ctx context.Context) (*[]AlbumEntity, error)
+
 	FindTrackByID(ctx context.Context, id uint) (Track, error)
 	FindTrackByTitle(ctx context.Context, title string) (Track, error)
 	FindTrackByGenre(ctx context.Context, genre string) (*[]Track, error)
@@ -75,6 +79,8 @@ type SearchHandler interface {
 	FindAlbumByGenre() http.HandlerFunc
 	FindAlbumByArtist() http.HandlerFunc
 	FindAlbumByTitleLike() http.HandlerFunc
+
+	Latest() http.HandlerFunc
 
 	FindTrackByID() http.HandlerFunc
 	FindTrackByTitle() http.HandlerFunc

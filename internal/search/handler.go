@@ -116,6 +116,24 @@ func (h *Handler) FindAlbumByTitleLike() http.HandlerFunc {
 	}
 }
 
+func (h *Handler) Latest() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		albums, err := h.service.Latest(r.Context())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		err = json.NewEncoder(w).Encode(albums)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+}
+
 func (h *Handler) FindTrackByID() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
