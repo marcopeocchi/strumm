@@ -28,7 +28,10 @@ export default function Home() {
           key={album.id}
           className="flex justify-start items-center flex-col gap-1 cursor-pointer"
         >
-          <div className="h-64 w-full bg-neutral-200 hover:bg-neutral-100 duration-200 rounded-lg" />
+          <img
+            className="h-64 w-full duration-200 rounded-lg"
+            src={`http://localhost:8080/static/img/${album.picture}`}
+          />
           <div className="text-center">
             {album.title}
           </div>

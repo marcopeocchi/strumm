@@ -73,7 +73,7 @@ func (s *Service) FindAlbumByGenre(ctx context.Context, genre string) (*[]domain
 		res[i].Year = album.Year
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
-		//		res[i].Picture = album.Picture
+		res[i].Picture = album.Picture
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -95,7 +95,7 @@ func (s *Service) FindAlbumByArtist(ctx context.Context, artist string) (*[]doma
 		res[i].Year = album.Year
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
-		//		res[i].Picture = album.Picture
+		res[i].Picture = album.Picture
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -117,7 +117,7 @@ func (s *Service) FindAlbumByTitleLike(ctx context.Context, titleLike string) (*
 		res[i].Year = album.Year
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
-		//		res[i].Picture = album.Picture
+		res[i].Picture = album.Picture
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -139,7 +139,7 @@ func (s *Service) Latest(ctx context.Context) (*[]domain.AlbumEntity, error) {
 		res[i].Year = album.Year
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
-		//		res[i].Picture = album.Picture
+		res[i].Picture = album.Picture
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}

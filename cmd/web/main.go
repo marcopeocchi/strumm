@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"path/filepath"
 
 	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
@@ -57,6 +58,13 @@ func main() {
 			r.Get("/search/title/{title}", searchContainer.FindTrackByTitle())
 			r.Get("/search/genre/{genre}", searchContainer.FindTrackByGenre())
 			r.Get("/search/artist/{artist}", searchContainer.FindTrackByArtist())
+		})
+	})
+
+	r.Route("/static", func(r chi.Router) {
+		r.Get("/img/{id}", func(w http.ResponseWriter, r *http.Request) {
+			id := chi.URLParam(r, "id")
+			http.ServeFile(w, r, filepath.Join(".cache", id))
 		})
 	})
 

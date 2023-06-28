@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"github.com/glebarez/sqlite"
@@ -8,6 +9,17 @@ import (
 	"github.com/marcopeocchi/mille/pkg/seed"
 	"gorm.io/gorm"
 )
+
+var (
+	root  string
+	cache string
+)
+
+func init() {
+	flag.StringVar(&root, "r", ".", "path of music directory")
+	flag.StringVar(&cache, "c", ".cache", "path of cache directory")
+	flag.Parse()
+}
 
 func main() {
 	db, err := gorm.Open(sqlite.Open("data.db"))
@@ -18,5 +30,5 @@ func main() {
 	db.AutoMigrate(domain.Track{})
 	db.AutoMigrate(domain.Album{})
 
-	seed.SeedDatabase(db, "/Volumes/private/music")
+	seed.SeedDatabase(db, root, cache)
 }

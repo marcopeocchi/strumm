@@ -7,11 +7,12 @@ import (
 	"path/filepath"
 
 	"github.com/dhowden/tag"
+	"github.com/google/uuid"
 	"github.com/marcopeocchi/mille/internal/domain"
 	"gorm.io/gorm"
 )
 
-func seedTracks(db *gorm.DB, root string) {
+func seedTracks(db *gorm.DB, root, cache string) {
 	filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -35,13 +36,27 @@ func seedTracks(db *gorm.DB, root string) {
 		}
 
 		modelAlbum := domain.Album{
-			Title:   tags.Album(),
-			Artist:  tags.AlbumArtist(),
-			Year:    tags.Year(),
-			Picture: "",
+			Title:  tags.Album(),
+			Artist: tags.AlbumArtist(),
+			Year:   tags.Year(),
 		}
 
-		db.FirstOrCreate(&_modelAlbum, &modelAlbum)
+		if db.FirstOrCreate(&_modelAlbum, &modelAlbum).RowsAffected > 0 {
+			_uuid := uuid.NewString()
+
+			if tags.Picture() != nil {
+				_uuid = _uuid + "." + tags.Picture().Ext
+				cachedImagePath := filepath.Join(
+					cache,
+					_uuid,
+				)
+				os.WriteFile(cachedImagePath, tags.Picture().Data, os.ModePerm)
+			}
+
+			db.Model(&domain.Album{}).
+				Where("title = ?", tags.Album()).
+				Update("picture", _uuid)
+		}
 
 		modelTrack := domain.Track{
 			Path:    path,
@@ -66,6 +81,6 @@ func seedTracks(db *gorm.DB, root string) {
 	})
 }
 
-func SeedDatabase(db *gorm.DB, root string) {
-	seedTracks(db, root)
+func SeedDatabase(db *gorm.DB, root, cache string) {
+	seedTracks(db, root, cache)
 }
