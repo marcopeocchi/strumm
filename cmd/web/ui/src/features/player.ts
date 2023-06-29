@@ -3,19 +3,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export interface PlayerState {
   isPlaying: boolean
   volume: number
-  artist: string
-  title: string
   img: string
-  src: string
+  queue: Track[]
+  currentId: number
 }
 
 const initialState: PlayerState = {
   isPlaying: false,
   volume: Number(localStorage.getItem('volume')),
-  artist: '',
-  title: '',
+  queue: [],
   img: '',
-  src: '',
+  currentId: 0,
 }
 
 export const playerSlice = createSlice({
@@ -29,28 +27,24 @@ export const playerSlice = createSlice({
       state.volume = action.payload
       localStorage.setItem('volume', String(action.payload))
     },
-    setArtist: (state, action: PayloadAction<string>) => {
-      state.artist = action.payload
-    },
-    setTitle: (state, action: PayloadAction<string>) => {
-      state.title = action.payload
-    },
     setImg: (state, action: PayloadAction<string>) => {
       state.img = action.payload
     },
-    setSrc: (state, action: PayloadAction<string>) => {
-      state.src = action.payload
+    setQueue: (state, action: PayloadAction<Track[]>) => {
+      state.queue = action.payload
+    },
+    setCurrentId: (state, action: PayloadAction<number>) => {
+      state.currentId = action.payload
     },
   }
 })
 
 export const {
-  setImg,
   setIsPlaying,
-  setSrc,
-  setTitle,
-  setArtist,
+  setImg,
   setVolume,
+  setQueue,
+  setCurrentId,
 } = playerSlice.actions
 
 export default playerSlice.reducer
