@@ -23,6 +23,7 @@ func seedTracks(db *gorm.DB, root, cache string) {
 			fmt.Println(err)
 			return nil
 		}
+		defer fd.Close()
 
 		tags, err := tag.ReadFrom(fd)
 		if err != nil {
