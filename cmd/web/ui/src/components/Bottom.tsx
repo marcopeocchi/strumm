@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../store/redux"
 import { useEffect, useRef, useState } from "react"
-import { setIsPlaying, setVolume } from "../features/player"
+import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
 import { getHTTPEndpoint } from "../utils/url"
 import { SkipForward, SkipBack } from "lucide-react"
 
@@ -27,6 +27,10 @@ export default function Bottom() {
       playerRef.current.volume = player.volume
     }
   }, [playerRef, player])
+
+  useEffect(() => {
+    dispatch(setCurrentId(player.queue[index].ID))
+  }, [index, player.queue])
 
   if (!player.isPlaying) {
     return null
