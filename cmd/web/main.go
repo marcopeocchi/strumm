@@ -33,6 +33,10 @@ func main() {
 		Entrypoint: "index.html",
 		Filesystem: &build,
 	}
+	sh.AddClientRoute("/album")
+	sh.AddClientRoute("/albums")
+	sh.AddClientRoute("/artists")
+	sh.AddClientRoute("/songs")
 
 	r := chi.NewRouter()
 	r.Use(middlewares.CORS)

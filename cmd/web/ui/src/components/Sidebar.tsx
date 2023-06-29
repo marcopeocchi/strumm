@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom"
-
 namespace Sidebar {
   type ContainerProps = {
     children: React.ReactNode
