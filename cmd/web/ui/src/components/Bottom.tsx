@@ -1,4 +1,4 @@
-import { SkipBack, SkipForward } from "lucide-react"
+import { SkipBack, SkipForward, Pause } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
@@ -17,6 +17,10 @@ export default function Bottom() {
   const previousTrack = () => setIndex(state => (
     state <= 0 ? 0 : (state - 1) % player.queue.length
   ))
+
+  const pause = () => playerRef.current?.paused
+    ? playerRef.current?.play()
+    : playerRef.current?.pause()
 
   const [index, setIndex] = useState(0)
 
@@ -52,7 +56,7 @@ export default function Bottom() {
       h-24
       bg-white dark:bg-black"
     >
-      <div className="w-1/6 flex gap-4">
+      <div className="w-1/4 flex gap-4">
         <img
           className="h-16 rounded"
           src={`${getHTTPEndpoint()}/static/img/${player.img}`}
@@ -67,7 +71,7 @@ export default function Bottom() {
         </div>
       </div>
       <audio
-        className="pt-4 w-full"
+        className="w-full"
         controls
         autoPlay
         ref={playerRef}
@@ -75,12 +79,18 @@ export default function Bottom() {
         onEnded={nextTrack}
         src={`${getHTTPEndpoint()}/api/stream/${player.queue[index].ID}`}
       />
-      <div className="flex gap-2">
+      <div className="flex gap-2 w-1/4 justify-center">
         <button
           onClick={previousTrack}
           className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
         >
           <SkipBack />
+        </button>
+        <button
+          onClick={pause}
+          className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
+        >
+          <Pause />
         </button>
         <button
           onClick={nextTrack}
