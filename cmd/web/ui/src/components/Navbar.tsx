@@ -5,7 +5,7 @@ export default function Navbar() {
     <div className="flex flex-row pl-6 py-2 border-b dark:border-neutral-600 w-full justify-between items-center">
       <Link
         to="/"
-        className="font-semibold hover:text-blue-400 duration-300 select-none"
+        className="font-semibold hover:text-blue-400 duration-200 select-none"
       >
         Mille
       </Link>
@@ -14,9 +14,9 @@ export default function Navbar() {
         items-center
         justify-center
         rounded-lg
-      bg-neutral-100
+      bg-neutral-100 dark:bg-neutral-800
         py-1.5 px-3 w-1/4
-      text-neutral-600 text-sm"
+      text-neutral-600 dark:text-neutral-200 text-sm"
       >
         <input
           placeholder="Search song"

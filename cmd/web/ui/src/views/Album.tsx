@@ -45,8 +45,11 @@ export default function AlbumView() {
               cursor-pointer 
               rounded p-2
               flex flex-row gap-4 py-1.5 items-center
-              hover:bg-neutral-200 hover:duration-100
-              ${(player.currentId === track.ID) && 'bg-neutral-200'}
+              hover:bg-neutral-200 hover:dark:bg-neutral-700
+              hover:duration-100
+              ${(player.currentId === track.ID) &&
+              'bg-neutral-200 dark:bg-neutral-700'
+              }
             `}
             key={track.ID}
             onClick={() => {

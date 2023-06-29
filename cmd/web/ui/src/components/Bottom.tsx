@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../store/redux"
+import { SkipBack, SkipForward } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
+import { RootState } from "../store/redux"
 import { getHTTPEndpoint } from "../utils/url"
-import { SkipForward, SkipBack } from "lucide-react"
 
 export default function Bottom() {
   const player = useSelector((state: RootState) => state.player)
@@ -34,6 +34,10 @@ export default function Bottom() {
     }
   }, [index, player.queue])
 
+  useEffect(() => {
+    setIndex(0)
+  }, [player.queue])
+
   if (!player.isPlaying) {
     return null
   }
@@ -48,30 +52,20 @@ export default function Bottom() {
       h-24
       bg-white dark:bg-black"
     >
-      <img
-        className="h-16 rounded"
-        src={`${getHTTPEndpoint()}/static/img/${player.img}`}
-      />
-      <div className="flex flex-col">
-        <div className="font-semibold">
-          {player.queue[index].title}
-        </div>
-        <div className="text-sm">
-          {player.queue[index].artist}
+      <div className="w-1/6 flex gap-4">
+        <img
+          className="h-16 rounded"
+          src={`${getHTTPEndpoint()}/static/img/${player.img}`}
+        />
+        <div className="flex flex-col">
+          <div className="font-semibold">
+            {player.queue[index].title}
+          </div>
+          <div className="text-sm">
+            {player.queue[index].artist}
+          </div>
         </div>
       </div>
-      <button
-        onClick={previousTrack}
-        className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
-      >
-        <SkipBack />
-      </button>
-      <button
-        onClick={nextTrack}
-        className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
-      >
-        <SkipForward />
-      </button>
       <audio
         className="pt-4 w-full"
         controls
@@ -81,6 +75,20 @@ export default function Bottom() {
         onEnded={nextTrack}
         src={`${getHTTPEndpoint()}/api/stream/${player.queue[index].ID}`}
       />
+      <div className="flex gap-2">
+        <button
+          onClick={previousTrack}
+          className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
+        >
+          <SkipBack />
+        </button>
+        <button
+          onClick={nextTrack}
+          className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
+        >
+          <SkipForward />
+        </button>
+      </div>
     </div>
   )
 }
