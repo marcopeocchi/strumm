@@ -29,7 +29,9 @@ export default function Bottom() {
   }, [playerRef, player])
 
   useEffect(() => {
-    dispatch(setCurrentId(player.queue[index].ID))
+    if (player.queue.length > 0) {
+      dispatch(setCurrentId(player.queue[index].ID))
+    }
   }, [index, player.queue])
 
   if (!player.isPlaying) {
