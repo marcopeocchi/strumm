@@ -21,10 +21,6 @@ func (s *Service) FindAlbumByID(ctx context.Context, id uint) (domain.AlbumEntit
 		return domain.AlbumEntity{}, err
 	}
 
-	for i := range *tracks {
-		(*tracks)[i].Path = ""
-	}
-
 	return domain.AlbumEntity{
 		ID:        album.ID,
 		CreatedAt: album.CreatedAt,

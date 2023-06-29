@@ -5,7 +5,7 @@ namespace Sidebar {
 
   export function Container({ children }: ContainerProps) {
     return (
-      <div className="border-r hidden sm:flex md:w-1/5 min-h-full py-2 flex-col">
+      <div className="border-r dark:border-neutral-600 hidden sm:flex md:w-1/6 min-h-full py-2 flex-col">
         {children}
       </div>
     )
@@ -40,12 +40,13 @@ namespace Sidebar {
       <div className={`
         rounded px-3 py-1.5 
         hover:bg-neutral-200 
+        hover:dark:bg-neutral-700
         hover:duration-150
         hover:cursor-pointer
         select-none
         w-full
         h-10 flex items-center
-        ${active && 'bg-neutral-200'}`
+        ${active && 'bg-neutral-200 dark:bg-neutral-700'}`
       }>
         <div className="flex gap-2 items-center">
           {icon}

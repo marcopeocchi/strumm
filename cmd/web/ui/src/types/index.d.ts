@@ -10,14 +10,14 @@ type Album = {
 }
 
 type Track = {
-  id: number
+  ID: number
   created_at: string
   updated_at: string
   format: string
   title: string
   artist: string
   genre: string
-  index: Int16Array
+  index: number
   lyrics: string
   year: Int16Array
 }

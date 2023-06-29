@@ -66,7 +66,7 @@ func seedTracks(db *gorm.DB, root, cache string) {
 			Lyrics:  tags.Lyrics(),
 			Year:    tags.Year(),
 			Index:   trackIndex,
-			AlbumID: modelAlbum.ID,
+			AlbumID: _modelAlbum.ID,
 			Format:  string(tags.Format()),
 		}
 

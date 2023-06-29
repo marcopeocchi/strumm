@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
+import AlbumImage from '../components/AlbumImage'
+import { Link } from 'react-router-dom'
 
 export default function Home() {
   const [albums, setAlbums] = useState<Album[]>([])
@@ -20,16 +22,16 @@ export default function Home() {
       grid-cols-1 
       sm:grid-cols-2 md:grid-cols-3 
       lg:grid-cols-4 xl:grid-cols-5 
-      2xl:grid-cols-6 
+      2xl:grid-cols-6
       gap-6"
     >
-      {albums.map((album) => (
-        <div
+      {albums.map(album => (
+        <Link
           key={album.id}
+          to={`/album/${album.id}`}
           className="flex justify-start items-center flex-col gap-1 cursor-pointer"
         >
-          <img
-            className="h-64 w-full duration-200 rounded-lg"
+          <AlbumImage
             src={`http://localhost:8080/static/img/${album.picture}`}
           />
           <div className="text-center">
@@ -38,7 +40,7 @@ export default function Home() {
           <div className="text-sm text-neutral-600">
             {album.artist}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   )
