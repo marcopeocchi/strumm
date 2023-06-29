@@ -1,4 +1,3 @@
-import { Search } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function Navbar() {
@@ -14,13 +13,16 @@ export default function Navbar() {
         flex gap-1
         items-center
         justify-center
-        rounded-xl 
+        rounded-lg
       bg-neutral-100
         py-1.5 px-3 w-1/4
       text-neutral-600 text-sm"
       >
-        <Search size={14} />
-        <input placeholder="Search" type="text" className="appearance-none text-center bg-transparent" />
+        <input
+          placeholder="Search song"
+          type="text"
+          className="appearance-none text-center bg-transparent w-full focus:outline-0"
+        />
       </div>
       <div />
     </div>

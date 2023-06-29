@@ -14,7 +14,7 @@ import { Outlet } from 'react-router-dom'
 
 export default function Layout() {
   return (
-    <main className='bg-white dark:bg-black text-neutral-900 dark:text-neutral-50'>
+    <main className='bg-white dark:bg-black text-neutral-900 dark:text-neutral-50 h-screen'>
       <Navbar />
       <div className='flex flex-row'>
         <Sidebar.Container>

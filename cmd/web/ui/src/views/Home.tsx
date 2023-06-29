@@ -23,7 +23,8 @@ export default function Home() {
       sm:grid-cols-2 md:grid-cols-3 
       lg:grid-cols-4 xl:grid-cols-5 
       2xl:grid-cols-6
-      gap-6"
+      gap-6
+      h-[calc(100vh-3.5rem)] overflow-scroll"
     >
       {albums.map(album => (
         <Link

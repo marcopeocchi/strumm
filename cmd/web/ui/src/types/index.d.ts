@@ -19,5 +19,5 @@ type Track = {
   genre: string
   index: number
   lyrics: string
-  year: Int16Array
+  year: number
 }

@@ -19,7 +19,7 @@ export default function AlbumView() {
   }, [params])
 
   return (
-    <div className="p-8 pb-32">
+    <div className="p-8 pb-32 h-[calc(100vh-3.5rem)] overflow-scroll">
       <div className="flex flex-row gap-8">
         <img
           className="object-cover w-64 h-64 rounded-lg"
@@ -59,7 +59,7 @@ export default function AlbumView() {
             <div>{track.index}</div>
             <div className="flex flex-col">
               <div>{track.title}</div>
-              <div>{track.artist}</div>
+              <div className="text-sm">{track.artist}</div>
             </div>
           </div>
         ))}
