@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"flag"
 	"io/fs"
 	"log"
 	"net/http"
@@ -18,8 +19,14 @@ import (
 
 var (
 	//go:embed ui/dist
-	app embed.FS
+	app   embed.FS
+	cache string
 )
+
+func init() {
+	flag.StringVar(&cache, "c", ".cache", "path of cache directory")
+	flag.Parse()
+}
 
 func main() {
 	db, err := gorm.Open(sqlite.Open("data.db"))
@@ -71,7 +78,7 @@ func main() {
 	r.Route("/static", func(r chi.Router) {
 		r.Get("/img/{id}", func(w http.ResponseWriter, r *http.Request) {
 			id := chi.URLParam(r, "id")
-			http.ServeFile(w, r, filepath.Join(".cache", id))
+			http.ServeFile(w, r, filepath.Join(cache, id))
 		})
 	})
 
