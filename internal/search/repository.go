@@ -58,7 +58,7 @@ func (r *Repository) FindAlbumByArtist(ctx context.Context, artist string) (*[]d
 func (r *Repository) FindAlbumByTitleLike(ctx context.Context, titleLike string) (*[]domain.Album, error) {
 	m := new([]domain.Album)
 
-	err := r.db.WithContext(ctx).Where("title = %?%", titleLike).Find(m).Error
+	err := r.db.WithContext(ctx).Where("title like ?", "%"+titleLike+"%").Find(m).Error
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (r *Repository) FindTrackByArtist(ctx context.Context, artist string) (*[]d
 func (r *Repository) FindTrackByTitleLike(ctx context.Context, titleLike string) (*[]domain.Track, error) {
 	m := new([]domain.Track)
 
-	err := r.db.WithContext(ctx).Where("title = %?%", titleLike).Find(m).Error
+	err := r.db.WithContext(ctx).Where("title like ?", "%"+titleLike+"%").Find(m).Error
 	if err != nil {
 		return nil, err
 	}
@@ -136,6 +136,44 @@ func (r *Repository) FindTrackByAlbumID(ctx context.Context, id uint) (*[]domain
 	m := new([]domain.Track)
 
 	err := r.db.WithContext(ctx).Where("album_id = ?", id).Find(m).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
+func (r *Repository) FindAny(ctx context.Context, like string) (*[]domain.Album, error) {
+	m := new([]domain.Album)
+
+	err := r.db.WithContext(ctx).Where("title like ?", "%"+like+"%").
+		Or("artist like ?", "%"+like+"%").
+		Find(m).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
+func (r *Repository) FindAllAlbums(ctx context.Context) (*[]domain.Album, error) {
+	m := new([]domain.Album)
+
+	err := r.db.WithContext(ctx).Find(m).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
+func (r *Repository) FindAllTracks(ctx context.Context) (*[]domain.Track, error) {
+	m := new([]domain.Track)
+
+	err := r.db.WithContext(ctx).Find(m).Error
+
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import Album from './views/Album'
 import Songs from './views/Songs'
 import Artists from './views/Artists'
 import Albums from './views/Albums'
+import Search from './views/Search'
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: '/artists',
         element: <Artists />
+      },
+      {
+        path: '/search/:query',
+        element: <Search />
       },
     ]
   },

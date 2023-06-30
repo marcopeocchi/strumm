@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/marcopeocchi/mille/pkg/paginator"
 )
 
 type Handler struct {
@@ -231,6 +232,83 @@ func (h *Handler) FindTrackByTitleLike() http.HandlerFunc {
 		}
 
 		err = json.NewEncoder(w).Encode(track)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+}
+
+func (h *Handler) FindAny() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		query := chi.URLParam(r, "query")
+
+		page, err := strconv.ParseInt(r.URL.Query().Get("page"), 10, 64)
+		if err != nil || page <= 0 {
+			page = 1
+		}
+
+		tracks, err := h.service.FindAny(r.Context(), query)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		paginated := paginator.NewPaginator(*tracks, 30)
+
+		err = json.NewEncoder(w).Encode(paginated.Get(page))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+}
+
+func (h *Handler) FindAllAlbums() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		page, err := strconv.ParseInt(r.URL.Query().Get("page"), 10, 64)
+		if err != nil || page <= 0 {
+			page = 1
+		}
+
+		tracks, err := h.service.FindAllAlbums(r.Context())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		paginated := paginator.NewPaginator(*tracks, 30)
+
+		err = json.NewEncoder(w).Encode(paginated.Get(page))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+}
+
+func (h *Handler) FindAllTracks() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		page, err := strconv.ParseInt(r.URL.Query().Get("page"), 10, 64)
+		if err != nil || page <= 0 {
+			page = 1
+		}
+
+		tracks, err := h.service.FindAllTracks(r.Context())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		paginated := paginator.NewPaginator(*tracks, 30)
+
+		err = json.NewEncoder(w).Encode(paginated.Get(page))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

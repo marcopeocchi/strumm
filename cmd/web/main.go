@@ -49,14 +49,17 @@ func main() {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
 
 		r.Route("/album", func(r chi.Router) {
+			r.Get("/all", searchContainer.FindAllAlbums())
 			r.Get("/latest", searchContainer.Latest())
 			r.Get("/search/id/{id}", searchContainer.FindAlbumByID())
+			r.Get("/search/any/{query}", searchContainer.FindAny())
 			r.Get("/search/like/{title}", searchContainer.FindAlbumByTitleLike())
 			r.Get("/search/title/{title}", searchContainer.FindAlbumByTitle())
 			r.Get("/search/artist/{artist}", searchContainer.FindAlbumByArtist())
 		})
 
 		r.Route("/track", func(r chi.Router) {
+			r.Get("/all", searchContainer.FindAllTracks())
 			r.Get("/search/id/{id}", searchContainer.FindTrackByID())
 			r.Get("/search/like/{title}", searchContainer.FindTrackByTitleLike())
 			r.Get("/search/title/{title}", searchContainer.FindTrackByTitle())

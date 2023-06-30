@@ -163,3 +163,56 @@ func (s *Service) FindTrackByArtist(ctx context.Context, artist string) (*[]doma
 func (s *Service) FindTrackByTitleLike(ctx context.Context, titleLike string) (*[]domain.Track, error) {
 	return s.repository.FindTrackByTitleLike(ctx, titleLike)
 }
+
+func (s *Service) FindAny(ctx context.Context, like string) (*[]domain.AlbumEntity, error) {
+	albums, err := s.repository.FindAny(ctx, like)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]domain.AlbumEntity, len(*albums))
+
+	for i, album := range *albums {
+		res[i].ID = album.ID
+		res[i].Year = album.Year
+		res[i].Title = album.Title
+		res[i].Artist = album.Artist
+		res[i].Picture = album.Picture
+		res[i].CreatedAt = album.CreatedAt
+		res[i].UpdatedAt = album.UpdatedAt
+		res[i].Tracks = &[]domain.Track{}
+	}
+
+	return &res, nil
+}
+
+func (s *Service) FindAllAlbums(ctx context.Context) (*[]domain.AlbumEntity, error) {
+	albums, err := s.repository.FindAllAlbums(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]domain.AlbumEntity, len(*albums))
+
+	for i, album := range *albums {
+		res[i].ID = album.ID
+		res[i].Year = album.Year
+		res[i].Title = album.Title
+		res[i].Artist = album.Artist
+		res[i].Picture = album.Picture
+		res[i].CreatedAt = album.CreatedAt
+		res[i].UpdatedAt = album.UpdatedAt
+		res[i].Tracks = &[]domain.Track{}
+	}
+
+	return &res, nil
+}
+
+func (s *Service) FindAllTracks(ctx context.Context) (*[]domain.Track, error) {
+	tracks, err := s.repository.FindAllTracks(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return tracks, nil
+}

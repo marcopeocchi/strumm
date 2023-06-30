@@ -1,26 +1,32 @@
 import { useEffect, useState } from "react"
 import { getHTTPEndpoint } from "../utils/url"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import AlbumImage from "../components/AlbumImage"
 
-export default function Albums() {
+export default function Search() {
   const [albums, setAlbums] = useState<Album[]>([])
   const [page, setPage] = useState(1)
 
-  const fetcher = async (page: number) => {
-    const res = await fetch(`${getHTTPEndpoint()}/api/album/all?page=${page}`)
+  const { query } = useParams()
+
+  const fetcher = async (query: string, page: number) => {
+    const res = await fetch(
+      `${getHTTPEndpoint()}/api/album/search/any/${query}?page=${page}`
+    )
     const data: Paginated<Album> = await res.json()
     setAlbums(data.list)
   }
 
   useEffect(() => {
-    fetcher(page)
-  }, [page])
+    if (query) {
+      fetcher(query, page)
+    }
+  }, [page, query])
 
   return (
     <div className="px-8 pt-8">
       <h1 className="font-semibold text-2xl">
-        Albums
+        Results for "{query?.toUpperCase()}"
       </h1>
       <div className='border-b pt-4' />
       <div className="
