@@ -2,9 +2,16 @@ import { useEffect, useState } from "react"
 import { getHTTPEndpoint } from "../utils/url"
 import { Link, useParams } from "react-router-dom"
 import AlbumImage from "../components/AlbumImage"
+import Paginator from "../components/Paginator"
 
 export default function Search() {
-  const [albums, setAlbums] = useState<Album[]>([])
+  const [albums, setAlbums] = useState<Paginated<Album>>({
+    list: [],
+    page: 1,
+    pages: 0,
+    pageSize: 0,
+    totalElements: 0
+  })
   const [page, setPage] = useState(1)
 
   const { query } = useParams()
@@ -14,7 +21,7 @@ export default function Search() {
       `${getHTTPEndpoint()}/api/album/search/any/${query}?page=${page}`
     )
     const data: Paginated<Album> = await res.json()
-    setAlbums(data.list)
+    setAlbums(data)
   }
 
   useEffect(() => {
@@ -29,16 +36,16 @@ export default function Search() {
         Results for "{query?.toUpperCase()}"
       </h1>
       <div className='border-b pt-4' />
-      <div className="
-        pt-6 px-8 pb-32 
+      <div className={`
+        pt-6 px-8 ${albums.pages > 1 ? 'pb-8' : 'pb-32 '}
         grid 
         grid-cols-1 
         sm:grid-cols-2 md:grid-cols-3 
         lg:grid-cols-4 xl:grid-cols-5 
         2xl:grid-cols-6
-        gap-6"
-      >
-        {albums.map(album => (
+        gap-6`
+      }>
+        {albums.list.map(album => (
           <Link
             key={album.id}
             to={`/album/${album.id}`}
@@ -56,6 +63,12 @@ export default function Search() {
           </Link>
         ))}
       </div>
+      {albums.pages > 1 &&
+        <Paginator
+          pages={albums.pages}
+          setPage={setPage}
+        />
+      }
     </div>
   )
 }

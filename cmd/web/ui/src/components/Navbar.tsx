@@ -5,9 +5,9 @@ export default function Navbar() {
   const [search, setSearch] = useState('')
 
   const onEnterPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && search.trim()) {
       e.preventDefault()
-      navigate(`/search/${search}`)
+      navigate(`/search/${search.trim()}`)
     }
   }
 
