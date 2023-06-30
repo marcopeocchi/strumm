@@ -31,7 +31,7 @@ export default function Navbar() {
       text-neutral-600 dark:text-neutral-200 text-sm"
       >
         <input
-          placeholder="Search song"
+          placeholder="Search album or artist"
           type="text"
           className="appearance-none text-center bg-transparent w-full focus:outline-0"
           onChange={e => setSearch(e.currentTarget.value)}
