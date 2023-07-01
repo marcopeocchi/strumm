@@ -13,7 +13,9 @@ export default function Paginator({ pages, setPage }: Props) {
             window.scrollTo(0, 0)
           }}
           className={`
-            py-1.5 px-2.5 bg-blue-500 text-neutral-100 border-x border-blue-600/20
+            py-1.5 px-2.5 
+            bg-black dark:bg-white dark:text-black text-neutral-100 border-x
+            border-black/20
             cursor-pointer
             hover:bg-blue-400 duration-100
             ${page === 0 && 'rounded-l-lg'}

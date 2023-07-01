@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
 import { RootState } from "../store/redux"
 import { getHTTPEndpoint } from "../utils/url"
+import { Link } from "react-router-dom"
 
-export default function Bottom() {
+export default function Player() {
   const player = useSelector((state: RootState) => state.player)
   const playerRef = useRef<HTMLAudioElement>(null)
 
@@ -62,12 +63,18 @@ export default function Bottom() {
           src={`${getHTTPEndpoint()}/static/img/${player.img}`}
         />
         <div className="flex flex-col">
-          <div className="font-semibold">
+          <Link
+            className="font-semibold hover:underline"
+            to={`/album/${player.queue[index].album}`}
+          >
             {player.queue[index].title}
-          </div>
-          <div className="text-sm">
+          </Link>
+          <Link
+            className="text-sm hover:underline"
+            to={`/album/${player.queue[index].album}`}
+          >
             {player.queue[index].artist}
-          </div>
+          </Link>
         </div>
       </div>
       <audio

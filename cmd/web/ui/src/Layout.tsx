@@ -1,19 +1,31 @@
-import Bottom from './components/Bottom'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
 import {
-  LayoutGrid,
-  Shuffle,
   Disc3,
+  LayoutGrid,
   Mic2,
   Music2,
-  Settings,
   ServerCog,
+  Settings,
+  Shuffle,
 } from 'lucide-react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Player from './components/Player'
+import Sidebar from './components/Sidebar'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from './store/redux'
 
 export default function Layout() {
   const { pathname } = useLocation()
+  const settings = useSelector((state: RootState) => state.settings)
+
+  useEffect(() => {
+    if (settings.theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [])
 
   return (
     <main className='bg-white dark:bg-black text-neutral-900 dark:text-neutral-100 h-screen'>
@@ -60,12 +72,12 @@ export default function Layout() {
           w-full 
           md:w-5/6 
           h-[calc(100vh-3.15rem)] 
-          overflow-scroll overflow-x-hidden"
+          overflow-auto overflow-x-hidden"
         >
           <Outlet />
         </div>
       </div>
-      <Bottom />
+      <Player />
     </main>
   )
 }

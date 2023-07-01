@@ -29,7 +29,7 @@ export default function Albums() {
       <h1 className="font-semibold text-2xl">
         Albums
       </h1>
-      <div className='border-b pt-4' />
+      <div className='border-b pt-4 dark:border-neutral-600' />
       <div className="
         pt-6 px-8 pb-8 
         grid 
@@ -51,7 +51,7 @@ export default function Albums() {
             <div className="text-center">
               {album.title}
             </div>
-            <div className="text-sm text-neutral-600">
+            <div className="text-sm text-neutral-600 dark:text-neutral-400">
               {album.artist}
             </div>
           </Link>

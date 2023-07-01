@@ -5,7 +5,16 @@ namespace Sidebar {
 
   export function Container({ children }: ContainerProps) {
     return (
-      <div className="border-r dark:border-neutral-600 hidden sm:flex md:w-1/6 min-h-full py-2 flex-col">
+      <div className="
+        border-r 
+        dark:border-neutral-600 
+        hidden 
+        sm:flex md:w-1/6 
+        h-[calc(100vh-7.5rem)] 
+        py-2 
+        flex-col
+        overflow-auto"
+      >
         {children}
       </div>
     )
