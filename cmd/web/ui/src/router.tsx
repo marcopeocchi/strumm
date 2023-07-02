@@ -1,11 +1,15 @@
+import { Suspense, lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import Layout from './Layout'
+import Loader from './components/Loader'
 import Home from './views/Home'
-import Album from './views/Album'
-import Songs from './views/Songs'
-import Artists from './views/Artists'
-import Albums from './views/Albums'
-import Search from './views/Search'
+
+const Album = lazy(() => import('./views/Album'))
+const Albums = lazy(() => import('./views/Albums'))
+const Artists = lazy(() => import('./views/Artists'))
+
+const Songs = lazy(() => import('./views/Songs'))
+const Search = lazy(() => import('./views/Search'))
 
 export const router = createBrowserRouter([
   {
@@ -18,23 +22,43 @@ export const router = createBrowserRouter([
       },
       {
         path: '/album/:id',
-        element: <Album />
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Album />
+          </Suspense>
+        )
       },
       {
         path: '/songs',
-        element: <Songs />
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Songs />
+          </Suspense>
+        )
       },
       {
         path: '/albums',
-        element: <Albums />
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Albums />
+          </Suspense>
+        )
       },
       {
         path: '/artists',
-        element: <Artists />
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Artists />
+          </Suspense>
+        )
       },
       {
         path: '/search/:query',
-        element: <Search />
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Search />
+          </Suspense>
+        )
       },
     ]
   },
