@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
-import { getHTTPEndpoint } from "../utils/url"
-import { Link } from "react-router-dom"
-import AlbumImage from "../components/AlbumImage"
+import AlbumCard from "../components/AlbumCard"
 import Paginator from "../components/Paginator"
+import { getHTTPEndpoint } from "../utils/url"
 
 export default function Albums() {
   const [albums, setAlbums] = useState<Paginated<Album>>({
@@ -39,23 +38,7 @@ export default function Albums() {
         2xl:grid-cols-6
         gap-6"
       >
-        {albums.list.map(album => (
-          <Link
-            key={album.id}
-            to={`/album/${album.id}`}
-            className="flex justify-start items-center flex-col gap-1 cursor-pointer"
-          >
-            <AlbumImage
-              src={`${getHTTPEndpoint()}/static/img/${album.picture}`}
-            />
-            <div className="text-center">
-              {album.title}
-            </div>
-            <div className="text-sm text-neutral-600 dark:text-neutral-400">
-              {album.artist}
-            </div>
-          </Link>
-        ))}
+        {albums.list.map(album => <AlbumCard album={album} />)}
       </div>
       {albums.pages > 1 &&
         <Paginator

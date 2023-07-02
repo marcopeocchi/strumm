@@ -1,10 +1,11 @@
-import { SkipBack, SkipForward, Pause } from "lucide-react"
+import { Pause, SkipBack, SkipForward } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
 import { RootState } from "../store/redux"
+import { ellipsis } from "../utils/strings"
 import { getHTTPEndpoint } from "../utils/url"
-import { Link } from "react-router-dom"
 
 export default function Player() {
   const player = useSelector((state: RootState) => state.player)
@@ -67,7 +68,7 @@ export default function Player() {
             className="font-semibold hover:underline"
             to={`/album/${player.queue[index].album}`}
           >
-            {player.queue[index].title}
+            {ellipsis(player.queue[index].title, 32)}
           </Link>
           <Link
             className="text-sm hover:underline"

@@ -10,7 +10,7 @@ export interface PlayerState {
 
 const initialState: PlayerState = {
   isPlaying: false,
-  volume: Number(localStorage.getItem('volume')),
+  volume: Number(localStorage.getItem('volume')) || 0.5,
   queue: [],
   img: '',
   currentId: 0,
