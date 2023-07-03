@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-type Theme = 'light' | 'dark' | 'auto'
+type Theme = 'light' | 'dark' | 'system'
 
 export interface SettingsState {
   theme: Theme
 }
 
 const initialState: SettingsState = {
-  theme: localStorage.getItem('theme') as Theme || 'auto'
+  theme: localStorage.getItem('theme') as Theme || 'system'
 }
 
 export const settingsSlice = createSlice({

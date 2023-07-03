@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"flag"
+	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
@@ -20,10 +21,12 @@ import (
 var (
 	//go:embed ui/dist
 	app   embed.FS
+	port  int
 	cache string
 )
 
 func init() {
+	flag.IntVar(&port, "p", 8080, "port to listen at")
 	flag.StringVar(&cache, "c", ".cache", "path of cache directory")
 	flag.Parse()
 }
@@ -84,5 +87,5 @@ func main() {
 
 	r.Get("/*", sh.Handler())
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(fmt.Sprintf(":%d", port), r)
 }

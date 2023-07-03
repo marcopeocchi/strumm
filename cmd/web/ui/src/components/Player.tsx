@@ -72,7 +72,7 @@ export default function Player() {
           </Link>
           <Link
             className="text-sm hover:underline"
-            to={`/album/${player.queue[index].album}`}
+            to={`/search/${player.queue[index].artist}`}
           >
             {player.queue[index].artist}
           </Link>
