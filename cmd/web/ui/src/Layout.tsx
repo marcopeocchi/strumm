@@ -59,10 +59,10 @@ export default function Layout() {
             </Sidebar.Section>
           </Sidebar.Container>
           <div className="
-          w-full 
-          md:w-5/6 
-          h-[calc(100vh-3.15rem)] 
-          overflow-auto overflow-x-hidden"
+            w-full 
+            md:w-5/6 
+            h-[calc(100vh-3.15rem)] 
+            overflow-auto overflow-x-hidden"
           >
             <Outlet />
           </div>

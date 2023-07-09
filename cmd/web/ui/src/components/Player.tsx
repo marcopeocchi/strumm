@@ -58,7 +58,7 @@ export default function Player() {
       h-24
       bg-white dark:bg-black"
     >
-      <div className="w-1/4 flex gap-4">
+      <div className="sm:w-1/4 flex gap-4">
         <img
           className="h-16 rounded"
           src={`${getHTTPEndpoint()}/static/img/${player.img}`}
@@ -79,7 +79,7 @@ export default function Player() {
         </div>
       </div>
       <audio
-        className="w-full"
+        className="hidden sm:w-full sm:block"
         controls
         autoPlay
         ref={playerRef}
@@ -90,19 +90,34 @@ export default function Player() {
       <div className="flex gap-2 w-1/4 justify-center">
         <button
           onClick={previousTrack}
-          className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
+          className="px-1 py-0.5 
+            rounded-lg 
+            border dark:border-neutral-400
+            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
+            duration-100
+            "
         >
           <SkipBack />
         </button>
         <button
           onClick={pause}
-          className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
+          className="px-1 py-0.5 
+            rounded-lg 
+            border dark:border-neutral-400
+            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
+            duration-100
+            "
         >
           <Pause />
         </button>
         <button
           onClick={nextTrack}
-          className="px-1 py-0.5 rounded-lg border hover:bg-neutral-100 duration-100"
+          className="px-1 py-0.5 
+            rounded-lg 
+            border dark:border-neutral-400
+            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
+            duration-100
+            "
         >
           <SkipForward />
         </button>

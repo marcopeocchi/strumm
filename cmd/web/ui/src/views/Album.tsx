@@ -21,9 +21,9 @@ export default function AlbumView() {
 
   return (
     <div className="p-8 pb-32">
-      <div className="flex flex-row gap-8">
+      <div className="flex flex-col sm:flex-row gap-8">
         <img
-          className="object-cover w-64 h-64 rounded-lg"
+          className="object-cover w-full sm:w-64 sm:h-64 rounded-lg"
           src={`${getHTTPEndpoint()}/static/img/${album?.picture}`}
         />
         <div>

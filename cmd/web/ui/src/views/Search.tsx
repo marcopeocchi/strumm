@@ -35,15 +35,15 @@ export default function Search() {
       <h1 className="font-semibold text-2xl">
         Results for "{query}"
       </h1>
-      <div className='border-b pt-4' />
+      <div className='border-b dark:border-neutral-600 pt-4' />
       <div className={`
-        pt-6 px-8 ${albums.pages > 1 ? 'pb-8' : 'pb-32 '}
+        pt-6 ${albums.pages > 1 ? 'pb-8' : 'pb-32 '}
         grid 
-        grid-cols-1 
+        grid-cols-2
         sm:grid-cols-2 md:grid-cols-3 
         lg:grid-cols-4 xl:grid-cols-5 
         2xl:grid-cols-6
-        gap-6`
+        gap-4 sm:gap-6`
       }>
         {albums.list.map(album => <AlbumCard album={album} />)}
       </div>
