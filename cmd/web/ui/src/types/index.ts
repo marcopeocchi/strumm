@@ -1,4 +1,4 @@
-type Album = {
+export type Album = {
   id: number
   created_at: string
   updated_at: string
@@ -9,7 +9,7 @@ type Album = {
   tracks: Track[]
 }
 
-type Track = {
+export type Track = {
   ID: number
   created_at: string
   updated_at: string
@@ -23,7 +23,7 @@ type Track = {
   year: number
 }
 
-type Paginated<T> = {
+export type Paginated<T> = {
   list: T[]
   page: number
   pages: number

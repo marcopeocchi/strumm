@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import AlbumCard from '../components/AlbumCard'
+import { Album } from '../types'
 import { getHTTPEndpoint } from '../utils/url'
 
 export default function Home() {
-  const [albums, setAlbums] = useState<Album[]>([])
-
   const fetcher = async () => {
     const res = await fetch(`${getHTTPEndpoint()}/api/album/latest`)
-    const data = await res.json() as Album[]
+    const data: Album[] = await res.json()
     return data
   }
 
-  useEffect(() => {
-    fetcher().then(setAlbums)
-  }, [])
+  const { data: albums } = useSWR<Album[]>(
+    `${getHTTPEndpoint()}/api/album/latest`,
+    fetcher
+  )
 
   return (
     <div>
@@ -35,7 +35,7 @@ export default function Home() {
         2xl:grid-cols-6
         gap-4 sm:gap-6"
       >
-        {albums.map(album => <AlbumCard album={album} />)}
+        {(albums ?? []).map(album => <AlbumCard album={album} />)}
       </div>
     </div>
   )

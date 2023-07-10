@@ -1,4 +1,11 @@
-import { Pause, SkipBack, SkipForward } from "lucide-react"
+import {
+  FastForward,
+  Pause,
+  Play,
+  Rewind,
+  SkipBack,
+  SkipForward
+} from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
@@ -6,19 +13,45 @@ import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
 import { RootState } from "../store/redux"
 import { ellipsis } from "../utils/strings"
 import { getHTTPEndpoint } from "../utils/url"
+import { formatMMSS } from "../utils/time"
 
 export default function Player() {
   const player = useSelector((state: RootState) => state.player)
   const playerRef = useRef<HTMLAudioElement>(null)
+
+  const [seek, setSeek] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
 
   const nextTrack = () => {
     index >= (player.queue.length - 1)
       ? dispatch(setIsPlaying(false))
       : setIndex(state => state + 1)
   }
+
   const previousTrack = () => setIndex(state => (
     state <= 0 ? 0 : (state - 1) % player.queue.length
   ))
+
+  const back15 = () => {
+    if (playerRef.current) {
+      playerRef.current.currentTime -= 15
+    }
+  }
+
+  const forward15 = () => {
+    if (playerRef.current) {
+      playerRef.current.currentTime += 15
+    }
+  }
+
+  const onSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (playerRef.current) {
+      const percentage = Number(e.currentTarget.value)
+      const currentTime = (percentage / 100) * playerRef.current.duration
+      playerRef.current.currentTime = currentTime
+    }
+  }
 
   const pause = () => playerRef.current?.paused
     ? playerRef.current?.play()
@@ -44,6 +77,18 @@ export default function Player() {
     setIndex(0)
   }, [player.queue])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (playerRef.current) {
+        const seek = playerRef.current.currentTime / playerRef.current.duration
+        setSeek(Math.ceil(seek * 100))
+        setCurrentTime(playerRef.current.currentTime)
+        setDuration(playerRef.current.duration)
+      }
+    }, 250)
+    return () => clearInterval(interval)
+  }, [player.currentId])
+
   if (!player.isPlaying) {
     return null
   }
@@ -51,11 +96,11 @@ export default function Player() {
   return (
     <div className="
       fixed bottom-0 
-      flex flex-row px-4 py-2 gap-4
+      flex flex-row px-2 py-2 gap-4
       border-t dark:border-neutral-600 
       w-full
       justify-between items-center 
-      h-24
+      min-h-24
       bg-white dark:bg-black"
     >
       <div className="sm:w-1/4 flex gap-4">
@@ -68,7 +113,7 @@ export default function Player() {
             className="font-semibold hover:underline"
             to={`/album/${player.queue[index].album}`}
           >
-            {ellipsis(player.queue[index].title, 32)}
+            {ellipsis(player.queue[index].title, 25)}
           </Link>
           <Link
             className="text-sm hover:underline"
@@ -79,7 +124,7 @@ export default function Player() {
         </div>
       </div>
       <audio
-        className="hidden sm:w-full sm:block"
+        className="hidden"
         controls
         autoPlay
         ref={playerRef}
@@ -87,41 +132,94 @@ export default function Player() {
         onEnded={nextTrack}
         src={`${getHTTPEndpoint()}/api/stream/${player.queue[index].ID}`}
       />
-      <div className="flex gap-2 w-1/4 justify-center">
-        <button
-          onClick={previousTrack}
-          className="px-1 py-0.5 
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between gap-1.5">
+          <div className="text-sm">
+            {formatMMSS(currentTime)}
+          </div>
+          <input
+            type="range"
+            value={seek}
+            onChange={onSeek}
+            className="md:w-80"
+          />
+          <div className="text-sm">
+            {formatMMSS(duration)}
+          </div>
+        </div>
+        <div className="flex gap-1.5 justify-center">
+          <button
+            onClick={previousTrack}
+            className="px-1 py-0.5 
             rounded-lg 
-            border dark:border-neutral-400
+            border dark:border-neutral-400/30
             hover:bg-neutral-100 dark:hover:bg-neutral-50/70
             duration-100
             "
-        >
-          <SkipBack />
-        </button>
-        <button
-          onClick={pause}
-          className="px-1 py-0.5 
+          >
+            <SkipBack />
+          </button>
+          <button
+            onClick={back15}
+            className="px-1 py-0.5 
             rounded-lg 
-            border dark:border-neutral-400
+            border dark:border-neutral-400/30
             hover:bg-neutral-100 dark:hover:bg-neutral-50/70
             duration-100
             "
-        >
-          <Pause />
-        </button>
-        <button
-          onClick={nextTrack}
-          className="px-1 py-0.5 
+          >
+            <Rewind />
+          </button>
+          <button
+            onClick={pause}
+            className="px-1 py-0.5 
             rounded-lg 
-            border dark:border-neutral-400
+            border dark:border-neutral-400/30
             hover:bg-neutral-100 dark:hover:bg-neutral-50/70
             duration-100
             "
-        >
-          <SkipForward />
-        </button>
+          >
+            {playerRef.current && playerRef.current.paused
+              ? <Play />
+              : <Pause />
+            }
+          </button>
+          <button
+            onClick={forward15}
+            className="px-1 py-0.5 
+            rounded-lg 
+            border dark:border-neutral-400/30
+            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
+            duration-100
+            "
+          >
+            <FastForward />
+          </button>
+          <button
+            onClick={nextTrack}
+            className="px-1 py-0.5 
+            rounded-lg 
+            border dark:border-neutral-400/30
+            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
+            duration-100
+            "
+          >
+            <SkipForward />
+          </button>
+        </div>
       </div>
+      <input
+        type="range"
+        className="w-20"
+        value={(playerRef.current?.volume ?? player.volume) * 100}
+        onChange={e => {
+          if (playerRef.current) {
+            const val = Number(e.currentTarget.value) / 100
+            playerRef.current.volume = val
+            setVolume(val)
+          }
+        }}
+      />
     </div>
   )
 }

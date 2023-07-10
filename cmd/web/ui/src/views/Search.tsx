@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import AlbumCard from "../components/AlbumCard"
 import Paginator from "../components/Paginator"
 import { getHTTPEndpoint } from "../utils/url"
+import { Album, Paginated } from "../types"
 
 export default function Search() {
   const [albums, setAlbums] = useState<Paginated<Album>>({

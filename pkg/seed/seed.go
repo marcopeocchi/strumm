@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/dhowden/tag"
 	"github.com/google/uuid"
@@ -16,6 +17,10 @@ func seedTracks(db *gorm.DB, root, cache string) {
 	filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
+		}
+
+		if strings.HasPrefix(d.Name(), ".") {
+			return nil
 		}
 
 		fd, err := os.Open(path)
