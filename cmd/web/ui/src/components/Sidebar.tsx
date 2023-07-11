@@ -10,7 +10,7 @@ namespace Sidebar {
         dark:border-neutral-600 
         hidden 
         sm:flex md:w-1/6 
-        h-[calc(100vh-7.5rem)] 
+        h-[calc(100vh-3rem)] 
         py-2 
         flex-col
         overflow-auto"

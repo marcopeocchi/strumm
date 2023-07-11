@@ -8,6 +8,7 @@ export default function Paginator({ pages, setPage }: Props) {
     <div className="flex flex-row justify-center pb-28">
       {[...Array(pages).keys()].map(page => (
         <span
+          key={page}
           onClick={() => {
             setPage(page + 1)
             window.scrollTo(0, 0)

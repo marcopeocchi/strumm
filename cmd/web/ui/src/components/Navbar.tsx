@@ -3,8 +3,6 @@ import SearchButton from './SearchButton'
 import ThemeToggler from './ThemeToggler'
 
 export default function Navbar() {
-
-
   return (
     <div className="
       flex flex-row 

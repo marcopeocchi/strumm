@@ -21,6 +21,7 @@ export default function AlbumImage({ src }: Props) {
           duration-100 
           hover:scale-105"
           src={src}
+          loading='lazy'
           onError={() => setHasError(true)}
         />
       </div>

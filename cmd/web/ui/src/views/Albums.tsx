@@ -8,15 +8,15 @@ import { getHTTPEndpoint } from "../utils/url"
 export default function Albums() {
   const [page, setPage] = useState(1)
 
-  const fetcher = async (page: number) => {
-    const res = await fetch(`${getHTTPEndpoint()}/api/album/all?page=${page}`)
-    const data: Paginated<Album> = await res.json()
+  const fetcher = async (url: string) => {
+    const res = await fetch(url)
+    const data = await res.json()
     return data
   }
 
   const { data: albums } = useSWR<Paginated<Album>>(
     `${getHTTPEndpoint()}/api/album/all?page=${page}`,
-    () => fetcher(page)
+    fetcher
   )
 
   return (
@@ -26,7 +26,7 @@ export default function Albums() {
       </h1>
       <div className='border-b pt-4 dark:border-neutral-600' />
       <div className="
-        pt-6 px-8 pb-8 
+        pt-6 pb-8 
         grid 
         grid-cols-2
         sm:grid-cols-2 md:grid-cols-3 
@@ -34,7 +34,7 @@ export default function Albums() {
         2xl:grid-cols-6
         gap-4 sm:gap-6"
       >
-        {albums?.list.map(album => <AlbumCard album={album} />)}
+        {albums?.list.map(album => <AlbumCard album={album} key={album.id} />)}
       </div>
       {(albums?.pages ?? 0) > 1 &&
         <Paginator
