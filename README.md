@@ -7,5 +7,5 @@ Dead simple, ultra-lightweight, self-hosted audio streaming platform.
 
 **🚧 Still WIP 🚧**
 
-![app](https://i.ibb.co/CtYXs3d/image.png)
-![app](https://i.ibb.co/pXZvpL8/image.png)
+![light](https://i.ibb.co/CtYXs3d/image.png)
+![dark](https://i.postimg.cc/6pQfJL6N/image.png)
