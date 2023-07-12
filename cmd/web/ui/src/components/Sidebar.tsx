@@ -42,11 +42,12 @@ namespace Sidebar {
     icon?: React.ReactNode
     active?: boolean
     children: React.ReactNode
+    onClick?: () => void
   }
 
-  export function Action({ icon, active, children }: ActionProps) {
+  export function Action({ icon, active, children, onClick }: ActionProps) {
     return (
-      <div className={`
+      <button className={`
         rounded px-3 py-1.5 
         hover:bg-neutral-200 
         hover:dark:bg-neutral-700
@@ -55,13 +56,14 @@ namespace Sidebar {
         select-none
         w-full
         h-10 flex items-center
-        ${active && 'bg-neutral-200 dark:bg-neutral-700'}`
-      }>
+        ${active && 'bg-neutral-200 dark:bg-neutral-700'}`}
+        onClick={onClick}
+      >
         <div className="flex gap-2 items-center">
           {icon}
           {children}
         </div>
-      </div>
+      </button>
     )
   }
 }

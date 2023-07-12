@@ -216,3 +216,26 @@ func (s *Service) FindAllTracks(ctx context.Context) (*[]domain.Track, error) {
 
 	return tracks, nil
 }
+
+func (s *Service) RandomAlbum(ctx context.Context) (domain.AlbumEntity, error) {
+	album, err := s.repository.RandomAlbum(ctx)
+	if err != nil {
+		return domain.AlbumEntity{}, err
+	}
+
+	tracks, err := s.repository.FindTrackByAlbumID(ctx, album.ID)
+	if err != nil {
+		return domain.AlbumEntity{}, err
+	}
+
+	return domain.AlbumEntity{
+		ID:        album.ID,
+		CreatedAt: album.CreatedAt,
+		UpdatedAt: album.UpdatedAt,
+		Title:     album.Title,
+		Artist:    album.Artist,
+		Picture:   album.Picture,
+		Year:      album.Year,
+		Tracks:    tracks,
+	}, nil
+}

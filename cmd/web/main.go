@@ -61,6 +61,7 @@ func main() {
 		r.Route("/album", func(r chi.Router) {
 			r.Get("/all", searchContainer.FindAllAlbums())
 			r.Get("/latest", searchContainer.Latest())
+			r.Get("/random", searchContainer.RandomAlbum())
 			r.Get("/search/id/{id}", searchContainer.FindAlbumByID())
 			r.Get("/search/any/{query}", searchContainer.FindAny())
 			r.Get("/search/like/{title}", searchContainer.FindAlbumByTitleLike())

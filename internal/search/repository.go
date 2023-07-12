@@ -180,3 +180,18 @@ func (r *Repository) FindAllTracks(ctx context.Context) (*[]domain.Track, error)
 
 	return m, nil
 }
+
+func (r *Repository) RandomAlbum(ctx context.Context) (domain.Album, error) {
+	m := domain.Album{}
+
+	err := r.db.WithContext(ctx).
+		Raw("SELECT * FROM albums ORDER BY RANDOM() LIMIT 1").
+		Scan(&m).
+		Error
+
+	if err != nil {
+		return domain.Album{}, err
+	}
+
+	return m, nil
+}

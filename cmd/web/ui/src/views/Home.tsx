@@ -2,6 +2,7 @@ import useSWR from 'swr'
 import AlbumCard from '../components/AlbumCard'
 import { Album } from '../types'
 import { getHTTPEndpoint } from '../utils/url'
+import Loader from '../components/Loader'
 
 export default function Home() {
   const fetcher = async () => {
@@ -14,6 +15,10 @@ export default function Home() {
     `${getHTTPEndpoint()}/api/album/latest`,
     fetcher
   )
+
+  if (!albums) {
+    return <Loader />
+  }
 
   return (
     <div>
@@ -35,7 +40,7 @@ export default function Home() {
         2xl:grid-cols-6
         gap-4 sm:gap-6"
       >
-        {(albums ?? []).map(album => <AlbumCard album={album} />)}
+        {albums.map(album => <AlbumCard album={album} key={album.id} />)}
       </div>
     </div>
   )

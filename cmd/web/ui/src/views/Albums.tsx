@@ -4,6 +4,7 @@ import AlbumCard from "../components/AlbumCard"
 import Paginator from "../components/Paginator"
 import { Album, Paginated } from "../types"
 import { getHTTPEndpoint } from "../utils/url"
+import Loader from "../components/Loader"
 
 export default function Albums() {
   const [page, setPage] = useState(1)
@@ -18,6 +19,10 @@ export default function Albums() {
     `${getHTTPEndpoint()}/api/album/all?page=${page}`,
     fetcher
   )
+
+  if (!albums) {
+    return <Loader />
+  }
 
   return (
     <div className="px-8 pt-8">
@@ -34,11 +39,11 @@ export default function Albums() {
         2xl:grid-cols-6
         gap-4 sm:gap-6"
       >
-        {albums?.list.map(album => <AlbumCard album={album} key={album.id} />)}
+        {albums.list.map(album => <AlbumCard album={album} key={album.id} />)}
       </div>
-      {(albums?.pages ?? 0) > 1 &&
+      {(albums.pages ?? 0) > 1 &&
         <Paginator
-          pages={albums!.pages}
+          pages={albums.pages}
           setPage={setPage}
         />
       }

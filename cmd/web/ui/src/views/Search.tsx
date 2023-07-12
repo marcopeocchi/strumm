@@ -1,35 +1,31 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useParams } from "react-router-dom"
+import useSWR from 'swr'
 import AlbumCard from "../components/AlbumCard"
+import Loader from "../components/Loader"
 import Paginator from "../components/Paginator"
-import { getHTTPEndpoint } from "../utils/url"
 import { Album, Paginated } from "../types"
+import { getHTTPEndpoint } from "../utils/url"
 
 export default function Search() {
-  const [albums, setAlbums] = useState<Paginated<Album>>({
-    list: [],
-    page: 1,
-    pages: 0,
-    pageSize: 0,
-    totalElements: 0
-  })
   const [page, setPage] = useState(1)
 
   const { query } = useParams()
 
-  const fetcher = async (query: string, page: number) => {
-    const res = await fetch(
-      `${getHTTPEndpoint()}/api/album/search/any/${query}?page=${page}`
-    )
+  const fetcher = async (url: string) => {
+    const res = await fetch(url)
     const data: Paginated<Album> = await res.json()
-    setAlbums(data)
+    return data
   }
 
-  useEffect(() => {
-    if (query) {
-      fetcher(query, page)
-    }
-  }, [page, query])
+  const { data: albums } = useSWR(
+    `${getHTTPEndpoint()}/api/album/search/any/${query}?page=${page}`,
+    fetcher
+  )
+
+  if (!albums) {
+    return <Loader />
+  }
 
   return (
     <div className="px-8 pt-8">
@@ -46,7 +42,7 @@ export default function Search() {
         2xl:grid-cols-6
         gap-4 sm:gap-6`
       }>
-        {albums.list.map(album => <AlbumCard album={album} />)}
+        {albums.list.map(album => <AlbumCard album={album} key={album.id} />)}
       </div>
       {albums.pages > 1 &&
         <Paginator

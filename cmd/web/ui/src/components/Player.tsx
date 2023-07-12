@@ -1,4 +1,5 @@
 import {
+  Disc3,
   FastForward,
   Pause,
   Play,
@@ -12,8 +13,9 @@ import { Link } from "react-router-dom"
 import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
 import { RootState } from "../store/redux"
 import { ellipsis } from "../utils/strings"
-import { getHTTPEndpoint } from "../utils/url"
 import { formatMMSS } from "../utils/time"
+import { getHTTPEndpoint } from "../utils/url"
+import FallbackImage from "./FallbackImage"
 
 export default function Player() {
   const player = useSelector((state: RootState) => state.player)
@@ -22,6 +24,8 @@ export default function Player() {
   const [seek, setSeek] = useState(0)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
+
+  const [hasError, setHasError] = useState(false)
 
   const nextTrack = () => {
     index >= (player.queue.length - 1)
@@ -104,10 +108,16 @@ export default function Player() {
       bg-white dark:bg-black"
     >
       <div className="sm:w-1/4 flex gap-4">
-        <img
-          className="h-16 rounded"
-          src={`${getHTTPEndpoint()}/static/img/${player.img}`}
-        />
+        {!hasError
+          ? <img
+            className="h-16 rounded"
+            src={`${getHTTPEndpoint()}/static/img/${player.img}`}
+            onError={() => setHasError(true)}
+          />
+          : <FallbackImage size="mini" rounded>
+            <Disc3 />
+          </FallbackImage>
+        }
         <div className="flex flex-col">
           <Link
             className="font-semibold hover:underline"
@@ -198,10 +208,10 @@ export default function Player() {
           <button
             onClick={nextTrack}
             className="px-1 py-0.5 
-            rounded-lg 
-            border dark:border-neutral-400/30
-            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
-            duration-100
+              rounded-lg 
+              border dark:border-neutral-400/30
+              hover:bg-neutral-100 dark:hover:bg-neutral-50/70
+              duration-100
             "
           >
             <SkipForward />

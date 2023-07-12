@@ -23,16 +23,19 @@ func (h *Handler) FindAlbumByID() http.HandlerFunc {
 		id, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 
 		album, err := h.service.FindAlbumByID(r.Context(), uint(id))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(album)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -48,11 +51,13 @@ func (h *Handler) FindAlbumByTitle() http.HandlerFunc {
 		album, err := h.service.FindAlbumByTitle(r.Context(), title)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(album)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -68,11 +73,13 @@ func (h *Handler) FindAlbumByGenre() http.HandlerFunc {
 		album, err := h.service.FindAlbumByTitle(r.Context(), genre)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(album)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -88,11 +95,13 @@ func (h *Handler) FindAlbumByArtist() http.HandlerFunc {
 		album, err := h.service.FindAlbumByArtist(r.Context(), artist)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(album)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -108,11 +117,13 @@ func (h *Handler) FindAlbumByTitleLike() http.HandlerFunc {
 		albums, err := h.service.FindAlbumByTitleLike(r.Context(), title)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(albums)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -126,11 +137,13 @@ func (h *Handler) Latest() http.HandlerFunc {
 		albums, err := h.service.Latest(r.Context())
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(albums)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -144,16 +157,19 @@ func (h *Handler) FindTrackByID() http.HandlerFunc {
 		id, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 
 		track, err := h.service.FindTrackByID(r.Context(), uint(id))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(track)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -169,11 +185,13 @@ func (h *Handler) FindTrackByTitle() http.HandlerFunc {
 		track, err := h.service.FindTrackByTitle(r.Context(), title)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(track)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -189,11 +207,13 @@ func (h *Handler) FindTrackByGenre() http.HandlerFunc {
 		track, err := h.service.FindTrackByGenre(r.Context(), genre)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(track)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -209,11 +229,13 @@ func (h *Handler) FindTrackByArtist() http.HandlerFunc {
 		track, err := h.service.FindTrackByArtist(r.Context(), artist)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(track)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -229,11 +251,13 @@ func (h *Handler) FindTrackByTitleLike() http.HandlerFunc {
 		track, err := h.service.FindTrackByTitleLike(r.Context(), title)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		err = json.NewEncoder(w).Encode(track)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -254,6 +278,7 @@ func (h *Handler) FindAny() http.HandlerFunc {
 		tracks, err := h.service.FindAny(r.Context(), query)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		paginated := paginator.NewPaginator(*tracks, 30)
@@ -261,6 +286,7 @@ func (h *Handler) FindAny() http.HandlerFunc {
 		err = json.NewEncoder(w).Encode(paginated.Get(page))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -279,6 +305,7 @@ func (h *Handler) FindAllAlbums() http.HandlerFunc {
 		tracks, err := h.service.FindAllAlbums(r.Context())
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		paginated := paginator.NewPaginator(*tracks, 30)
@@ -286,6 +313,7 @@ func (h *Handler) FindAllAlbums() http.HandlerFunc {
 		err = json.NewEncoder(w).Encode(paginated.Get(page))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
@@ -304,6 +332,7 @@ func (h *Handler) FindAllTracks() http.HandlerFunc {
 		tracks, err := h.service.FindAllTracks(r.Context())
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		paginated := paginator.NewPaginator(*tracks, 30)
@@ -311,6 +340,27 @@ func (h *Handler) FindAllTracks() http.HandlerFunc {
 		err = json.NewEncoder(w).Encode(paginated.Get(page))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
+func (h *Handler) RandomAlbum() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		album, err := h.service.RandomAlbum(r.Context())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = json.NewEncoder(w).Encode(album)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
