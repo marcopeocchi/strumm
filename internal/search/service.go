@@ -27,6 +27,7 @@ func (s *Service) FindAlbumByID(ctx context.Context, id uint) (domain.AlbumEntit
 		UpdatedAt: album.UpdatedAt,
 		Title:     album.Title,
 		Picture:   album.Picture,
+		BlurHash:  album.BlurHash,
 		Artist:    album.Artist,
 		Year:      album.Year,
 		Tracks:    tracks,
@@ -49,6 +50,7 @@ func (s *Service) FindAlbumByTitle(ctx context.Context, title string) (domain.Al
 		Title:     album.Title,
 		Artist:    album.Artist,
 		Picture:   album.Picture,
+		BlurHash:  album.BlurHash,
 		Year:      album.Year,
 		CreatedAt: album.CreatedAt,
 		UpdatedAt: album.UpdatedAt,
@@ -70,6 +72,7 @@ func (s *Service) FindAlbumByGenre(ctx context.Context, genre string) (*[]domain
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
 		res[i].Picture = album.Picture
+		res[i].BlurHash = album.BlurHash
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -92,6 +95,7 @@ func (s *Service) FindAlbumByArtist(ctx context.Context, artist string) (*[]doma
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
 		res[i].Picture = album.Picture
+		res[i].BlurHash = album.BlurHash
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -114,6 +118,7 @@ func (s *Service) FindAlbumByTitleLike(ctx context.Context, titleLike string) (*
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
 		res[i].Picture = album.Picture
+		res[i].BlurHash = album.BlurHash
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -136,6 +141,7 @@ func (s *Service) Latest(ctx context.Context) (*[]domain.AlbumEntity, error) {
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
 		res[i].Picture = album.Picture
+		res[i].BlurHash = album.BlurHash
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -178,6 +184,7 @@ func (s *Service) FindAny(ctx context.Context, like string) (*[]domain.AlbumEnti
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
 		res[i].Picture = album.Picture
+		res[i].BlurHash = album.BlurHash
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -200,6 +207,7 @@ func (s *Service) FindAllAlbums(ctx context.Context) (*[]domain.AlbumEntity, err
 		res[i].Title = album.Title
 		res[i].Artist = album.Artist
 		res[i].Picture = album.Picture
+		res[i].BlurHash = album.BlurHash
 		res[i].CreatedAt = album.CreatedAt
 		res[i].UpdatedAt = album.UpdatedAt
 		res[i].Tracks = &[]domain.Track{}
@@ -235,6 +243,7 @@ func (s *Service) RandomAlbum(ctx context.Context) (domain.AlbumEntity, error) {
 		Title:     album.Title,
 		Artist:    album.Artist,
 		Picture:   album.Picture,
+		BlurHash:  album.BlurHash,
 		Year:      album.Year,
 		Tracks:    tracks,
 	}, nil

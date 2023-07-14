@@ -3,6 +3,7 @@ module github.com/marcopeocchi/mille
 go 1.20
 
 require (
+	github.com/buckket/go-blurhash v1.1.0
 	github.com/dhowden/tag v0.0.0-20220618230019-adf36e896086
 	github.com/glebarez/sqlite v1.8.0
 	github.com/go-chi/chi/v5 v5.0.8

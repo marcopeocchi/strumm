@@ -23,10 +23,11 @@ type Track struct {
 
 type Album struct {
 	gorm.Model
-	Title   string `gorm:"index,unique"`
-	Artist  string
-	Picture string
-	Year    int
+	Title    string `gorm:"index,unique"`
+	Artist   string
+	Picture  string
+	BlurHash string
+	Year     int
 }
 
 type AlbumEntity struct {
@@ -36,6 +37,7 @@ type AlbumEntity struct {
 	Title     string    `json:"title"`
 	Artist    string    `json:"artist"`
 	Picture   string    `json:"picture"`
+	BlurHash  string    `json:"blur_hash"`
 	Year      int       `json:"year"`
 	Tracks    *[]Track  `json:"tracks"`
 }

@@ -5,6 +5,7 @@ export type Album = {
   title: string
   artist: string
   picture: string
+  blur_hash: string
   year: number
   tracks: Track[]
 }

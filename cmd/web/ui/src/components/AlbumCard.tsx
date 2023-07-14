@@ -15,6 +15,7 @@ export default function AlbumCard({ album }: Props) {
       className="flex justify-start items-center flex-col gap-1 cursor-pointer"
     >
       <AlbumImage
+        hash={album.blur_hash}
         src={`${getHTTPEndpoint()}/static/img/${album.picture}`}
       />
       <div className="text-center">

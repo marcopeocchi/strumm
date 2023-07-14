@@ -12,6 +12,7 @@ import NavigateRandom from './components/NavigateRandom'
 import Player from './components/Player'
 import Sidebar from './components/Sidebar'
 import ThemeLoader from './loaders/ThemeLoader'
+import Credits from './components/Credits'
 
 export default function Layout() {
   const { pathname } = useLocation()
@@ -75,6 +76,7 @@ export default function Layout() {
                 Server settings
               </Sidebar.Action>
             </Sidebar.Section>
+            <Credits className='p-6 h-full flex items-end' />
           </Sidebar.Container>
           <div className="
             w-full 
