@@ -31,20 +31,21 @@ export default function AlbumImage({ src, hash }: Props) {
       rounded-lg 
       hover:ring-2 ring-blue-300 w-full"
     >
-      {hash !== '' &&
-        <Blurhash
-          mode="canvas"
-          src={src}
-          alt={''}
-          hash={hash}
-          width={400}
-          height={400}
-        />}
       <img
         src={src}
         onError={() => setHasError(true)}
         className='hidden'
       />
+      {hash !== '' &&
+        <Blurhash
+          mode="css"
+          src={src}
+          alt={''}
+          hash={hash}
+          width={300}
+          height={300}
+        />
+      }
     </div>
   )
 }

@@ -11,9 +11,6 @@ dependencies:
   blurhash-as:
     specifier: ^0.10.0
     version: 0.10.0
-  blurhash-wasm:
-    specifier: ^0.2.0
-    version: 0.2.0
   lucide-react:
     specifier: ^0.256.0
     version: 0.256.0(react@18.2.0)
@@ -994,10 +991,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       '@assemblyscript/loader': 0.27.5
-    dev: false
-
-  /blurhash-wasm@0.2.0:
-    resolution: {integrity: sha512-d/jOMANMlth4VNQRs3Xr/bDj7K3S2/QuRvrwC3QldeOTX9/5MLHUn2+JQV11Ja2J4/kY+HbRJOCGCy9T4BBvJw==}
     dev: false
 
   /bmp-js@0.1.0:
