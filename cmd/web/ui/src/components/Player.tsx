@@ -1,5 +1,4 @@
 import {
-  Disc3,
   FastForward,
   Pause,
   Play,
@@ -15,7 +14,7 @@ import { RootState } from "../store/redux"
 import { ellipsis } from "../utils/strings"
 import { formatMMSS } from "../utils/time"
 import { getHTTPEndpoint } from "../utils/url"
-import FallbackImage from "./FallbackImage"
+import Image from "./Image"
 
 export default function Player() {
   const player = useSelector((state: RootState) => state.player)
@@ -24,8 +23,6 @@ export default function Player() {
   const [seek, setSeek] = useState(0)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
-
-  const [hasError, setHasError] = useState(false)
 
   const nextTrack = () => {
     index >= (player.queue.length - 1)
@@ -73,7 +70,7 @@ export default function Player() {
 
   useEffect(() => {
     if (player.queue.length > 0) {
-      dispatch(setCurrentId(player.queue[index].ID))
+      dispatch(setCurrentId(player.queue.at(index)!.ID))
     }
   }, [index, player.queue])
 
@@ -108,28 +105,23 @@ export default function Player() {
       bg-white dark:bg-black"
     >
       <div className="sm:w-1/4 flex gap-4">
-        {!hasError
-          ? <img
-            className="h-16 rounded"
-            src={`${getHTTPEndpoint()}/static/img/${player.img}`}
-            onError={() => setHasError(true)}
-          />
-          : <FallbackImage size="mini" rounded>
-            <Disc3 />
-          </FallbackImage>
-        }
+        <Image
+          rounded
+          size="mini"
+          src={`${getHTTPEndpoint()}/static/img/${player.img}`}
+        />
         <div className="flex flex-col">
           <Link
             className="font-semibold hover:underline"
-            to={`/album/${player.queue[index].album}`}
+            to={`/album/${player.queue.at(index)?.album}`}
           >
-            {ellipsis(player.queue[index].title, 25)}
+            {ellipsis(player.queue.at(index)?.title ?? '', 25)}
           </Link>
           <Link
             className="text-sm hover:underline"
-            to={`/search/${player.queue[index].artist}`}
+            to={`/search/${player.queue.at(index)?.artist}`}
           >
-            {player.queue[index].artist}
+            {player.queue.at(index)?.artist}
           </Link>
         </div>
       </div>
@@ -140,7 +132,7 @@ export default function Player() {
         ref={playerRef}
         onVolumeChange={(e) => dispatch(setVolume(e.currentTarget.volume))}
         onEnded={nextTrack}
-        src={`${getHTTPEndpoint()}/api/stream/${player.queue[index].ID}`}
+        src={`${getHTTPEndpoint()}/api/stream/${player.queue.at(index)?.ID}`}
       />
       <div className="flex flex-col gap-2">
         <div className="flex justify-between gap-1.5">
@@ -218,6 +210,7 @@ export default function Player() {
           </button>
         </div>
       </div>
+      <div />
       <input
         type="range"
         className="w-20"

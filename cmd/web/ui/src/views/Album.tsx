@@ -26,7 +26,7 @@ export default function AlbumView() {
   }
 
   return (
-    <div className="pb-32 select-none">
+    <div className="pb-20 select-none">
       <AlbumPalette id={album.picture} >
         <AlbumInfo album={album} />
       </AlbumPalette>

@@ -18,7 +18,6 @@ const FallbackImage: React.FC<Props> = ({
       ${size === 'mini' && 'sm:w-16 sm:h-16'}
       ${pulse && 'animate-pulse'}
       ${rounded && 'rounded'}
-      shadow-lg 
       flex items-center justify-center 
       font-semibold text-2xl
       bg-neutral-300 dark:bg-neutral-800`

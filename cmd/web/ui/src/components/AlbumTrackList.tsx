@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Album } from "../types"
 import { RootState } from "../store/redux"
 import { setImg, setIsPlaying, setQueue } from "../features/player"
-import { Play } from "lucide-react"
+import { Play, ListEnd } from "lucide-react"
 
 type Props = {
   album: Album
@@ -19,36 +19,45 @@ const AlbumTrackList: React.FC<Props> = ({ album }) => {
           className="
             cursor-pointer 
             rounded p-2
-            flex flex-row gap-4 py-1.5 items-center
-            hover:bg-neutral-200 hover:dark:bg-neutral-700
+            flex flex-row gap-4 py-1.5 items-center justify-between
+          hover:bg-neutral-200 hover:dark:bg-neutral-700
             hover:duration-100"
           key={track.ID}
-          onClick={() => {
+        >
+          <div className="flex items-center gap-4 w-full" onClick={() => {
             dispatch(setQueue(album.tracks.slice(idx)))
             dispatch(setImg(album.picture))
             dispatch(setIsPlaying(true))
-          }}
-        >
-          <div>
-            {player.currentId === track.ID
-              ? <Play size={12} fill="#60a5fa" color="#60a5fa" />
-              : track.index
-            }
-          </div>
-          <div className="flex flex-col">
-            <div className={`${(player.currentId === track.ID) &&
-              'text-blue-400 -ml-1'
-              }`}
-            >
-              {track.title}
+          }}>
+            <div>
+              {player.currentId === track.ID
+                ? <Play size={12} fill="#60a5fa" color="#60a5fa" />
+                : track.index
+              }
             </div>
-            <div className={`${(player.currentId === track.ID) &&
-              'text-blue-400 -ml-1'
-              } text-sm`}
-            >
-              {track.artist}
+            <div className="flex flex-col">
+              <div className={`${(player.currentId === track.ID) &&
+                'text-blue-400 -ml-1'
+                }`}
+              >
+                {track.title}
+              </div>
+              <div className={`${(player.currentId === track.ID) &&
+                'text-blue-400 -ml-1'
+                } text-sm`}
+              >
+                {track.artist}
+              </div>
             </div>
           </div>
+          <button
+            className="py-1 px-1.5 rounded hover:bg-blue-200 dark:hover:bg-blue-400"
+            onClick={() => {
+              dispatch(setQueue([...player.queue, track]))
+            }}
+          >
+            <ListEnd size={18} />
+          </button>
         </div>
       ))}
     </div>

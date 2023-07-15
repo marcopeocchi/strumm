@@ -31,3 +31,8 @@ export type Paginated<T> = {
   pageSize: number
   totalElements: number
 }
+
+export type ArtistMetadata = {
+  artistBio: string
+  artistPicture: string
+}

@@ -8,7 +8,7 @@ export default function Home() {
   const fetcher = async () => {
     const res = await fetch(`${getHTTPEndpoint()}/api/album/latest`)
     const data: Album[] = await res.json()
-    return data.slice(0, 40)
+    return data.slice(0, 36)
   }
 
   const { data: albums } = useSWR<Album[]>(

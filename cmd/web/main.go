@@ -12,6 +12,7 @@ import (
 	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/marcopeocchi/mille/internal/metadata"
 	"github.com/marcopeocchi/mille/internal/middlewares"
 	"github.com/marcopeocchi/mille/internal/search"
 	"github.com/marcopeocchi/mille/internal/stream"
@@ -54,6 +55,7 @@ func main() {
 
 	streamContainer := stream.Container(db)
 	searchContainer := search.Container(db)
+	metadataContainer, _ := metadata.Container(&http.Client{})
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
@@ -76,6 +78,10 @@ func main() {
 			r.Get("/search/title/{title}", searchContainer.FindTrackByTitle())
 			r.Get("/search/genre/{genre}", searchContainer.FindTrackByGenre())
 			r.Get("/search/artist/{artist}", searchContainer.FindTrackByArtist())
+		})
+
+		r.Route("/metadata", func(r chi.Router) {
+			r.Get("/{name}", metadataContainer.GetAlbumMetadata())
 		})
 	})
 

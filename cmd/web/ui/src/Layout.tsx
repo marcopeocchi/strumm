@@ -13,6 +13,7 @@ import Player from './components/Player'
 import Sidebar from './components/Sidebar'
 import ThemeLoader from './loaders/ThemeLoader'
 import Credits from './components/Credits'
+import Queue from './components/Queue'
 
 export default function Layout() {
   const { pathname } = useLocation()
@@ -86,6 +87,7 @@ export default function Layout() {
           >
             <Outlet />
           </div>
+          <Queue />
         </div>
         <Player />
       </ThemeLoader>

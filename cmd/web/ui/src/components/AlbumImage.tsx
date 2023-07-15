@@ -4,6 +4,7 @@ import { Blurhash } from 'react-blurhash-as'
 type Props = {
   src: string
   hash: string
+
 }
 
 export default function AlbumImage({ src, hash }: Props) {
@@ -29,7 +30,8 @@ export default function AlbumImage({ src, hash }: Props) {
       aspect-square
       bg-cover overflow-hidden
       rounded-lg 
-      hover:ring-2 ring-blue-300 w-full"
+      hover:ring-2 ring-blue-300 
+      w-full"
     >
       <img
         src={src}
