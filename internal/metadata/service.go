@@ -17,8 +17,8 @@ func (s *Service) GetAlbumMetadata(ctx context.Context, artist string) (domain.A
 		deezerResponse domain.DeezerAPIResponse
 		lastFMResponse domain.LastFMScrobble
 		retval         domain.AlbumMetadata
-		err            error
 		wg             sync.WaitGroup
+		err            error
 	)
 
 	wg.Add(2)
@@ -29,7 +29,7 @@ func (s *Service) GetAlbumMetadata(ctx context.Context, artist string) (domain.A
 	}()
 
 	go func() {
-		deezerResponse, err = s.repo.GetAlbumMetadata(ctx, artist)
+		deezerResponse, err = s.repo.GetDeezerMetadata(ctx, artist)
 		wg.Done()
 	}()
 

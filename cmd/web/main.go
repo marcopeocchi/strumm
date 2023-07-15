@@ -38,6 +38,9 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	httpClient := &http.Client{}
+	defer httpClient.CloseIdleConnections()
+
 	build, _ := fs.Sub(app, "ui/dist")
 
 	sh := middlewares.SpaHandler{
@@ -55,7 +58,7 @@ func main() {
 
 	streamContainer := stream.Container(db)
 	searchContainer := search.Container(db)
-	metadataContainer, _ := metadata.Container(&http.Client{})
+	metadataContainer, _ := metadata.Container(httpClient)
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())

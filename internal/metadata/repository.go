@@ -18,7 +18,7 @@ type Repository struct {
 	client *http.Client
 }
 
-func (r *Repository) GetAlbumMetadata(ctx context.Context, artist string) (domain.DeezerAPIResponse, error) {
+func (r *Repository) GetDeezerMetadata(ctx context.Context, artist string) (domain.DeezerAPIResponse, error) {
 	res, err := r.client.Get(buildQueryDeezer(artist))
 	if err != nil {
 		return domain.DeezerAPIResponse{}, err

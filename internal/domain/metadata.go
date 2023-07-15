@@ -39,7 +39,7 @@ type LastFMScrobble struct {
 }
 
 type MetatadaRepository interface {
-	GetAlbumMetadata(ctx context.Context, artist string) (DeezerAPIResponse, error)
+	GetDeezerMetadata(ctx context.Context, artist string) (DeezerAPIResponse, error)
 	GetLastFMScrobble(ctx context.Context, artist string) (LastFMScrobble, error)
 }
 
