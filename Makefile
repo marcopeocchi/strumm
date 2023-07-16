@@ -4,6 +4,9 @@ default:
 react:
 	cd app && pnpm build
 
+wasm:
+	GOOS=js GOARCH=wasm go build -o dominantColors.wasm cmd/wasm/main.go
+
 multiarch:
 	mkdir -p build
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -o build/mille-armv6 cmd/web/main.go

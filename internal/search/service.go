@@ -21,17 +21,10 @@ func (s *Service) FindAlbumByID(ctx context.Context, id uint) (domain.AlbumEntit
 		return domain.AlbumEntity{}, err
 	}
 
-	return domain.AlbumEntity{
-		ID:        album.ID,
-		CreatedAt: album.CreatedAt,
-		UpdatedAt: album.UpdatedAt,
-		Title:     album.Title,
-		Picture:   album.Picture,
-		BlurHash:  album.BlurHash,
-		Artist:    album.Artist,
-		Year:      album.Year,
-		Tracks:    tracks,
-	}, nil
+	m := domain.AlbumEntity{}
+	m.FromAlbum(album, tracks)
+
+	return m, nil
 }
 
 func (s *Service) FindAlbumByTitle(ctx context.Context, title string) (domain.AlbumEntity, error) {
@@ -45,17 +38,10 @@ func (s *Service) FindAlbumByTitle(ctx context.Context, title string) (domain.Al
 		return domain.AlbumEntity{}, err
 	}
 
-	return domain.AlbumEntity{
-		ID:        album.ID,
-		Title:     album.Title,
-		Artist:    album.Artist,
-		Picture:   album.Picture,
-		BlurHash:  album.BlurHash,
-		Year:      album.Year,
-		CreatedAt: album.CreatedAt,
-		UpdatedAt: album.UpdatedAt,
-		Tracks:    tracks,
-	}, nil
+	m := domain.AlbumEntity{}
+	m.FromAlbum(album, tracks)
+
+	return m, nil
 }
 
 func (s *Service) FindAlbumByGenre(ctx context.Context, genre string) (*[]domain.AlbumEntity, error) {
@@ -67,15 +53,7 @@ func (s *Service) FindAlbumByGenre(ctx context.Context, genre string) (*[]domain
 	res := make([]domain.AlbumEntity, len(*albums))
 
 	for i, album := range *albums {
-		res[i].ID = album.ID
-		res[i].Year = album.Year
-		res[i].Title = album.Title
-		res[i].Artist = album.Artist
-		res[i].Picture = album.Picture
-		res[i].BlurHash = album.BlurHash
-		res[i].CreatedAt = album.CreatedAt
-		res[i].UpdatedAt = album.UpdatedAt
-		res[i].Tracks = &[]domain.Track{}
+		res[i].FromAlbum(album, &[]domain.Track{})
 	}
 
 	return &res, nil
@@ -89,16 +67,8 @@ func (s *Service) FindAlbumByArtist(ctx context.Context, artist string) (*[]doma
 
 	res := make([]domain.AlbumEntity, len(*albums))
 
-	for i, album := range res {
-		res[i].ID = album.ID
-		res[i].Year = album.Year
-		res[i].Title = album.Title
-		res[i].Artist = album.Artist
-		res[i].Picture = album.Picture
-		res[i].BlurHash = album.BlurHash
-		res[i].CreatedAt = album.CreatedAt
-		res[i].UpdatedAt = album.UpdatedAt
-		res[i].Tracks = &[]domain.Track{}
+	for i, album := range *albums {
+		res[i].FromAlbum(album, &[]domain.Track{})
 	}
 
 	return &res, nil
@@ -113,15 +83,7 @@ func (s *Service) FindAlbumByTitleLike(ctx context.Context, titleLike string) (*
 	res := make([]domain.AlbumEntity, len(*albums))
 
 	for i, album := range *albums {
-		res[i].ID = album.ID
-		res[i].Year = album.Year
-		res[i].Title = album.Title
-		res[i].Artist = album.Artist
-		res[i].Picture = album.Picture
-		res[i].BlurHash = album.BlurHash
-		res[i].CreatedAt = album.CreatedAt
-		res[i].UpdatedAt = album.UpdatedAt
-		res[i].Tracks = &[]domain.Track{}
+		res[i].FromAlbum(album, &[]domain.Track{})
 	}
 
 	return &res, nil
@@ -136,15 +98,7 @@ func (s *Service) Latest(ctx context.Context) (*[]domain.AlbumEntity, error) {
 	res := make([]domain.AlbumEntity, len(*albums))
 
 	for i, album := range *albums {
-		res[i].ID = album.ID
-		res[i].Year = album.Year
-		res[i].Title = album.Title
-		res[i].Artist = album.Artist
-		res[i].Picture = album.Picture
-		res[i].BlurHash = album.BlurHash
-		res[i].CreatedAt = album.CreatedAt
-		res[i].UpdatedAt = album.UpdatedAt
-		res[i].Tracks = &[]domain.Track{}
+		res[i].FromAlbum(album, &[]domain.Track{})
 	}
 
 	return &res, nil
@@ -179,15 +133,7 @@ func (s *Service) FindAny(ctx context.Context, like string) (*[]domain.AlbumEnti
 	res := make([]domain.AlbumEntity, len(*albums))
 
 	for i, album := range *albums {
-		res[i].ID = album.ID
-		res[i].Year = album.Year
-		res[i].Title = album.Title
-		res[i].Artist = album.Artist
-		res[i].Picture = album.Picture
-		res[i].BlurHash = album.BlurHash
-		res[i].CreatedAt = album.CreatedAt
-		res[i].UpdatedAt = album.UpdatedAt
-		res[i].Tracks = &[]domain.Track{}
+		res[i].FromAlbum(album, &[]domain.Track{})
 	}
 
 	return &res, nil
@@ -202,15 +148,7 @@ func (s *Service) FindAllAlbums(ctx context.Context) (*[]domain.AlbumEntity, err
 	res := make([]domain.AlbumEntity, len(*albums))
 
 	for i, album := range *albums {
-		res[i].ID = album.ID
-		res[i].Year = album.Year
-		res[i].Title = album.Title
-		res[i].Artist = album.Artist
-		res[i].Picture = album.Picture
-		res[i].BlurHash = album.BlurHash
-		res[i].CreatedAt = album.CreatedAt
-		res[i].UpdatedAt = album.UpdatedAt
-		res[i].Tracks = &[]domain.Track{}
+		res[i].FromAlbum(album, &[]domain.Track{})
 	}
 
 	return &res, nil
@@ -236,15 +174,8 @@ func (s *Service) RandomAlbum(ctx context.Context) (domain.AlbumEntity, error) {
 		return domain.AlbumEntity{}, err
 	}
 
-	return domain.AlbumEntity{
-		ID:        album.ID,
-		CreatedAt: album.CreatedAt,
-		UpdatedAt: album.UpdatedAt,
-		Title:     album.Title,
-		Artist:    album.Artist,
-		Picture:   album.Picture,
-		BlurHash:  album.BlurHash,
-		Year:      album.Year,
-		Tracks:    tracks,
-	}, nil
+	m := domain.AlbumEntity{}
+	m.FromAlbum(album, tracks)
+
+	return m, nil
 }

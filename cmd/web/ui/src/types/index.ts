@@ -7,6 +7,7 @@ export type Album = {
   picture: string
   blur_hash: string
   year: number
+  dominant_color: string,
   tracks: Track[]
 }
 

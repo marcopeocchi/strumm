@@ -1,14 +1,10 @@
 package seed
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"image"
-	"image/jpeg"
-	"image/png"
 	"io/fs"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,6 +13,7 @@ import (
 	"github.com/dhowden/tag"
 	"github.com/google/uuid"
 	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/marcopeocchi/mille/pkg/utils"
 	"gorm.io/gorm"
 )
 
@@ -71,15 +68,17 @@ func seedTracks(db *gorm.DB, root, cache string) {
 
 				os.WriteFile(cachedImagePath, tags.Picture().Data, os.ModePerm)
 
-				rgba, err := decodeCoverImage(tags.Picture().Data)
+				rgba, err := utils.DecodeImage(tags.Picture().Data)
 
 				if err == nil {
-					hash, err := generateBlurHash(rgba)
+					hash, errHash := generateBlurHash(rgba)
+					dominantColors, errColors := utils.GetDominantColors(rgba, 5)
 
-					if err == nil {
+					if errHash == nil && errColors == nil {
 						db.Model(&domain.Album{}).
 							Where("title = ?", tags.Album()).
-							Update("blur_hash", hash)
+							Update("blur_hash", hash).
+							Update("dominant_color", dominantColors[0])
 					}
 				}
 			}
@@ -114,35 +113,6 @@ func seedTracks(db *gorm.DB, root, cache string) {
 
 func SeedDatabase(db *gorm.DB, root, cache string) {
 	seedTracks(db, root, cache)
-}
-
-func decodeCoverImage(b []byte) (image.Image, error) {
-	var (
-		mime = http.DetectContentType(b)
-		r    = bytes.NewReader(b)
-		rgba image.Image
-		err  error
-	)
-
-	if mime == "image/png" {
-		rgba, err = png.Decode(r)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if mime == "image/jpeg" {
-		rgba, err = jpeg.Decode(r)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if mime == "" {
-		return nil, errors.New("can't decode image")
-	}
-
-	return rgba, err
 }
 
 func generateBlurHash(rgba image.Image) (string, error) {

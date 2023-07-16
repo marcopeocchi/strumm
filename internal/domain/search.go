@@ -23,23 +23,38 @@ type Track struct {
 
 type Album struct {
 	gorm.Model
-	Title    string `gorm:"index,unique"`
-	Artist   string
-	Picture  string
-	BlurHash string
-	Year     int
+	Title         string `gorm:"index,unique"`
+	Artist        string
+	Picture       string
+	BlurHash      string
+	DominantColor string
+	Year          int
 }
 
 type AlbumEntity struct {
-	ID        uint      `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Title     string    `json:"title"`
-	Artist    string    `json:"artist"`
-	Picture   string    `json:"picture"`
-	BlurHash  string    `json:"blur_hash"`
-	Year      int       `json:"year"`
-	Tracks    *[]Track  `json:"tracks"`
+	ID            uint      `json:"id"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+	Title         string    `json:"title"`
+	Artist        string    `json:"artist"`
+	Picture       string    `json:"picture"`
+	BlurHash      string    `json:"blur_hash"`
+	DominantColor string    `json:"dominant_color"`
+	Year          int       `json:"year"`
+	Tracks        *[]Track  `json:"tracks"`
+}
+
+func (a *AlbumEntity) FromAlbum(album Album, tracks *[]Track) {
+	a.ID = album.ID
+	a.CreatedAt = album.CreatedAt
+	a.UpdatedAt = album.UpdatedAt
+	a.Title = album.Title
+	a.Artist = album.Artist
+	a.Picture = album.Picture
+	a.BlurHash = album.BlurHash
+	a.DominantColor = album.DominantColor
+	a.Year = album.Year
+	a.Tracks = tracks
 }
 
 type SearchRepository interface {
