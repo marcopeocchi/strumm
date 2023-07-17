@@ -6,6 +6,7 @@ import { ellipsis } from "../utils/strings"
 import { getHTTPEndpoint } from "../utils/url"
 import Image from "./Image/Image"
 import Loader from "./Loader"
+import { Link } from "react-router-dom"
 
 const nextFetcher = (url: string) =>
   fetch(url)
@@ -30,13 +31,13 @@ const Queue: React.FC = () => {
 
   return (
     <div className={`
-      w-1/5 p-6 
+      w-1/4 p-6 
       border-l dark:border-neutral-600 
       ${player.isPlaying
         ? 'xl:flex flex-col gap-4 hidden'
         : 'hidden'
       }
-      overflow-y-scroll h-[calc(100vh-3.15rem)] `
+      overflow-y-scroll h-[calc(100vh-3.15rem)]`
     }>
       <img src={metadata?.artistPicture} className="rounded-lg" />
       <div className="
@@ -44,9 +45,12 @@ const Queue: React.FC = () => {
       bg-neutral-50 dark:bg-neutral-900 
         rounded-lg"
       >
-        <h2 className="text-2xl font-bold">
+        <Link
+          to={`/search/${player.queue.at(0)?.artist}`}
+          className="text-2xl font-bold hover:underline"
+        >
           {player.queue.at(0)?.artist}
-        </h2>
+        </Link>
         <h2 className="text-sm break-words">
           {metadata?.artistBio
             ? ellipsis(metadata?.artistBio ?? '', 500)

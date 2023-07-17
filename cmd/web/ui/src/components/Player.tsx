@@ -9,7 +9,12 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { setCurrentId, setCurrentIndex, setIsPlaying, setVolume } from "../features/player"
+import {
+  setCurrentId,
+  setCurrentIndex,
+  setIsPlaying,
+  setVolume
+} from "../features/player"
 import { RootState } from "../store/redux"
 import { ellipsis } from "../utils/strings"
 import { formatMMSS } from "../utils/time"
