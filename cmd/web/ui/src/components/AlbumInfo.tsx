@@ -2,7 +2,7 @@ import { Disc3 } from "lucide-react"
 import { useState } from "react"
 import { Album } from "../types"
 import { getHTTPEndpoint } from "../utils/url"
-import FallbackImage from "./FallbackImage"
+import FallbackImage from "./Image/FallbackImage"
 
 type Props = {
   album: Album

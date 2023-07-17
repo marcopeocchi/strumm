@@ -7,6 +7,7 @@ export interface PlayerState {
   img: string
   queue: Track[]
   currentId: number
+  currentIndex: number
 }
 
 const initialState: PlayerState = {
@@ -15,6 +16,7 @@ const initialState: PlayerState = {
   queue: [],
   img: '',
   currentId: 0,
+  currentIndex: 0,
 }
 
 export const playerSlice = createSlice({
@@ -37,6 +39,9 @@ export const playerSlice = createSlice({
     setCurrentId: (state, action: PayloadAction<number>) => {
       state.currentId = action.payload
     },
+    setCurrentIndex: (state, action: PayloadAction<number>) => {
+      state.currentIndex = action.payload
+    },
   }
 })
 
@@ -46,6 +51,7 @@ export const {
   setVolume,
   setQueue,
   setCurrentId,
+  setCurrentIndex,
 } = playerSlice.actions
 
 export default playerSlice.reducer

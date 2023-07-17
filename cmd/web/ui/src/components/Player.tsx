@@ -9,12 +9,12 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { setCurrentId, setIsPlaying, setVolume } from "../features/player"
+import { setCurrentId, setCurrentIndex, setIsPlaying, setVolume } from "../features/player"
 import { RootState } from "../store/redux"
 import { ellipsis } from "../utils/strings"
 import { formatMMSS } from "../utils/time"
 import { getHTTPEndpoint } from "../utils/url"
-import Image from "./Image"
+import RemoteImage from "./Image/RemoteImage"
 
 export default function Player() {
   const player = useSelector((state: RootState) => state.player)
@@ -69,8 +69,9 @@ export default function Player() {
   }, [playerRef, player])
 
   useEffect(() => {
-    if (player.queue.length > 0) {
+    if (player.queue.length > 0 && player.queue.at(index)) {
       dispatch(setCurrentId(player.queue.at(index)!.ID))
+      dispatch(setCurrentIndex(index))
     }
   }, [index, player.queue])
 
@@ -105,10 +106,10 @@ export default function Player() {
       bg-white dark:bg-black"
     >
       <div className="sm:w-1/4 flex gap-4">
-        <Image
+        <RemoteImage
           rounded
           size="mini"
-          src={`${getHTTPEndpoint()}/static/img/${player.img}`}
+          albumId={player.queue.at(index)?.album}
         />
         <div className="flex flex-col">
           <Link

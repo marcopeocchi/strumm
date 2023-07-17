@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/redux'
+import { Palette } from '../types'
+import { pickBrightest } from '../utils/colors'
 
 type Props = {
-  id: string
-  color?: string,
+  palette: Palette,
   children?: React.ReactNode
 }
 
-export const AlbumPalette: React.FC<Props> = ({ children, color }) => {
+export const AlbumPalette: React.FC<Props> = ({ children, palette }) => {
   const settings = useSelector((state: RootState) => state.settings)
 
   const generateGradient = (from?: string) =>
@@ -18,7 +19,7 @@ export const AlbumPalette: React.FC<Props> = ({ children, color }) => {
   return (
     <div
       className="w-full"
-      style={{ background: generateGradient(color) }}
+      style={{ background: generateGradient(pickBrightest(palette)) }}
     >
       <div className='relative p-8 flex items-end'>
         <div className='pb-8'>

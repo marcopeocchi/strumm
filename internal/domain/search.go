@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/marcopeocchi/mille/pkg/utils"
 	"gorm.io/gorm"
 )
 
@@ -23,25 +24,28 @@ type Track struct {
 
 type Album struct {
 	gorm.Model
-	Title         string `gorm:"index,unique"`
-	Artist        string
-	Picture       string
-	BlurHash      string
-	DominantColor string
-	Year          int
+	Title             string `gorm:"index,unique"`
+	Artist            string
+	Picture           string
+	BlurHash          string
+	DominantColor     string
+	LessDominantColor string
+	AccentColor       string
+	Year              int
 }
 
 type AlbumEntity struct {
-	ID            uint      `json:"id"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
-	Title         string    `json:"title"`
-	Artist        string    `json:"artist"`
-	Picture       string    `json:"picture"`
-	BlurHash      string    `json:"blur_hash"`
-	DominantColor string    `json:"dominant_color"`
-	Year          int       `json:"year"`
-	Tracks        *[]Track  `json:"tracks"`
+	ID            uint          `json:"id"`
+	CreatedAt     time.Time     `json:"created_at"`
+	UpdatedAt     time.Time     `json:"updated_at"`
+	Title         string        `json:"title"`
+	Artist        string        `json:"artist"`
+	Picture       string        `json:"picture"`
+	BlurHash      string        `json:"blur_hash"`
+	DominantColor string        `json:"dominant_color"`
+	Year          int           `json:"year"`
+	Palette       utils.Palette `json:"palette"`
+	Tracks        *[]Track      `json:"tracks"`
 }
 
 func (a *AlbumEntity) FromAlbum(album Album, tracks *[]Track) {
@@ -55,6 +59,11 @@ func (a *AlbumEntity) FromAlbum(album Album, tracks *[]Track) {
 	a.DominantColor = album.DominantColor
 	a.Year = album.Year
 	a.Tracks = tracks
+	a.Palette = utils.Palette{
+		Dominant:     album.DominantColor,
+		LessDominant: album.LessDominantColor,
+		Accent:       album.AccentColor,
+	}
 }
 
 type SearchRepository interface {

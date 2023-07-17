@@ -7,8 +7,14 @@ export type Album = {
   picture: string
   blur_hash: string
   year: number
-  dominant_color: string,
+  palette: Palette,
   tracks: Track[]
+}
+
+export type Palette = {
+  dominant: string
+  lessDominant: string
+  accent: string
 }
 
 export type Track = {

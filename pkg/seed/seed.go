@@ -1,15 +1,12 @@
 package seed
 
 import (
-	"errors"
 	"fmt"
-	"image"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/buckket/go-blurhash"
 	"github.com/dhowden/tag"
 	"github.com/google/uuid"
 	"github.com/marcopeocchi/mille/internal/domain"
@@ -68,17 +65,19 @@ func seedTracks(db *gorm.DB, root, cache string) {
 
 				os.WriteFile(cachedImagePath, tags.Picture().Data, os.ModePerm)
 
-				rgba, err := utils.DecodeImage(tags.Picture().Data)
+				rgba, err := utils.DecodeImageFromBytes(tags.Picture().Data)
 
 				if err == nil {
-					hash, errHash := generateBlurHash(rgba)
-					dominantColors, errColors := utils.GetDominantColors(rgba, 5)
+					hash, errHash := utils.GenerateBlurHash(rgba, X_COMPONENTS, Y_COMPONENTS)
+					palette, errColors := utils.GetDominantColors(rgba, 5)
 
 					if errHash == nil && errColors == nil {
 						db.Model(&domain.Album{}).
 							Where("title = ?", tags.Album()).
 							Update("blur_hash", hash).
-							Update("dominant_color", dominantColors[0])
+							Update("dominant_color", palette.Dominant).
+							Update("less_dominant_color", palette.LessDominant).
+							Update("accent_color", palette.Accent)
 					}
 				}
 			}
@@ -113,16 +112,4 @@ func seedTracks(db *gorm.DB, root, cache string) {
 
 func SeedDatabase(db *gorm.DB, root, cache string) {
 	seedTracks(db, root, cache)
-}
-
-func generateBlurHash(rgba image.Image) (string, error) {
-	if rgba == nil {
-		return "", errors.New("can't generate hash")
-	}
-
-	hash, err := blurhash.Encode(X_COMPONENTS, Y_COMPONENTS, rgba)
-	if err != nil {
-		return "", err
-	}
-	return hash, nil
 }

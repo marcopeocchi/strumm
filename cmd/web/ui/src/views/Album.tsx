@@ -27,7 +27,7 @@ export default function AlbumView() {
 
   return (
     <div className="pb-20 select-none">
-      <AlbumPalette id={album.picture} color={album.dominant_color}>
+      <AlbumPalette palette={album.palette}>
         <AlbumInfo album={album} />
       </AlbumPalette>
       <div className="px-8">

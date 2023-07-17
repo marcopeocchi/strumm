@@ -31,9 +31,8 @@ type LastFMScrobble struct {
 	Artist struct {
 		Name string `json:"data"`
 		Bio  struct {
-			Published string `json:"published"`
-			Summary   string `json:"summary"`
-			Content   string `json:"content"`
+			Summary string `json:"summary"`
+			Content string `json:"content"`
 		} `json:"bio"`
 	} `json:"artist"`
 }

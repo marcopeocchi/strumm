@@ -4,7 +4,6 @@ import { Blurhash } from 'react-blurhash-as'
 type Props = {
   src: string
   hash: string
-
 }
 
 export default function AlbumImage({ src, hash }: Props) {

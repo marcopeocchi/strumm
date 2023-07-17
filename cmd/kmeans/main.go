@@ -8,11 +8,17 @@ import (
 	"os"
 	"sort"
 
+	"github.com/marcopeocchi/mille/pkg/utils"
 	"github.com/muesli/clusters"
 	"github.com/muesli/kmeans"
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("missing image argument")
+		os.Exit(1)
+	}
+
 	fd, err := os.Open(os.Args[1])
 	if err != nil {
 		fmt.Println(err)
@@ -21,7 +27,7 @@ func main() {
 
 	defer fd.Close()
 
-	rgba, err := jpeg.Decode(fd)
+	rgba, err := utils.DecodeImage(fd)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -60,13 +66,9 @@ func main() {
 	})
 
 	for i, cluster := range kmClusters {
-		centroidR := cluster.Center[0]
-		centroidG := cluster.Center[1]
-		centroidB := cluster.Center[2]
-
-		r := uint8(centroidR)
-		g := uint8(centroidG)
-		b := uint8(centroidB)
+		r := uint8(cluster.Center[0])
+		g := uint8(cluster.Center[1])
+		b := uint8(cluster.Center[2])
 
 		rgba := color.RGBA{r, g, b, 0xff}
 
@@ -77,7 +79,7 @@ func main() {
 		}
 	}
 
-	f, _ := os.Create("image.jpg")
+	f, _ := os.Create("palette.jpg")
 	defer f.Close()
 
 	jpeg.Encode(f, img, nil)

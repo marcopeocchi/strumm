@@ -3,8 +3,10 @@ package metadata
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/marcopeocchi/mille/internal/domain"
@@ -37,34 +39,39 @@ func (r *Repository) GetDeezerMetadata(ctx context.Context, artist string) (doma
 }
 
 func (r *Repository) GetLastFMScrobble(ctx context.Context, artist string) (domain.LastFMScrobble, error) {
-	res, err := r.client.Get(buildQueryLastFM(artist))
-	if err != nil {
-		return domain.LastFMScrobble{}, err
-	}
+	select {
+	case <-ctx.Done():
+		return domain.LastFMScrobble{}, errors.New("context cancelled")
+	default:
+		res, err := r.client.Get(buildQueryLastFM(artist))
+		if err != nil {
+			return domain.LastFMScrobble{}, err
+		}
 
-	defer res.Body.Close()
+		defer res.Body.Close()
 
-	m := domain.LastFMScrobble{}
+		m := domain.LastFMScrobble{}
 
-	err = json.NewDecoder(res.Body).Decode(&m)
-	if err != nil {
+		err = json.NewDecoder(res.Body).Decode(&m)
+		if err != nil {
+			return m, nil
+		}
+
 		return m, nil
 	}
-
-	return m, nil
 }
 
 func buildQueryDeezer(artist string) string {
 	return fmt.Sprintf(
 		"https://api.deezer.com/search/artist/?q=%s&index=0&limit=1&output=json",
-		artist,
+		url.QueryEscape(artist),
 	)
 }
 
 func buildQueryLastFM(artist string) string {
 	return fmt.Sprintf(
 		"https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&api_key=%s&format=json",
-		artist,
+		url.QueryEscape(artist),
 		LASTFM_APIKEY,
 	)
 }

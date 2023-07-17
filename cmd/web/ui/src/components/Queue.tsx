@@ -4,7 +4,7 @@ import { RootState } from "../store/redux"
 import { Album, ArtistMetadata } from "../types"
 import { ellipsis } from "../utils/strings"
 import { getHTTPEndpoint } from "../utils/url"
-import Image from "./Image"
+import Image from "./Image/Image"
 import Loader from "./Loader"
 
 const nextFetcher = (url: string) =>
@@ -24,7 +24,7 @@ const Queue: React.FC = () => {
   )
 
   const { data: metadata } = useSWR<ArtistMetadata>(
-    player.queue.at(1)?.artist ?? '',
+    player.queue.at(player.currentIndex)?.artist ?? '',
     metadataFetcher,
   )
 

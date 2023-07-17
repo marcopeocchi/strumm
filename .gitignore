@@ -2,3 +2,4 @@ data.db
 .DS_Store
 .cache
 build/
+*.jpg

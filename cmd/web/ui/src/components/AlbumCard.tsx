@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { Album } from "../types"
 import { getHTTPEndpoint } from "../utils/url"
-import AlbumImage from "./AlbumImage"
+import AlbumImage from "./Image/AlbumImage"
 
 type Props = {
   album: Album
