@@ -5,8 +5,8 @@ import { getHTTPEndpoint } from '../utils/url'
 import Loader from '../components/Loader'
 
 export default function Home() {
-  const fetcher = async () => {
-    const res = await fetch(`${getHTTPEndpoint()}/api/album/latest`)
+  const fetcher = async (url: string) => {
+    const res = await fetch(url)
     const data: Album[] = await res.json()
     return data.slice(0, 36)
   }

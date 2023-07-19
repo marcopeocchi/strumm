@@ -23,7 +23,7 @@ import { getHTTPEndpoint } from '../utils/url'
 import RemoteImage from './Image/RemoteImage'
 
 export default function Player() {
-  const [_, setCurrentIndex] = useRecoilState(currentIndexState)
+  const [, setCurrentIndex] = useRecoilState(currentIndexState)
   const [volume, setVolume] = useRecoilState(volumeState)
   const [queue, setQueue] = useRecoilState(playingQueueState)
   const [metadata] = useRecoilState(albumMetadataState)

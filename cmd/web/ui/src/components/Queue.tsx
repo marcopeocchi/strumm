@@ -1,35 +1,49 @@
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useRecoilState, useRecoilValue } from "recoil"
 import useSWR from 'swr'
-import { currentIndexState, isPlayingState, playingQueueState } from "../atoms/player"
+import {
+  currentIndexState,
+  isPlayingState,
+  playingQueueState
+} from "../atoms/player"
 import { Album, ArtistMetadata } from "../types"
 import { ellipsis } from "../utils/strings"
 import { getHTTPEndpoint } from "../utils/url"
 import Image from "./Image/Image"
 import Loader from "./Loader"
 
-const nextFetcher = (url: string) =>
+const fetcher = (url: string) =>
   fetch(url)
-    .then(res => res.json())
-
-const metadataFetcher = (artist: string) =>
-  fetch(`${getHTTPEndpoint()}/api/metadata/${artist}`)
     .then(res => res.json())
 
 const Queue: React.FC = () => {
   const [queue] = useRecoilState(playingQueueState)
-  const [currentIndex] = useRecoilState(currentIndexState)
+  const [index] = useRecoilState(currentIndexState)
+
   const isPlaying = useRecoilValue(isPlayingState)
 
   const { data: next } = useSWR<Album>(
     `${getHTTPEndpoint()}/api/album/search/id/${queue.at(1)?.album ?? ''}`,
-    nextFetcher
+    fetcher
   )
 
-  const { data: metadata } = useSWR<ArtistMetadata>(
-    queue.at(currentIndex)?.artist ?? '',
-    metadataFetcher,
+  const { data: metadata, mutate, error } = useSWR<ArtistMetadata>(
+    `${getHTTPEndpoint()}/api/metadata/${queue.at(index)?.artist ?? ''}`,
+    fetcher,
   )
+
+  useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        mutate({
+          artistBio: `Can't find additional info.`,
+          artistPicture: ''
+        })
+      }, 2000)
+      return () => clearTimeout(timeout)
+    }
+  }, [error])
 
   return (
     <div className={`

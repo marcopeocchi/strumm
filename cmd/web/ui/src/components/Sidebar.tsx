@@ -49,8 +49,8 @@ namespace Sidebar {
     return (
       <button className={`
         rounded px-3 py-1.5 
-        hover:bg-neutral-200 
-        hover:dark:bg-neutral-700
+      hover:bg-neutral-200 
+      hover:dark:bg-neutral-700
         hover:duration-150
         hover:cursor-pointer
         select-none
