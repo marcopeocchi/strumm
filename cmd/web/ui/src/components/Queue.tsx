@@ -1,12 +1,12 @@
-import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
+import { useRecoilState, useRecoilValue } from "recoil"
 import useSWR from 'swr'
-import { RootState } from "../store/redux"
+import { currentIndexState, isPlayingState, playingQueueState } from "../atoms/player"
 import { Album, ArtistMetadata } from "../types"
 import { ellipsis } from "../utils/strings"
 import { getHTTPEndpoint } from "../utils/url"
 import Image from "./Image/Image"
 import Loader from "./Loader"
-import { Link } from "react-router-dom"
 
 const nextFetcher = (url: string) =>
   fetch(url)
@@ -17,15 +17,17 @@ const metadataFetcher = (artist: string) =>
     .then(res => res.json())
 
 const Queue: React.FC = () => {
-  const player = useSelector((state: RootState) => state.player)
+  const [queue] = useRecoilState(playingQueueState)
+  const [currentIndex] = useRecoilState(currentIndexState)
+  const isPlaying = useRecoilValue(isPlayingState)
 
   const { data: next } = useSWR<Album>(
-    `${getHTTPEndpoint()}/api/album/search/id/${player.queue.at(1)?.album ?? ''}`,
+    `${getHTTPEndpoint()}/api/album/search/id/${queue.at(1)?.album ?? ''}`,
     nextFetcher
   )
 
   const { data: metadata } = useSWR<ArtistMetadata>(
-    player.queue.at(player.currentIndex)?.artist ?? '',
+    queue.at(currentIndex)?.artist ?? '',
     metadataFetcher,
   )
 
@@ -33,7 +35,7 @@ const Queue: React.FC = () => {
     <div className={`
       w-1/4 p-6 
       border-l dark:border-neutral-600 
-      ${player.isPlaying
+      ${isPlaying
         ? 'xl:flex flex-col gap-4 hidden'
         : 'hidden'
       }
@@ -46,10 +48,10 @@ const Queue: React.FC = () => {
         rounded-lg"
       >
         <Link
-          to={`/search/${player.queue.at(0)?.artist}`}
+          to={`/search/${queue.at(0)?.artist}`}
           className="text-2xl font-bold hover:underline"
         >
-          {player.queue.at(0)?.artist}
+          {queue.at(0)?.artist}
         </Link>
         <h2 className="text-sm break-words">
           {metadata?.artistBio
@@ -58,10 +60,10 @@ const Queue: React.FC = () => {
           }
         </h2>
         <p className="text-sm">
-          Genre: {player.queue.at(0)?.genre || '-'}
+          Genre: {queue.at(0)?.genre || '-'}
         </p>
       </div>
-      {(next && player.isPlaying) &&
+      {(next && isPlaying) &&
         <div className="
           p-4 
         bg-neutral-50 dark:bg-neutral-900 
@@ -79,7 +81,7 @@ const Queue: React.FC = () => {
             />
             <div>
               <p className="text-ellipsis">
-                {player.queue.at(1)?.title}
+                {queue.at(1)?.title}
               </p>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
                 {next?.artist}
@@ -88,7 +90,7 @@ const Queue: React.FC = () => {
           </div>
         </div>
       }
-      {player.isPlaying && <div className="py-8" />}
+      {isPlaying && <div className="py-8" />}
     </div>
   )
 }

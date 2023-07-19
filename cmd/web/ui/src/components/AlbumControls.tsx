@@ -1,14 +1,15 @@
-import { useDispatch } from "react-redux"
-import { Album } from "../types"
-import { setImg, setIsPlaying, setQueue } from "../features/player"
 import { Heart, Play } from "lucide-react"
+import { useRecoilState } from "recoil"
+import { albumMetadataState, playingQueueState } from "../atoms/player"
+import { Album } from "../types"
 
 type Props = {
   album: Album
 }
 
 const AlbumControls: React.FC<Props> = ({ album }) => {
-  const dispatch = useDispatch()
+  const [, setMetadata] = useRecoilState(albumMetadataState)
+  const [, setQueue] = useRecoilState(playingQueueState)
 
   return (
     <div className="flex gap-4">
@@ -18,9 +19,8 @@ const AlbumControls: React.FC<Props> = ({ album }) => {
           flex items-center justify-center
           hover:bg-blue-500 duration-100 shadow-md"
         onClick={() => {
-          dispatch(setQueue(album.tracks))
-          dispatch(setImg(album.picture))
-          dispatch(setIsPlaying(true))
+          setQueue(album.tracks)
+          setMetadata({ ...album, tracks: [] })
         }}
       >
         <Play

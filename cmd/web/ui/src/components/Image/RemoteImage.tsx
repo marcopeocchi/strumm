@@ -13,7 +13,6 @@ const RemoteImage: React.FC<Props> = (props) => {
   const fetcher = async (url: string) => {
     const res = await fetch(url)
     const data: Album = await res.json()
-    console.log(`${getHTTPEndpoint()}/static/img/${data.picture}`)
     return `${getHTTPEndpoint()}/static/img/${data.picture}`
   }
 

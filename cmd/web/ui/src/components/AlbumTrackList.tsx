@@ -1,16 +1,15 @@
-import { useDispatch, useSelector } from "react-redux"
+import { ListEnd, Play } from "lucide-react"
+import { useRecoilState } from "recoil"
+import { albumMetadataState, playingQueueState } from "../atoms/player"
 import { Album } from "../types"
-import { RootState } from "../store/redux"
-import { setImg, setIsPlaying, setQueue } from "../features/player"
-import { Play, ListEnd } from "lucide-react"
 
 type Props = {
   album: Album
 }
 
 const AlbumTrackList: React.FC<Props> = ({ album }) => {
-  const dispatch = useDispatch()
-  const player = useSelector((state: RootState) => state.player)
+  const [queue, setQueue] = useRecoilState(playingQueueState)
+  const [metadata, setMetadata] = useRecoilState(albumMetadataState)
 
   return (
     <div className="pt-3 md:pt-6 -ml-2">
@@ -25,24 +24,23 @@ const AlbumTrackList: React.FC<Props> = ({ album }) => {
           key={track.ID}
         >
           <div className="flex items-center gap-4 w-full" onClick={() => {
-            dispatch(setQueue(album.tracks.slice(idx)))
-            dispatch(setImg(album.picture))
-            dispatch(setIsPlaying(true))
+            setQueue(album.tracks.slice(idx))
+            setMetadata({ ...album, tracks: [] })
           }}>
             <div>
-              {player.currentId === track.ID
+              {metadata.id === track.ID
                 ? <Play size={12} fill="#60a5fa" color="#60a5fa" />
                 : track.index
               }
             </div>
             <div className="flex flex-col">
-              <div className={`${(player.currentId === track.ID) &&
+              <div className={`${(metadata.id === track.ID) &&
                 'text-blue-400 -ml-1'
                 }`}
               >
                 {track.title}
               </div>
-              <div className={`${(player.currentId === track.ID) &&
+              <div className={`${(metadata.id === track.ID) &&
                 'text-blue-400 -ml-1'
                 } text-sm`}
               >
@@ -52,9 +50,7 @@ const AlbumTrackList: React.FC<Props> = ({ album }) => {
           </div>
           <button
             className="py-1 px-1.5 rounded hover:bg-blue-200 dark:hover:bg-blue-400"
-            onClick={() => {
-              dispatch(setQueue([...player.queue, track]))
-            }}
+            onClick={() => { setQueue([...queue, track]) }}
           >
             <ListEnd size={18} />
           </button>

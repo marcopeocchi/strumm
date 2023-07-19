@@ -1,35 +1,33 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { setTheme } from '../features/settings'
-import { RootState } from '../store/redux'
+import { useRecoilState } from 'recoil'
+import { themeState } from '../atoms/settings'
 
 type Props = {
   children: React.ReactNode
 }
 
 export default function ThemeLoader({ children }: Props) {
-  const settings = useSelector((state: RootState) => state.settings)
-  const dispatch = useDispatch()
+  const [theme, setTheme] = useRecoilState(themeState)
 
   useEffect(() => {
-    if (settings.theme === 'dark') {
+    if (theme === 'dark') {
       document.documentElement.classList.add('dark')
       return
     }
-    if (settings.theme === 'light') {
+    if (theme === 'light') {
       document.documentElement.classList.remove('dark')
       return
     }
     if (
-      settings.theme === 'system' &&
+      theme === 'system' &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
       document.documentElement.classList.add('dark')
-      dispatch(setTheme('dark'))
+      setTheme('dark')
       return
     }
     document.documentElement.classList.remove('dark')
-    dispatch(setTheme('light'))
+    setTheme('light')
     return
   }, [])
 

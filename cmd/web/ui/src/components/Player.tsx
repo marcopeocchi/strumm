@@ -5,38 +5,47 @@ import {
   Rewind,
   SkipBack,
   SkipForward
-} from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+} from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
-  setCurrentId,
-  setCurrentIndex,
-  setIsPlaying,
-  setVolume
-} from "../features/player"
-import { RootState } from "../store/redux"
-import { ellipsis } from "../utils/strings"
-import { formatMMSS } from "../utils/time"
-import { getHTTPEndpoint } from "../utils/url"
-import RemoteImage from "./Image/RemoteImage"
+  albumMetadataState,
+  currentIndexState,
+  isPlayingState,
+  playingQueueState,
+  volumePercentState,
+  volumeState
+} from '../atoms/player'
+import { ellipsis } from '../utils/strings'
+import { formatMMSS } from '../utils/time'
+import { getHTTPEndpoint } from '../utils/url'
+import RemoteImage from './Image/RemoteImage'
 
 export default function Player() {
-  const player = useSelector((state: RootState) => state.player)
+  const [_, setCurrentIndex] = useRecoilState(currentIndexState)
+  const [volume, setVolume] = useRecoilState(volumeState)
+  const [queue, setQueue] = useRecoilState(playingQueueState)
+  const [metadata] = useRecoilState(albumMetadataState)
+
+  const isPlaying = useRecoilValue(isPlayingState)
+  const volumePercent = useRecoilValue(volumePercentState)
+
   const playerRef = useRef<HTMLAudioElement>(null)
 
   const [seek, setSeek] = useState(0)
+  const [index, setIndex] = useState(0)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
 
   const nextTrack = () => {
-    index >= (player.queue.length - 1)
-      ? dispatch(setIsPlaying(false))
+    index >= (queue.length - 1)
+      ? setQueue([])
       : setIndex(state => state + 1)
   }
 
   const previousTrack = () => setIndex(state => (
-    state <= 0 ? 0 : (state - 1) % player.queue.length
+    state <= 0 ? 0 : (state - 1) % queue.length
   ))
 
   const back15 = () => {
@@ -63,26 +72,22 @@ export default function Player() {
     ? playerRef.current?.play()
     : playerRef.current?.pause()
 
-  const [index, setIndex] = useState(0)
+  useEffect(() => {
+    if (queue.length > 0 && queue.at(index)) {
+      setCurrentIndex(index)
+    }
+  }, [index, queue])
 
-  const dispatch = useDispatch()
 
   useEffect(() => {
     if (playerRef.current) {
-      playerRef.current.volume = player.volume
+      playerRef.current.volume = volume
     }
-  }, [playerRef, player])
-
-  useEffect(() => {
-    if (player.queue.length > 0 && player.queue.at(index)) {
-      dispatch(setCurrentId(player.queue.at(index)!.ID))
-      dispatch(setCurrentIndex(index))
-    }
-  }, [index, player.queue])
+  }, [volume])
 
   useEffect(() => {
     setIndex(0)
-  }, [player.queue])
+  }, [queue])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -94,9 +99,9 @@ export default function Player() {
       }
     }, 250)
     return () => clearInterval(interval)
-  }, [player.currentId])
+  }, [metadata.id])
 
-  if (!player.isPlaying) {
+  if (!isPlaying) {
     return null
   }
 
@@ -114,20 +119,20 @@ export default function Player() {
         <RemoteImage
           rounded
           size="mini"
-          albumId={player.queue.at(index)?.album}
+          albumId={queue.at(index)?.album}
         />
         <div className="flex flex-col">
           <Link
             className="font-semibold hover:underline"
-            to={`/album/${player.queue.at(index)?.album}`}
+            to={`/album/${queue.at(index)?.album}`}
           >
-            {ellipsis(player.queue.at(index)?.title ?? '', 25)}
+            {ellipsis(queue.at(index)?.title ?? '', 25)}
           </Link>
           <Link
             className="text-sm hover:underline"
-            to={`/search/${player.queue.at(index)?.artist}`}
+            to={`/search/${queue.at(index)?.artist}`}
           >
-            {player.queue.at(index)?.artist}
+            {queue.at(index)?.artist}
           </Link>
         </div>
       </div>
@@ -136,9 +141,9 @@ export default function Player() {
         controls
         autoPlay
         ref={playerRef}
-        onVolumeChange={(e) => dispatch(setVolume(e.currentTarget.volume))}
         onEnded={nextTrack}
-        src={`${getHTTPEndpoint()}/api/stream/${player.queue.at(index)?.ID}`}
+        onPlay={e => e.currentTarget.volume = volume}
+        src={`${getHTTPEndpoint()}/api/stream/${queue.at(index)?.ID}`}
       />
       <div className="flex flex-col gap-2">
         <div className="flex justify-between gap-1.5">
@@ -220,13 +225,10 @@ export default function Player() {
       <input
         type="range"
         className="w-20"
-        value={(playerRef.current?.volume ?? player.volume) * 100}
+        value={volumePercent}
         onChange={e => {
-          if (playerRef.current) {
-            const val = Number(e.currentTarget.value) / 100
-            playerRef.current.volume = val
-            setVolume(val)
-          }
+          const val = Number(e.currentTarget.value) / 100
+          setVolume(val)
         }}
       />
     </div>

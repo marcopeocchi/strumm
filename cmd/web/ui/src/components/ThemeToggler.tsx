@@ -1,7 +1,6 @@
-import { Sun, Moon } from 'lucide-react'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../store/redux'
-import { toggleTheme } from '../features/settings'
+import { Moon, Sun } from 'lucide-react'
+import { useRecoilState } from 'recoil'
+import { themeState } from '../atoms/settings'
 
 type Props = {
   size?: 'sm' | 'md'
@@ -9,16 +8,30 @@ type Props = {
 }
 
 export default function ThemeToggler({ size = 'md', className }: Props) {
-  const settings = useSelector((state: RootState) => state.settings)
-  const dispatch = useDispatch()
+  const [theme, setTheme] = useRecoilState(themeState)
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark')
+      localStorage.setItem('theme', 'dark')
+      document.documentElement.classList.add('dark')
+      return
+    }
+    if (theme === 'dark') {
+      setTheme('light')
+      localStorage.setItem('theme', 'light')
+      document.documentElement.classList.remove('dark')
+      return
+    }
+  }
 
   return (
     <button
       className={`border dark:border-neutral-600 rounded-lg p-1.5 ${className}`}
-      onClick={() => dispatch(toggleTheme())}
+      onClick={() => toggleTheme()}
     >
       {
-        settings.theme === 'light'
+        theme === 'light'
           ? <Moon size={size === 'sm' ? 12 : 16} />
           : <Sun size={size === 'sm' ? 12 : 16} />
       }
