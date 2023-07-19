@@ -38,15 +38,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	httpClient := &http.Client{}
+	httpClient := http.DefaultClient
 	defer httpClient.CloseIdleConnections()
 
 	build, _ := fs.Sub(app, "ui/dist")
 
-	sh := middlewares.SpaHandler{
-		Entrypoint: "index.html",
-		Filesystem: &build,
-	}
+	sh := middlewares.NewSpaHandler("index.html", build)
 	sh.AddClientRoute("/album")
 	sh.AddClientRoute("/albums")
 	sh.AddClientRoute("/artists")

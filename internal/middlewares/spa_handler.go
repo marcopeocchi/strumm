@@ -13,8 +13,15 @@ import (
 
 type SpaHandler struct {
 	Entrypoint string
-	Filesystem *fs.FS
+	Filesystem fs.FS
 	routes     []string
+}
+
+func NewSpaHandler(index string, fs fs.FS) *SpaHandler {
+	return &SpaHandler{
+		Entrypoint: index,
+		Filesystem: fs,
+	}
 }
 
 func (s *SpaHandler) AddClientRoute(route string) *SpaHandler {
@@ -47,7 +54,7 @@ func (s *SpaHandler) Handler() http.HandlerFunc {
 
 		path = strings.TrimPrefix(path, "/")
 
-		file, err := (*s.Filesystem).Open(path)
+		file, err := s.Filesystem.Open(path)
 
 		if err != nil {
 			if os.IsNotExist(err) {

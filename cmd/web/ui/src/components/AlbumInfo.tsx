@@ -1,28 +1,22 @@
-import { Disc3 } from "lucide-react"
-import { useState } from "react"
 import { Album } from "../types"
 import { getHTTPEndpoint } from "../utils/url"
-import FallbackImage from "./Image/FallbackImage"
+import Image from "./Image/Image"
 
 type Props = {
   album: Album
 }
 
 const AlbumInfo: React.FC<Props> = ({ album }) => {
-  const [hasError, setHasError] = useState(false)
+  const getFormat = () => album.tracks.some(t => Boolean(t.format))
+    ? album.tracks.find(t => t.format)!.format
+    : 'unknown format'
 
   return (
     <div className="flex flex-col sm:flex-row gap-8 items-end">
-      {!hasError
-        ? <img
-          className="object-cover w-full sm:w-64 sm:h-64 shadow-lg"
-          src={`${getHTTPEndpoint()}/static/img/${album.picture}`}
-          onError={() => setHasError(true)}
-        />
-        : <FallbackImage size="full">
-          <Disc3 size={96} />
-        </FallbackImage>
-      }
+      <Image
+        src={`${getHTTPEndpoint()}/static/img/${album.picture}`}
+        size="full"
+      />
       <div>
         <h1 className="text-6xl sm:text-7xl font-bold">
           {album.title}
@@ -31,7 +25,7 @@ const AlbumInfo: React.FC<Props> = ({ album }) => {
           {album.year || '-'}
         </h5>
         <h5 className="font-semibold text-sm pt-1">
-          {album.artist} - {album.tracks.length || '-'} tracks
+          {album.artist} - {album.tracks.length || '-'} tracks - {getFormat()}
         </h5>
       </div>
     </div>

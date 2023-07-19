@@ -23,7 +23,7 @@ const Image: React.FC<Props> = ({
   if (hasError) {
     return (
       <FallbackImage size={size ?? 'full'} rounded={rounded}>
-        <Disc3 size={size === 'mini' ? 32 : 72} />
+        <Disc3 size={size === 'mini' ? 32 : 96} />
       </FallbackImage>
     )
   }
