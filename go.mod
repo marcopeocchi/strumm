@@ -12,6 +12,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/muesli/clusters v0.0.0-20200529215643-2700303c1762
 	github.com/muesli/kmeans v0.3.1
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	golang.org/x/image v0.0.0-20200927104501-e162460cd6b5
 	gorm.io/gorm v1.25.2
 )

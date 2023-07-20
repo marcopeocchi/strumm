@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/patrickmn/go-cache"
 )
 
 var (
@@ -18,10 +19,18 @@ var (
 
 type Repository struct {
 	client *http.Client
+	cache  *cache.Cache
 }
 
 func (r *Repository) GetDeezerMetadata(ctx context.Context, artist string) (domain.DeezerAPIResponse, error) {
-	res, err := r.client.Get(buildQueryDeezer(artist))
+	url := buildQueryDeezer(artist)
+
+	cached, found := r.cache.Get(url)
+	if found {
+		return cached.(domain.DeezerAPIResponse), nil
+	}
+
+	res, err := r.client.Get(url)
 	if err != nil {
 		return domain.DeezerAPIResponse{}, err
 	}
@@ -35,15 +44,24 @@ func (r *Repository) GetDeezerMetadata(ctx context.Context, artist string) (doma
 		return m, nil
 	}
 
+	r.cache.Set(url, m, cache.DefaultExpiration)
+
 	return m, nil
 }
 
 func (r *Repository) GetLastFMScrobble(ctx context.Context, artist string) (domain.LastFMScrobble, error) {
+	url := buildQueryLastFM(artist)
+
+	cached, found := r.cache.Get(url)
+	if found {
+		return cached.(domain.LastFMScrobble), nil
+	}
+
 	select {
 	case <-ctx.Done():
 		return domain.LastFMScrobble{}, errors.New("context cancelled")
 	default:
-		res, err := r.client.Get(buildQueryLastFM(artist))
+		res, err := r.client.Get(url)
 		if err != nil {
 			return domain.LastFMScrobble{}, err
 		}
@@ -56,6 +74,8 @@ func (r *Repository) GetLastFMScrobble(ctx context.Context, artist string) (doma
 		if err != nil {
 			return m, nil
 		}
+
+		r.cache.Set(url, m, cache.DefaultExpiration)
 
 		return m, nil
 	}

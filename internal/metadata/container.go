@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/patrickmn/go-cache"
 )
 
-func Container(client *http.Client) (domain.MetadataHandler, domain.MetadataService) {
+func Container(client *http.Client, cache *cache.Cache) (domain.MetadataHandler, domain.MetadataService) {
 	var (
-		repository = ProvideRepository(client)
+		repository = ProvideRepository(client, cache)
 		service    = ProvideService(repository)
 		handler    = ProvideHandler(service)
 	)

@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/patrickmn/go-cache"
 )
 
 var (
@@ -17,10 +18,11 @@ var (
 	handlerOnce    sync.Once
 )
 
-func ProvideRepository(client *http.Client) *Repository {
+func ProvideRepository(client *http.Client, cache *cache.Cache) *Repository {
 	repositoryOnce.Do(func() {
 		repository = &Repository{
 			client: client,
+			cache:  cache,
 		}
 	})
 	return repository

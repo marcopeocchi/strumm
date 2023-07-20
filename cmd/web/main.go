@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
@@ -17,19 +18,20 @@ import (
 	"github.com/marcopeocchi/mille/internal/middlewares"
 	"github.com/marcopeocchi/mille/internal/stream"
 	"github.com/marcopeocchi/mille/internal/track"
+	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 )
 
 var (
 	//go:embed ui/dist
-	app   embed.FS
-	port  int
-	cache string
+	app    embed.FS
+	port   int
+	static string
 )
 
 func init() {
 	flag.IntVar(&port, "p", 8080, "port to listen at")
-	flag.StringVar(&cache, "c", ".cache", "path of cache directory")
+	flag.StringVar(&static, "c", ".cache", "path of cache directory")
 	flag.Parse()
 }
 
@@ -41,6 +43,8 @@ func main() {
 
 	httpClient := http.DefaultClient
 	defer httpClient.CloseIdleConnections()
+
+	sharedCache := cache.New(2*time.Hour, 10*time.Minute)
 
 	build, _ := fs.Sub(app, "ui/dist")
 
@@ -58,7 +62,7 @@ func main() {
 	albumContainer := album.Container(db)
 	trackContainer := track.Container(db)
 	streamContainer := stream.Container(db)
-	metadataContainer, _ := metadata.Container(httpClient)
+	metadataContainer, _ := metadata.Container(httpClient, sharedCache)
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
@@ -91,7 +95,7 @@ func main() {
 	r.Route("/static", func(r chi.Router) {
 		r.Get("/img/{id}", func(w http.ResponseWriter, r *http.Request) {
 			id := chi.URLParam(r, "id")
-			http.ServeFile(w, r, filepath.Join(cache, id))
+			http.ServeFile(w, r, filepath.Join(static, id))
 		})
 	})
 
