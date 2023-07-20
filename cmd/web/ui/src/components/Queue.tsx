@@ -24,7 +24,7 @@ const Queue: React.FC = () => {
   const isPlaying = useRecoilValue(isPlayingState)
 
   const { data: next } = useSWR<Album>(
-    `${getHTTPEndpoint()}/api/album/search/id/${queue.at(1)?.album ?? ''}`,
+    `${getHTTPEndpoint()}/api/album/id/${queue.at(1)?.album ?? ''}`,
     fetcher
   )
 

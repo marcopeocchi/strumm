@@ -19,7 +19,7 @@ export default function Search() {
   }
 
   const { data: albums } = useSWR(
-    `${getHTTPEndpoint()}/api/album/search/any/${query}?page=${page}`,
+    `${getHTTPEndpoint()}/api/album/any/${query}?page=${page}`,
     fetcher
   )
 

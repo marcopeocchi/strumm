@@ -9,19 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Track struct {
-	gorm.Model
-	Format  string `json:"format"`
-	Title   string `json:"title"`
-	AlbumID uint   `json:"album"`
-	Artist  string `json:"artist"`
-	Genre   string `json:"genre"`
-	Index   int    `json:"index"`
-	Lyrics  string `json:"lyrics"`
-	Year    int    `json:"year"`
-	Path    string `json:"path"`
-}
-
 type Album struct {
 	gorm.Model
 	Title             string `gorm:"index,unique"`
@@ -66,7 +53,8 @@ func (a *AlbumEntity) FromAlbum(album Album, tracks *[]Track) {
 	}
 }
 
-type SearchRepository interface {
+type AlbumRepository interface {
+	FindAllAlbums(ctx context.Context) (*[]Album, error)
 	FindAlbumByID(ctx context.Context, id uint) (Album, error)
 	FindAlbumByTitle(ctx context.Context, title string) (Album, error)
 	FindAlbumByGenre(ctx context.Context, genre string) (*[]Album, error)
@@ -75,20 +63,12 @@ type SearchRepository interface {
 
 	Latest(ctx context.Context) (*[]Album, error)
 	FindAny(ctx context.Context, like string) (*[]Album, error)
-	FindAllAlbums(ctx context.Context) (*[]Album, error)
-	FindAllTracks(ctx context.Context) (*[]Track, error)
-
-	FindTrackByID(ctx context.Context, id uint) (Track, error)
-	FindTrackByTitle(ctx context.Context, title string) (Track, error)
-	FindTrackByGenre(ctx context.Context, genre string) (*[]Track, error)
-	FindTrackByAlbumID(ctx context.Context, id uint) (*[]Track, error)
-	FindTrackByArtist(ctx context.Context, artist string) (*[]Track, error)
-	FindTrackByTitleLike(ctx context.Context, titleLike string) (*[]Track, error)
 
 	RandomAlbum(ctx context.Context) (Album, error)
 }
 
-type SearchService interface {
+type AlbumService interface {
+	FindAllAlbums(ctx context.Context) (*[]AlbumEntity, error)
 	FindAlbumByID(ctx context.Context, id uint) (AlbumEntity, error)
 	FindAlbumByTitle(ctx context.Context, title string) (AlbumEntity, error)
 	FindAlbumByGenre(ctx context.Context, genre string) (*[]AlbumEntity, error)
@@ -97,19 +77,12 @@ type SearchService interface {
 
 	Latest(ctx context.Context) (*[]AlbumEntity, error)
 	FindAny(ctx context.Context, like string) (*[]AlbumEntity, error)
-	FindAllAlbums(ctx context.Context) (*[]AlbumEntity, error)
-	FindAllTracks(ctx context.Context) (*[]Track, error)
-
-	FindTrackByID(ctx context.Context, id uint) (Track, error)
-	FindTrackByTitle(ctx context.Context, title string) (Track, error)
-	FindTrackByGenre(ctx context.Context, genre string) (*[]Track, error)
-	FindTrackByArtist(ctx context.Context, artist string) (*[]Track, error)
-	FindTrackByTitleLike(ctx context.Context, titleLike string) (*[]Track, error)
 
 	RandomAlbum(ctx context.Context) (AlbumEntity, error)
 }
 
-type SearchHandler interface {
+type AlbumHandler interface {
+	FindAllAlbums() http.HandlerFunc
 	FindAlbumByID() http.HandlerFunc
 	FindAlbumByTitle() http.HandlerFunc
 	FindAlbumByGenre() http.HandlerFunc
@@ -118,14 +91,6 @@ type SearchHandler interface {
 
 	Latest() http.HandlerFunc
 	FindAny() http.HandlerFunc
-	FindAllAlbums() http.HandlerFunc
-	FindAllTracks() http.HandlerFunc
-
-	FindTrackByID() http.HandlerFunc
-	FindTrackByTitle() http.HandlerFunc
-	FindTrackByGenre() http.HandlerFunc
-	FindTrackByArtist() http.HandlerFunc
-	FindTrackByTitleLike() http.HandlerFunc
 
 	RandomAlbum() http.HandlerFunc
 }

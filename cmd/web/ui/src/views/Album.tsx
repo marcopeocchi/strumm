@@ -16,7 +16,7 @@ export default function AlbumView() {
       .then(res => res.json())
 
   const { data: album } = useSWR<Album>(
-    `${getHTTPEndpoint()}/api/album/search/id/${params.id ?? ''}`,
+    `${getHTTPEndpoint()}/api/album/id/${params.id ?? ''}`,
     fetcher
   )
 

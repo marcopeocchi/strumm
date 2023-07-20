@@ -12,10 +12,11 @@ import (
 	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/marcopeocchi/mille/internal/album"
 	"github.com/marcopeocchi/mille/internal/metadata"
 	"github.com/marcopeocchi/mille/internal/middlewares"
-	"github.com/marcopeocchi/mille/internal/search"
 	"github.com/marcopeocchi/mille/internal/stream"
+	"github.com/marcopeocchi/mille/internal/track"
 	"gorm.io/gorm"
 )
 
@@ -53,31 +54,33 @@ func main() {
 	r.Use(middlewares.CORS)
 	r.Use(middleware.Logger)
 
+	// Dependency Injection containers
+	albumContainer := album.Container(db)
+	trackContainer := track.Container(db)
 	streamContainer := stream.Container(db)
-	searchContainer := search.Container(db)
 	metadataContainer, _ := metadata.Container(httpClient)
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
 
 		r.Route("/album", func(r chi.Router) {
-			r.Get("/all", searchContainer.FindAllAlbums())
-			r.Get("/latest", searchContainer.Latest())
-			r.Get("/random", searchContainer.RandomAlbum())
-			r.Get("/search/id/{id}", searchContainer.FindAlbumByID())
-			r.Get("/search/any/{query}", searchContainer.FindAny())
-			r.Get("/search/like/{title}", searchContainer.FindAlbumByTitleLike())
-			r.Get("/search/title/{title}", searchContainer.FindAlbumByTitle())
-			r.Get("/search/artist/{artist}", searchContainer.FindAlbumByArtist())
+			r.Get("/all", albumContainer.FindAllAlbums())
+			r.Get("/latest", albumContainer.Latest())
+			r.Get("/random", albumContainer.RandomAlbum())
+			r.Get("/id/{id}", albumContainer.FindAlbumByID())
+			r.Get("/any/{query}", albumContainer.FindAny())
+			r.Get("/like/{title}", albumContainer.FindAlbumByTitleLike())
+			r.Get("/title/{title}", albumContainer.FindAlbumByTitle())
+			r.Get("/artist/{artist}", albumContainer.FindAlbumByArtist())
 		})
 
 		r.Route("/track", func(r chi.Router) {
-			r.Get("/all", searchContainer.FindAllTracks())
-			r.Get("/search/id/{id}", searchContainer.FindTrackByID())
-			r.Get("/search/like/{title}", searchContainer.FindTrackByTitleLike())
-			r.Get("/search/title/{title}", searchContainer.FindTrackByTitle())
-			r.Get("/search/genre/{genre}", searchContainer.FindTrackByGenre())
-			r.Get("/search/artist/{artist}", searchContainer.FindTrackByArtist())
+			r.Get("/all", trackContainer.FindAllTracks())
+			r.Get("/id/{id}", trackContainer.FindTrackByID())
+			r.Get("/like/{title}", trackContainer.FindTrackByTitleLike())
+			r.Get("/title/{title}", trackContainer.FindTrackByTitle())
+			r.Get("/genre/{genre}", trackContainer.FindTrackByGenre())
+			r.Get("/artist/{artist}", trackContainer.FindTrackByArtist())
 		})
 
 		r.Route("/metadata", func(r chi.Router) {

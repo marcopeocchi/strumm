@@ -1,11 +1,4 @@
-import {
-  FastForward,
-  Pause,
-  Play,
-  Rewind,
-  SkipBack,
-  SkipForward
-} from 'lucide-react'
+
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -18,9 +11,9 @@ import {
   volumeState
 } from '../atoms/player'
 import { ellipsis } from '../utils/strings'
-import { formatMMSS } from '../utils/time'
 import { getHTTPEndpoint } from '../utils/url'
 import RemoteImage from './Image/RemoteImage'
+import MiniPlayer from './MiniPlayer'
 
 export default function Player() {
   const [, setCurrentIndex] = useRecoilState(currentIndexState)
@@ -35,8 +28,6 @@ export default function Player() {
 
   const [seek, setSeek] = useState(0)
   const [index, setIndex] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
 
   const nextTrack = () => {
     index >= (queue.length - 1)
@@ -68,7 +59,7 @@ export default function Player() {
     }
   }
 
-  const pause = () => playerRef.current?.paused
+  const togglePlayPause = () => playerRef.current?.paused
     ? playerRef.current?.play()
     : playerRef.current?.pause()
 
@@ -77,7 +68,6 @@ export default function Player() {
       setCurrentIndex(index)
     }
   }, [index, queue])
-
 
   useEffect(() => {
     if (playerRef.current) {
@@ -94,8 +84,6 @@ export default function Player() {
       if (playerRef.current) {
         const seek = playerRef.current.currentTime / playerRef.current.duration
         setSeek(Math.ceil(seek * 100))
-        setCurrentTime(playerRef.current.currentTime)
-        setDuration(playerRef.current.duration)
       }
     }, 250)
     return () => clearInterval(interval)
@@ -142,85 +130,23 @@ export default function Player() {
         autoPlay
         ref={playerRef}
         onEnded={nextTrack}
+        // for firefox and safari which won't autoplay.
+        onCanPlay={e => e.currentTarget.play()}
         onPlay={e => e.currentTarget.volume = volume}
         src={`${getHTTPEndpoint()}/api/stream/${queue.at(index)?.ID}`}
       />
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between gap-1.5">
-          <div className="text-sm">
-            {formatMMSS(currentTime)}
-          </div>
-          <input
-            type="range"
-            value={seek}
-            onChange={onSeek}
-            className="md:w-80"
-          />
-          <div className="text-sm">
-            {formatMMSS(duration)}
-          </div>
-        </div>
-        <div className="flex gap-1.5 justify-center">
-          <button
-            onClick={previousTrack}
-            className="px-1 py-0.5 
-            rounded-lg 
-            border dark:border-neutral-400/30
-            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
-            duration-100
-            "
-          >
-            <SkipBack />
-          </button>
-          <button
-            onClick={back15}
-            className="px-1 py-0.5 
-            rounded-lg 
-            border dark:border-neutral-400/30
-            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
-            duration-100
-            "
-          >
-            <Rewind />
-          </button>
-          <button
-            onClick={pause}
-            className="px-1 py-0.5 
-            rounded-lg 
-            border dark:border-neutral-400/30
-            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
-            duration-100
-            "
-          >
-            {playerRef.current && playerRef.current.paused
-              ? <Play />
-              : <Pause />
-            }
-          </button>
-          <button
-            onClick={forward15}
-            className="px-1 py-0.5 
-            rounded-lg 
-            border dark:border-neutral-400/30
-            hover:bg-neutral-100 dark:hover:bg-neutral-50/70
-            duration-100
-            "
-          >
-            <FastForward />
-          </button>
-          <button
-            onClick={nextTrack}
-            className="px-1 py-0.5 
-              rounded-lg 
-              border dark:border-neutral-400/30
-              hover:bg-neutral-100 dark:hover:bg-neutral-50/70
-              duration-100
-            "
-          >
-            <SkipForward />
-          </button>
-        </div>
-      </div>
+      <MiniPlayer
+        onNext={nextTrack}
+        onPrev={previousTrack}
+        onFastForward={forward15}
+        onRewind={back15}
+        onSeek={onSeek}
+        onPlayToggle={togglePlayPause}
+        seekValue={seek}
+        paused={playerRef.current?.paused}
+        currentTime={playerRef.current?.currentTime}
+        duration={playerRef.current?.duration}
+      />
       <div />
       <input
         type="range"

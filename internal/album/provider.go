@@ -1,4 +1,4 @@
-package search
+package album
 
 import (
 	"sync"
@@ -24,14 +24,17 @@ func ProvideRepository(db *gorm.DB) *Repository {
 	return repository
 }
 
-func ProvideService(repo domain.SearchRepository) *Service {
+func ProvideService(ar domain.AlbumRepository, tr domain.TrackRepository) *Service {
 	serviceOnce.Do(func() {
-		service = &Service{repository: repo}
+		service = &Service{
+			albumRepository: ar,
+			trackRepository: tr,
+		}
 	})
 	return service
 }
 
-func ProvideHandler(svc domain.SearchService) *Handler {
+func ProvideHandler(svc domain.AlbumService) *Handler {
 	handlerOnce.Do(func() {
 		handler = &Handler{service: svc}
 	})

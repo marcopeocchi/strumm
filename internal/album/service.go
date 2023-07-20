@@ -1,4 +1,4 @@
-package search
+package album
 
 import (
 	"context"
@@ -7,16 +7,17 @@ import (
 )
 
 type Service struct {
-	repository domain.SearchRepository
+	albumRepository domain.AlbumRepository
+	trackRepository domain.TrackRepository
 }
 
 func (s *Service) FindAlbumByID(ctx context.Context, id uint) (domain.AlbumEntity, error) {
-	album, err := s.repository.FindAlbumByID(ctx, id)
+	album, err := s.albumRepository.FindAlbumByID(ctx, id)
 	if err != nil {
 		return domain.AlbumEntity{}, err
 	}
 
-	tracks, err := s.repository.FindTrackByAlbumID(ctx, id)
+	tracks, err := s.trackRepository.FindTrackByAlbumID(ctx, id)
 	if err != nil {
 		return domain.AlbumEntity{}, err
 	}
@@ -28,12 +29,12 @@ func (s *Service) FindAlbumByID(ctx context.Context, id uint) (domain.AlbumEntit
 }
 
 func (s *Service) FindAlbumByTitle(ctx context.Context, title string) (domain.AlbumEntity, error) {
-	album, err := s.repository.FindAlbumByTitle(ctx, title)
+	album, err := s.albumRepository.FindAlbumByTitle(ctx, title)
 	if err != nil {
 		return domain.AlbumEntity{}, err
 	}
 
-	tracks, err := s.repository.FindTrackByAlbumID(ctx, album.ID)
+	tracks, err := s.trackRepository.FindTrackByAlbumID(ctx, album.ID)
 	if err != nil {
 		return domain.AlbumEntity{}, err
 	}
@@ -45,7 +46,7 @@ func (s *Service) FindAlbumByTitle(ctx context.Context, title string) (domain.Al
 }
 
 func (s *Service) FindAlbumByGenre(ctx context.Context, genre string) (*[]domain.AlbumEntity, error) {
-	albums, err := s.repository.FindAlbumByGenre(ctx, genre)
+	albums, err := s.albumRepository.FindAlbumByGenre(ctx, genre)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (s *Service) FindAlbumByGenre(ctx context.Context, genre string) (*[]domain
 }
 
 func (s *Service) FindAlbumByArtist(ctx context.Context, artist string) (*[]domain.AlbumEntity, error) {
-	albums, err := s.repository.FindAlbumByArtist(ctx, artist)
+	albums, err := s.albumRepository.FindAlbumByArtist(ctx, artist)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +76,7 @@ func (s *Service) FindAlbumByArtist(ctx context.Context, artist string) (*[]doma
 }
 
 func (s *Service) FindAlbumByTitleLike(ctx context.Context, titleLike string) (*[]domain.AlbumEntity, error) {
-	albums, err := s.repository.FindAlbumByTitleLike(ctx, titleLike)
+	albums, err := s.albumRepository.FindAlbumByTitleLike(ctx, titleLike)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +91,7 @@ func (s *Service) FindAlbumByTitleLike(ctx context.Context, titleLike string) (*
 }
 
 func (s *Service) Latest(ctx context.Context) (*[]domain.AlbumEntity, error) {
-	albums, err := s.repository.Latest(ctx)
+	albums, err := s.albumRepository.Latest(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -104,28 +105,8 @@ func (s *Service) Latest(ctx context.Context) (*[]domain.AlbumEntity, error) {
 	return &res, nil
 }
 
-func (s *Service) FindTrackByID(ctx context.Context, id uint) (domain.Track, error) {
-	return s.repository.FindTrackByID(ctx, id)
-}
-
-func (s *Service) FindTrackByTitle(ctx context.Context, title string) (domain.Track, error) {
-	return s.repository.FindTrackByTitle(ctx, title)
-}
-
-func (s *Service) FindTrackByGenre(ctx context.Context, genre string) (*[]domain.Track, error) {
-	return s.repository.FindTrackByGenre(ctx, genre)
-}
-
-func (s *Service) FindTrackByArtist(ctx context.Context, artist string) (*[]domain.Track, error) {
-	return s.repository.FindTrackByArtist(ctx, artist)
-}
-
-func (s *Service) FindTrackByTitleLike(ctx context.Context, titleLike string) (*[]domain.Track, error) {
-	return s.repository.FindTrackByTitleLike(ctx, titleLike)
-}
-
 func (s *Service) FindAny(ctx context.Context, like string) (*[]domain.AlbumEntity, error) {
-	albums, err := s.repository.FindAny(ctx, like)
+	albums, err := s.albumRepository.FindAny(ctx, like)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +121,7 @@ func (s *Service) FindAny(ctx context.Context, like string) (*[]domain.AlbumEnti
 }
 
 func (s *Service) FindAllAlbums(ctx context.Context) (*[]domain.AlbumEntity, error) {
-	albums, err := s.repository.FindAllAlbums(ctx)
+	albums, err := s.albumRepository.FindAllAlbums(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -154,22 +135,13 @@ func (s *Service) FindAllAlbums(ctx context.Context) (*[]domain.AlbumEntity, err
 	return &res, nil
 }
 
-func (s *Service) FindAllTracks(ctx context.Context) (*[]domain.Track, error) {
-	tracks, err := s.repository.FindAllTracks(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return tracks, nil
-}
-
 func (s *Service) RandomAlbum(ctx context.Context) (domain.AlbumEntity, error) {
-	album, err := s.repository.RandomAlbum(ctx)
+	album, err := s.albumRepository.RandomAlbum(ctx)
 	if err != nil {
 		return domain.AlbumEntity{}, err
 	}
 
-	tracks, err := s.repository.FindTrackByAlbumID(ctx, album.ID)
+	tracks, err := s.trackRepository.FindTrackByAlbumID(ctx, album.ID)
 	if err != nil {
 		return domain.AlbumEntity{}, err
 	}

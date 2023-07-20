@@ -17,7 +17,7 @@ const RemoteImage: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    fetcher(`${getHTTPEndpoint()}/api/album/search/id/${props.albumId}`)
+    fetcher(`${getHTTPEndpoint()}/api/album/id/${props.albumId}`)
       .then(setSrc)
   }, [props.albumId])
 
