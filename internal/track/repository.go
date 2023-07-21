@@ -88,3 +88,19 @@ func (r *Repository) FindAllTracks(ctx context.Context) (*[]domain.Track, error)
 
 	return m, nil
 }
+
+func (r *Repository) RandomTrack(ctx context.Context) (domain.Track, error) {
+	m := domain.Track{}
+	err := r.db.WithContext(ctx).
+		Raw("SELECT * FROM tracks ORDER BY RANDOM() LIMIT 1").
+		Scan(&m).
+		Error
+
+	if err != nil {
+		return m, err
+	}
+
+	m.Path = ""
+
+	return m, nil
+}

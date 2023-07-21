@@ -30,23 +30,28 @@ func (r *Repository) GetDeezerMetadata(ctx context.Context, artist string) (doma
 		return cached.(domain.DeezerAPIResponse), nil
 	}
 
-	res, err := r.client.Get(url)
-	if err != nil {
-		return domain.DeezerAPIResponse{}, err
-	}
+	select {
+	case <-ctx.Done():
+		return domain.DeezerAPIResponse{}, errors.New("context cancelled")
+	default:
+		res, err := r.client.Get(url)
+		if err != nil {
+			return domain.DeezerAPIResponse{}, err
+		}
 
-	defer res.Body.Close()
+		defer res.Body.Close()
 
-	m := domain.DeezerAPIResponse{}
+		m := domain.DeezerAPIResponse{}
 
-	err = json.NewDecoder(res.Body).Decode(&m)
-	if err != nil {
+		err = json.NewDecoder(res.Body).Decode(&m)
+		if err != nil {
+			return m, nil
+		}
+
+		r.cache.Set(url, m, cache.DefaultExpiration)
+
 		return m, nil
 	}
-
-	r.cache.Set(url, m, cache.DefaultExpiration)
-
-	return m, nil
 }
 
 func (r *Repository) GetLastFMScrobble(ctx context.Context, artist string) (domain.LastFMScrobble, error) {

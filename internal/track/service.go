@@ -33,3 +33,7 @@ func (s *Service) FindTrackByTitleLike(ctx context.Context, titleLike string) (*
 func (s *Service) FindAllTracks(ctx context.Context) (*[]domain.Track, error) {
 	return s.repository.FindAllTracks(ctx)
 }
+
+func (s *Service) RandomTrack(ctx context.Context) (domain.Track, error) {
+	return s.repository.RandomTrack(ctx)
+}

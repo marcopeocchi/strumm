@@ -1,6 +1,5 @@
 import { Moon, Sun } from 'lucide-react'
-import { useRecoilState } from 'recoil'
-import { themeState } from '../atoms/settings'
+import useTheme from '../hooks/useTheme'
 
 type Props = {
   size?: 'sm' | 'md'
@@ -8,27 +7,12 @@ type Props = {
 }
 
 export default function ThemeToggler({ size = 'md', className }: Props) {
-  const [theme, setTheme] = useRecoilState(themeState)
-
-  const toggleTheme = () => {
-    if (theme === 'light') {
-      setTheme('dark')
-      localStorage.setItem('theme', 'dark')
-      document.documentElement.classList.add('dark')
-      return
-    }
-    if (theme === 'dark') {
-      setTheme('light')
-      localStorage.setItem('theme', 'light')
-      document.documentElement.classList.remove('dark')
-      return
-    }
-  }
+  const { theme, toggler } = useTheme()
 
   return (
     <button
       className={`border dark:border-neutral-600 rounded-lg p-1.5 ${className}`}
-      onClick={() => toggleTheme()}
+      onClick={() => toggler()}
     >
       {
         theme === 'light'

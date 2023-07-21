@@ -11,6 +11,8 @@ const Artists = lazy(() => import('./views/Artists'))
 const Songs = lazy(() => import('./views/Songs'))
 const Search = lazy(() => import('./views/Search'))
 
+const Settings = lazy(() => import('./views/Settings'))
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -57,6 +59,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <Search />
+          </Suspense>
+        )
+      },
+      {
+        path: '/settings',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Settings />
           </Suspense>
         )
       },

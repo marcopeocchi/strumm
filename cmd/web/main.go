@@ -80,6 +80,7 @@ func main() {
 
 		r.Route("/track", func(r chi.Router) {
 			r.Get("/all", trackContainer.FindAllTracks())
+			r.Get("/random", trackContainer.RandomTrack())
 			r.Get("/id/{id}", trackContainer.FindTrackByID())
 			r.Get("/like/{title}", trackContainer.FindTrackByTitleLike())
 			r.Get("/title/{title}", trackContainer.FindTrackByTitle())

@@ -12,7 +12,7 @@ const AlbumInfo: React.FC<Props> = ({ album }) => {
     : 'unknown format'
 
   return (
-    <div className="flex flex-col sm:flex-row gap-8 items-end">
+    <div className="flex flex-col sm:flex-row gap-8 items-start md:items-end">
       <Image
         src={`${getHTTPEndpoint()}/static/img/${album.picture}`}
         size="full"

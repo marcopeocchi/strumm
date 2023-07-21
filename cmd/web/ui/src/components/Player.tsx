@@ -1,4 +1,5 @@
 
+import { Mic2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -14,8 +15,10 @@ import { ellipsis } from '../utils/strings'
 import { getHTTPEndpoint } from '../utils/url'
 import RemoteImage from './Image/RemoteImage'
 import MiniPlayer from './MiniPlayer'
+import { showLyricsState } from '../atoms/ui'
 
 export default function Player() {
+  const [showLyrics, setShowLyrics] = useRecoilState(showLyricsState)
   const [, setCurrentIndex] = useRecoilState(currentIndexState)
   const [volume, setVolume] = useRecoilState(volumeState)
   const [queue, setQueue] = useRecoilState(playingQueueState)
@@ -108,6 +111,7 @@ export default function Player() {
           rounded
           size="mini"
           albumId={queue.at(index)?.album}
+          className='hidden sm:block'
         />
         <div className="flex flex-col">
           <Link
@@ -133,7 +137,7 @@ export default function Player() {
         // for firefox and safari which won't autoplay.
         onCanPlay={e => e.currentTarget.play()}
         onPlay={e => e.currentTarget.volume = volume}
-        src={`${getHTTPEndpoint()}/api/stream/${queue.at(index)?.ID}`}
+        src={`${getHTTPEndpoint()}/api/stream/${queue.at(index)?.id}`}
       />
       <MiniPlayer
         onNext={nextTrack}
@@ -148,15 +152,22 @@ export default function Player() {
         duration={playerRef.current?.duration}
       />
       <div />
-      <input
-        type="range"
-        className="w-20"
-        value={volumePercent}
-        onChange={e => {
-          const val = Number(e.currentTarget.value) / 100
-          setVolume(val)
-        }}
-      />
+      <div className='flex items-center gap-2.5'>
+        <button
+          onClick={() => setShowLyrics(state => !state)}
+          className={showLyrics ? 'text-blue-500' : ''}>
+          <Mic2 size={18} />
+        </button>
+        <input
+          type="range"
+          className="w-20"
+          value={volumePercent}
+          onChange={e => {
+            const val = Number(e.currentTarget.value) / 100
+            setVolume(val)
+          }}
+        />
+      </div>
     </div>
   )
 }

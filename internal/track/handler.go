@@ -154,3 +154,23 @@ func (h *Handler) FindTrackByTitleLike() http.HandlerFunc {
 		}
 	}
 }
+
+func (h *Handler) RandomTrack() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+
+		track, err := h.service.RandomTrack(r.Context())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = json.NewEncoder(w).Encode(track)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}

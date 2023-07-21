@@ -18,7 +18,7 @@ export type Palette = {
 }
 
 export type Track = {
-  ID: number
+  id: number
   created_at: string
   updated_at: string
   format: string

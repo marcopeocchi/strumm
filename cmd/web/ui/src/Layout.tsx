@@ -66,11 +66,13 @@ export default function Layout() {
               </Link>
             </Sidebar.Section>
             <Sidebar.Section title="Settings">
-              <Sidebar.Action
-                icon={<Settings size={16} />}
-              >
-                Client settings
-              </Sidebar.Action>
+              <Link to="/settings">
+                <Sidebar.Action
+                  icon={<Settings size={16} />}
+                >
+                  Client settings
+                </Sidebar.Action>
+              </Link>
               <Sidebar.Action
                 icon={<ServerCog size={16} />}
               >

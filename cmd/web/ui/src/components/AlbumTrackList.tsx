@@ -21,26 +21,26 @@ const AlbumTrackList: React.FC<Props> = ({ album }) => {
             flex flex-row gap-4 py-1.5 items-center justify-between
           hover:bg-neutral-200 hover:dark:bg-neutral-700
             hover:duration-100"
-          key={track.ID}
+          key={track.id}
         >
           <div className="flex items-center gap-4 w-full" onClick={() => {
             setQueue(album.tracks.slice(idx))
             setMetadata({ ...album, tracks: [] })
           }}>
             <div>
-              {metadata.id === track.ID
+              {metadata.id === track.id
                 ? <Play size={12} fill="#60a5fa" color="#60a5fa" />
                 : track.index
               }
             </div>
             <div className="flex flex-col">
-              <div className={`${(metadata.id === track.ID) &&
+              <div className={`${(metadata.id === track.id) &&
                 'text-blue-400 -ml-1'
                 }`}
               >
                 {track.title}
               </div>
-              <div className={`${(metadata.id === track.ID) &&
+              <div className={`${(metadata.id === track.id) &&
                 'text-blue-400 -ml-1'
                 } text-sm`}
               >
