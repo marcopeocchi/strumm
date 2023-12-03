@@ -1,20 +1,28 @@
+import clsx from "clsx"
+import { Palette } from "../types"
+import { pickBrightest } from "../utils/colors"
+
 type Props = {
   className?: string
+  palette: Palette
   lyrics: string
   show: boolean
 }
 
-const Lyrics: React.FC<Props> = ({ className, lyrics, show }) => {
+const Lyrics: React.FC<Props> = ({ className, lyrics, show, palette }) => {
   return (
-    <div className={`
-      ${show ? 'absolute' : 'hidden'} 
-      w-full sm:w-5/6 xl:w-2/3 h-[calc(100vh-8rem)] 
-      bg-neutral-50 dark:bg-neutral-900 
-      z-10 
-      border-r dark:border-neutral-600
-      p-8 overflow-y-auto
-      ${className}`
-    }>
+    <div
+      className={clsx(
+        show ? 'absolute' : 'hidden',
+        'w-full sm:w-5/6 xl:w-2/3 h-[calc(100vh-8rem)]',
+        'bg-neutral-50 dark:bg-neutral-900',
+        'z-10',
+        'border-r dark:border-neutral-600',
+        'p-8 overflow-y-auto',
+        className
+      )}
+      style={{ backgroundColor: palette.accent }}
+    >
       <div className="text-justify text-2xl font-semibold">
         {!lyrics && 'No lyrics this track'}
 

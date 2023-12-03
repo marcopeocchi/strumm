@@ -13,11 +13,11 @@ import (
 	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/marcopeocchi/mille/internal/album"
-	"github.com/marcopeocchi/mille/internal/metadata"
-	"github.com/marcopeocchi/mille/internal/middlewares"
-	"github.com/marcopeocchi/mille/internal/stream"
-	"github.com/marcopeocchi/mille/internal/track"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/album"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/metadata"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/middlewares"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/stream"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/track"
 	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 )
@@ -27,16 +27,18 @@ var (
 	app    embed.FS
 	port   int
 	static string
+	dbpath string
 )
 
 func init() {
 	flag.IntVar(&port, "p", 8080, "port to listen at")
 	flag.StringVar(&static, "c", ".cache", "path of cache directory")
+	flag.StringVar(&dbpath, "d", "data.db", "path of database")
 	flag.Parse()
 }
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("data.db"))
+	db, err := gorm.Open(sqlite.Open(dbpath))
 	if err != nil {
 		log.Fatalln(err)
 	}

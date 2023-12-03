@@ -18,7 +18,7 @@ export default function Paginator({ pages, setPage }: Props) {
             bg-black dark:bg-white dark:text-black text-neutral-100 border-x
             border-black/20
             cursor-pointer
-            hover:bg-blue-400 duration-100
+            hover:bg-red-400 duration-100
             ${page === 0 && 'rounded-l-lg'}
             ${page === pages - 1 && 'rounded-r-lg'}
         `}>

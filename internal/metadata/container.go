@@ -3,7 +3,7 @@ package metadata
 import (
 	"net/http"
 
-	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
 	"github.com/patrickmn/go-cache"
 )
 

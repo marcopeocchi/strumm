@@ -1,8 +1,8 @@
 package album
 
 import (
-	"github.com/marcopeocchi/mille/internal/domain"
-	"github.com/marcopeocchi/mille/internal/track"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/track"
 	"gorm.io/gorm"
 )
 

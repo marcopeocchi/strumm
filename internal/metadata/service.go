@@ -2,10 +2,9 @@ package metadata
 
 import (
 	"context"
-	"errors"
 	"sync"
 
-	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
 )
 
 type Service struct {
@@ -36,7 +35,7 @@ func (s *Service) GetAlbumMetadata(ctx context.Context, artist string) (domain.A
 	wg.Wait()
 
 	if len(deezerResponse.Data) == 0 {
-		return retval, errors.New("can't find metadata for given artist")
+		retval.ArtistBio = ""
 	}
 
 	retval.ArtistPicture = deezerResponse.Data[0].PictureXL

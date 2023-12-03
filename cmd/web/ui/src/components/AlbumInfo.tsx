@@ -7,9 +7,9 @@ type Props = {
 }
 
 const AlbumInfo: React.FC<Props> = ({ album }) => {
-  const getFormat = () => album.tracks.some(t => Boolean(t.format))
-    ? album.tracks.find(t => t.format)!.format
-    : 'unknown format'
+  const getFormat = () =>
+    album.tracks.find(t => Boolean(t.format))!.format
+    || 'unknown format'
 
   return (
     <div className="flex flex-col sm:flex-row gap-8 items-start md:items-end">

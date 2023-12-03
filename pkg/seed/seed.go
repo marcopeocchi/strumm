@@ -9,8 +9,8 @@ import (
 
 	"github.com/dhowden/tag"
 	"github.com/google/uuid"
-	"github.com/marcopeocchi/mille/internal/domain"
-	"github.com/marcopeocchi/mille/pkg/utils"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/pkg/utils"
 	"gorm.io/gorm"
 )
 
@@ -58,12 +58,12 @@ func seedTracks(db *gorm.DB, root, cache string) {
 
 			if tags.Picture() != nil && len(tags.Picture().Data) > 0 {
 				_uuid = _uuid + "." + tags.Picture().Ext
-				cachedImagePath := filepath.Join(
-					cache,
-					_uuid,
-				)
+				cachedImagePath := filepath.Join(cache, _uuid)
 
-				os.WriteFile(cachedImagePath, tags.Picture().Data, os.ModePerm)
+				if err := os.WriteFile(cachedImagePath, tags.Picture().Data, os.ModePerm); err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
 
 				rgba, err := utils.DecodeImageFromBytes(tags.Picture().Data)
 

@@ -2,13 +2,12 @@ import { useState } from "react"
 import { Blurhash } from "react-blurhash-as"
 import FallbackImage from "./FallbackImage"
 import { Disc3 } from "lucide-react"
+import clsx from "clsx"
 
-type Props = {
-  src: string
+interface Props extends React.ImgHTMLAttributes<HTMLImageElement> {
   size?: 'mini' | 'full'
   rounded?: boolean
   blurhash?: string,
-  className?: string
 }
 
 const Image: React.FC<Props> = ({
@@ -17,6 +16,7 @@ const Image: React.FC<Props> = ({
   rounded,
   blurhash,
   className,
+  ...props
 }) => {
   const [hasError, setHasError] = useState(false)
 
@@ -27,17 +27,14 @@ const Image: React.FC<Props> = ({
       </FallbackImage>
     )
   }
-
   return (
-    <div className={`
-      aspect-square
-      bg-cover
-      ${size === 'full' ? 'sm:w-64 sm:h-64' : 'w-full h-full'}
-      ${size === 'mini' ? 'sm:w-16 sm:h-16' : 'w-full h-full'}
-      ${rounded && 'rounded'}
-      ${className}
-      `
-    }>
+    <div className={clsx(
+      'aspect-square bg-cover',
+      size === 'full' ? 'sm:w-64 sm:h-64' : 'w-full h-full',
+      size === 'mini' ? 'sm:w-16 sm:h-16' : 'w-full h-full',
+      rounded && 'rounded',
+      className
+    )}>
       {blurhash ?
         <>
           <img
@@ -45,14 +42,15 @@ const Image: React.FC<Props> = ({
             onLoad={() => setHasError(false)}
             onError={() => setHasError(true)}
             className='hidden'
+            {...props}
           />
           <Blurhash
             mode="css"
-            src={src}
-            alt={''}
+            src={src ?? ''}
+            alt={props.alt ?? ''}
             hash={blurhash!}
-            width={300}
-            height={300}
+            width={Number(props.width) || 300}
+            height={Number(props.height) || 300}
           />
         </> :
         <img

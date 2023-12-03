@@ -15,9 +15,9 @@ const AlbumControls: React.FC<Props> = ({ album }) => {
     <div className="flex gap-4">
       <button
         className="
-          bg-blue-400 h-14 w-14 rounded-full 
+          bg-red-400 h-14 w-14 rounded-full 
           flex items-center justify-center
-          hover:bg-blue-500 duration-100 shadow-md"
+          hover:bg-red-500 duration-100 shadow-md"
         onClick={() => {
           setQueue(album.tracks)
           setMetadata({ ...album, tracks: [] })
@@ -32,9 +32,9 @@ const AlbumControls: React.FC<Props> = ({ album }) => {
       </button>
       <button
         className="
-          bg-blue-400 h-14 w-14 rounded-full 
+          bg-red-400 h-14 w-14 rounded-full 
           flex items-center justify-center
-          hover:bg-blue-500 duration-100 shadow-md"
+          hover:bg-red-500 duration-100 shadow-md"
       >
         <Heart
           fill="white"

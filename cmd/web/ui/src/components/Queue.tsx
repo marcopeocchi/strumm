@@ -1,21 +1,17 @@
-import { useEffect } from "react"
-import { Link } from "react-router-dom"
-import { useRecoilState, useRecoilValue } from "recoil"
-import useSWR from 'swr'
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   currentIndexState,
   isPlayingState,
   playingQueueState
-} from "../atoms/player"
-import { Album, ArtistMetadata } from "../types"
-import { ellipsis } from "../utils/strings"
-import { getHTTPEndpoint } from "../utils/url"
-import Image from "./Image/Image"
-import Loader from "./Loader"
-
-const fetcher = (url: string) =>
-  fetch(url)
-    .then(res => res.json())
+} from '../atoms/player'
+import useFetch from '../hooks/useFetch'
+import { Album, ArtistMetadata } from '../types'
+import { ellipsis } from '../utils/strings'
+import { getHTTPEndpoint } from '../utils/url'
+import Image from './Image/Image'
+import Loader from './Loader'
 
 const Queue: React.FC = () => {
   const [queue] = useRecoilState(playingQueueState)
@@ -23,14 +19,12 @@ const Queue: React.FC = () => {
 
   const isPlaying = useRecoilValue(isPlayingState)
 
-  const { data: next } = useSWR<Album>(
+  const { data: next } = useFetch<Album>(
     `${getHTTPEndpoint()}/api/album/id/${queue.at(1)?.album ?? ''}`,
-    fetcher
   )
 
-  const { data: metadata, mutate, error } = useSWR<ArtistMetadata>(
+  const { data: metadata, mutate, error } = useFetch<ArtistMetadata>(
     `${getHTTPEndpoint()}/api/metadata/${queue.at(index)?.artist ?? ''}`,
-    fetcher,
   )
 
   useEffect(() => {

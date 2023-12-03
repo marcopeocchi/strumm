@@ -13,9 +13,9 @@ export default function Navbar() {
     >
       <Link
         to="/"
-        className="font-semibold hover:text-blue-400 duration-200 select-none"
+        className="font-semibold hover:text-red-400 duration-200 select-none"
       >
-        Mille
+        Strumm
       </Link>
 
       <></>

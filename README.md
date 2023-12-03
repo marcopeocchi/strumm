@@ -14,4 +14,4 @@ Dead simple, ultra-lightweight, self-hosted audio streaming platform.
 
 Retrieve artist's related metatada from LastFM and Dezzer 😎.
 
-![image](https://github.com/marcopeocchi/mille/assets/35533749/f84e9c2e-e19f-4c4d-82ff-fa26976d529f)
+![image](https://github.com/marcopeocchi/github.com/marcopeocchi/strumm/assets/35533749/f84e9c2e-e19f-4c4d-82ff-fa26976d529f)

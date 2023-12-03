@@ -39,7 +39,7 @@ const MiniPlayer: React.FC<Props> = (props) => {
           type="range"
           value={props.seekValue}
           onChange={props.onSeek}
-          className="md:w-80"
+          className="md:w-80 accent-red-500 dark:accent-red-400"
         />
         <div className="text-sm">
           {formatMMSS(props.duration)}

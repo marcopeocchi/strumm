@@ -8,7 +8,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/marcopeocchi/mille/pkg/utils"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/pkg/utils"
 	"github.com/muesli/clusters"
 	"github.com/muesli/kmeans"
 )

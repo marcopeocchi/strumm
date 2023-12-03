@@ -34,7 +34,11 @@ export default function AlbumView() {
 
   return (
     <div className="pb-20 select-none">
-      <Lyrics lyrics={queue.at(index)?.lyrics ?? ''} show={showLyrics} />
+      <Lyrics
+        lyrics={queue.at(index)?.lyrics ?? ''}
+        show={showLyrics}
+        palette={album.palette}
+      />
       <AlbumPalette palette={album.palette}>
         <AlbumInfo album={album} />
       </AlbumPalette>

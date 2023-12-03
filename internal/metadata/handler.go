@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/marcopeocchi/mille/internal/domain"
+	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
 )
 
 type Handler struct {
