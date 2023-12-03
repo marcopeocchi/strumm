@@ -5,7 +5,7 @@ RUN apk update && \
 
 COPY . /usr/src/strumm
 
-WORKDIR /usr/src/strumm/frontend
+WORKDIR /usr/src/strumm/cmd/web/ui
 
 RUN npm install
 RUN npm run build
@@ -23,7 +23,7 @@ WORKDIR /app
 COPY --from=build /usr/src/strumm/strumm /app
 COPY --from=build /usr/src/strumm/dbseed /app
 
-ENV JWT_SECRET=secret
+ENV JWT_SECRET=secretW
 ENV LASTFM_APIKEY=apikey
 
 EXPOSE 8084
