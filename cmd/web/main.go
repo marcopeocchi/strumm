@@ -13,11 +13,11 @@ import (
 	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/album"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/metadata"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/middlewares"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/stream"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/track"
+	"github.com/marcopeocchi/strumm/internal/album"
+	"github.com/marcopeocchi/strumm/internal/metadata"
+	"github.com/marcopeocchi/strumm/internal/middlewares"
+	"github.com/marcopeocchi/strumm/internal/stream"
+	"github.com/marcopeocchi/strumm/internal/track"
 	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 )
@@ -48,13 +48,10 @@ func main() {
 
 	sharedCache := cache.New(2*time.Hour, 10*time.Minute)
 
-	build, _ := fs.Sub(app, "ui/dist")
-
-	sh := middlewares.NewSpaHandler("index.html", build)
-	sh.AddClientRoute("/album")
-	sh.AddClientRoute("/albums")
-	sh.AddClientRoute("/artists")
-	sh.AddClientRoute("/songs")
+	build, err := fs.Sub(app, "ui/dist")
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	r := chi.NewRouter()
 	r.Use(middlewares.CORS)
@@ -97,12 +94,11 @@ func main() {
 
 	r.Route("/static", func(r chi.Router) {
 		r.Get("/img/{id}", func(w http.ResponseWriter, r *http.Request) {
-			id := chi.URLParam(r, "id")
-			http.ServeFile(w, r, filepath.Join(static, id))
+			http.ServeFile(w, r, filepath.Join(static, chi.URLParam(r, "id")))
 		})
 	})
 
-	r.Get("/*", sh.Handler())
+	r.Get("/*", http.FileServer(http.FS(build)).ServeHTTP)
 
 	http.ListenAndServe(fmt.Sprintf(":%d", port), r)
 }

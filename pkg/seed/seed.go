@@ -9,8 +9,8 @@ import (
 
 	"github.com/dhowden/tag"
 	"github.com/google/uuid"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/pkg/utils"
+	"github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/strumm/pkg/utils"
 	"gorm.io/gorm"
 )
 

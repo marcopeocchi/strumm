@@ -3,7 +3,7 @@ package album
 import (
 	"context"
 
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/strumm/internal/domain"
 )
 
 type Service struct {

@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/strumm/internal/domain"
 	"github.com/patrickmn/go-cache"
 )
 

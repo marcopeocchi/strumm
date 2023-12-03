@@ -8,7 +8,7 @@ const Credits: React.FC<Props> = ({ className }) => {
   return (
     <div className={className}>
       <a
-        href="https://github.com/marcopeocchi/github.com/marcopeocchi/strumm"
+        href="https://github.com/marcopeocchi/strumm"
         className="
           text-xs 
           text-neutral-700 dark:text-neutral-300

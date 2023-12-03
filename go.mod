@@ -1,4 +1,4 @@
-module github.com/marcopeocchi/github.com/marcopeocchi/strumm
+module github.com/marcopeocchi/strumm
 
 go 1.20
 

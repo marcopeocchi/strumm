@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/pkg/utils"
+	"github.com/marcopeocchi/strumm/pkg/utils"
 	"gorm.io/gorm"
 )
 

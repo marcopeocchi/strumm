@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/strumm/internal/domain"
 )
 
 type Handler struct {

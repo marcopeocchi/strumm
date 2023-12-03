@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/strumm/internal/domain"
 )
 
 type Service struct {

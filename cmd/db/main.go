@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/glebarez/sqlite"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/pkg/seed"
+	"github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/strumm/pkg/seed"
 	"gorm.io/gorm"
 )
 

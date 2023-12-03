@@ -3,7 +3,7 @@ package stream
 import (
 	"sync"
 
-	"github.com/marcopeocchi/github.com/marcopeocchi/strumm/internal/domain"
+	"github.com/marcopeocchi/strumm/internal/domain"
 	"gorm.io/gorm"
 )
 
