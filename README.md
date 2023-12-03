@@ -1,4 +1,4 @@
-# Mille
+# Strumm
 
 Dead simple, ultra-lightweight, self-hosted audio streaming platform.
 
