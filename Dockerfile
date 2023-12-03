@@ -1,19 +1,26 @@
-FROM golang:alpine AS build
-
-RUN apk update && \
-    apk add nodejs npm
+# Bun ----------------------------------------------------------
+FROM oven/bun:1 as ui
 
 COPY . /usr/src/strumm
 
 WORKDIR /usr/src/strumm/cmd/web/ui
 
-RUN npm install
-RUN npm run build
+RUN bun install
+RUN bun run build
+# --------------------------------------------------------------
+
+# Go -----------------------------------------------------------
+FROM golang AS build
+
+COPY . /usr/src/strumm
+COPY --from=ui /usr/src/strumm/cmd/web/ui /usr/src/strumm/cmd/web/ui
 
 WORKDIR /usr/src/strumm
 RUN CGO_ENABLED=0 GOOS=linux go build -o strumm cmd/web/main.go
 RUN CGO_ENABLED=0 GOOS=linux go build -o dbseed cmd/db/main.go
+# --------------------------------------------------------------
 
+# Bin ----------------------------------------------------------
 FROM scratch
 
 VOLUME /music /cache
