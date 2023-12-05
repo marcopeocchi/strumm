@@ -3,6 +3,7 @@ package seed
 import (
 	"fmt"
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -101,9 +102,9 @@ func seedTracks(db *gorm.DB, root, cache string) {
 
 		result := db.FirstOrCreate(&modelTrack, &modelTrack)
 		if result.RowsAffected > 0 {
-			fmt.Printf("[OK] %s\n", path)
+			log.Printf("[OK] %s\n", path)
 		} else {
-			fmt.Printf("[SKIP] %s\n", path)
+			log.Printf("[SKIP] %s\n", path)
 		}
 
 		return nil
