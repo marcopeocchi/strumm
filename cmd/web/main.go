@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/marcopeocchi/strumm/internal/album"
@@ -24,6 +23,8 @@ import (
 	"github.com/marcopeocchi/strumm/internal/stream"
 	"github.com/marcopeocchi/strumm/internal/track"
 	"github.com/marcopeocchi/strumm/pkg/seed"
+	_ "github.com/ncruces/go-sqlite3/embed"
+	"github.com/ncruces/go-sqlite3/gormlite"
 	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 )
@@ -46,7 +47,7 @@ func init() {
 }
 
 func main() {
-	db, err := gorm.Open(sqlite.Open(dbpath))
+	db, err := gorm.Open(gormlite.Open(dbpath))
 	if err != nil {
 		log.Fatalln(err)
 	}

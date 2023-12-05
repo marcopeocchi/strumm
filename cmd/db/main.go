@@ -4,8 +4,9 @@ import (
 	"flag"
 	"log"
 
-	"github.com/glebarez/sqlite"
 	"github.com/marcopeocchi/strumm/pkg/seed"
+	_ "github.com/ncruces/go-sqlite3/embed"
+	"github.com/ncruces/go-sqlite3/gormlite"
 	"gorm.io/gorm"
 )
 
@@ -23,7 +24,7 @@ func init() {
 }
 
 func main() {
-	db, err := gorm.Open(sqlite.Open(dbpath))
+	db, err := gorm.Open(gormlite.Open(dbpath))
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -103,10 +103,10 @@ func seedTracks(db *gorm.DB, root, cache string) {
 		result := db.FirstOrCreate(&modelTrack, &modelTrack)
 		if result.RowsAffected > 0 {
 			log.Printf("[OK] %s\n", path)
-		} else {
-			log.Printf("[SKIP] %s\n", path)
 		}
-
+		// else {
+		// 	log.Printf("[SKIP] %s\n", path)
+		// }
 		return nil
 	})
 }
