@@ -7,11 +7,12 @@ Dead simple, ultra-lightweight, self-hosted audio streaming platform.
 
 **🚧 Still WIP 🚧**
 
-![light](https://i.ibb.co/CtYXs3d/image.png)
-![dark](https://i.postimg.cc/6pQfJL6N/image.png)
+![image](https://github.com/marcopeocchi/strumm/assets/35533749/b136d270-3189-4860-a237-1ca8ce50ca30)
+![image](https://github.com/marcopeocchi/strumm/assets/35533749/cab28c84-f734-448d-b169-58d6f3978df9)
 
 ## Metadata
 
-Retrieve artist's related metatada from LastFM and Dezzer 😎.
+Retrieve artist's related metatada from LastFM and Deezer 😎.
 
-![image](https://github.com/marcopeocchi/strumm/assets/35533749/f84e9c2e-e19f-4c4d-82ff-fa26976d529f)
+![image](https://github.com/marcopeocchi/strumm/assets/35533749/5c54b8da-79ea-4ca3-b642-44ffad8dd0f7)
+
