@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { themeState } from '../atoms/settings'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 }
 
 export default function ThemeLoader({ children }: Props) {
-  const [theme, setTheme] = useRecoilState(themeState)
+  const theme = useRecoilValue(themeState)
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -23,11 +23,9 @@ export default function ThemeLoader({ children }: Props) {
       window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
       document.documentElement.classList.add('dark')
-      setTheme('dark')
       return
     }
     document.documentElement.classList.remove('dark')
-    setTheme('light')
     return
   }, [])
 

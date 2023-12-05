@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
       <h1 className="font-semibold text-2xl">
         Settings
       </h1>
-      <div className='border-b pt-4 dark:border-neutral-600' />
+      <div className='border-b pt-4 dark:border-neutral-700' />
       <div className="pt-6 grid grid-cols-4 gap-1.5">
         <div className="font-semibold">
           Theme
@@ -28,7 +28,7 @@ const Settings: React.FC = () => {
             px-2 py-1.5 
           dark:bg-neutral-700 bg-neutral-100 
             rounded 
-            border dark:border-neutral-600 
+            border dark:border-neutral-700 
             capitalize"
           onChange={e => { setTheme(e.currentTarget.value as Theme) }}
           value={theme}

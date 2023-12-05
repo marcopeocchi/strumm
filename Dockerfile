@@ -40,4 +40,4 @@ ENV JWT_SECRET=secretW
 ENV LASTFM_APIKEY=apikey
 
 EXPOSE 8080
-ENTRYPOINT [ "./strumm" , "-c", "/cache", "-d", "/cache/data.db" ]
+ENTRYPOINT [ "./strumm" , "-c", "/cache/images", "-d", "/cache/data.db" ]

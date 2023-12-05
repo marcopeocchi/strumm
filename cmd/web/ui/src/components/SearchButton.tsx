@@ -24,7 +24,7 @@ export default function SearchButton() {
   return (
     <>
       <button
-        className="border dark:border-neutral-600 rounded-lg p-1.5"
+        className="border dark:border-neutral-700 rounded-lg p-1.5"
         onClick={() => setOpen(state => !state)}
       >
         <Search size={16} />
@@ -37,7 +37,7 @@ export default function SearchButton() {
         bg-neutral-100 dark:bg-neutral-800
         py-1 px-3 w-full
         text-neutral-600 dark:text-neutral-200 text-sm
-        border dark:border-neutral-600
+        border dark:border-neutral-700
         transition duration-150 ease-in-out
         !visible
         ${!open && 'hidden'}

@@ -1,6 +1,6 @@
 import { Palette } from "../types"
 
-export const isColorTooDark = (hexValue: string, lumaTreshold = 95) => {
+export const isColorTooDark = (hexValue: string, lumaTreshold = 60) => {
   const rgb = parseInt(hexValue.substring(1), 16)
 
   const r = (rgb >> 16) & 0xff
@@ -9,10 +9,9 @@ export const isColorTooDark = (hexValue: string, lumaTreshold = 95) => {
 
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b
 
-  if (luma < lumaTreshold) {
-    return true
-  }
-  return false
+  console.log(luma, lumaTreshold, luma < lumaTreshold)
+
+  return luma < lumaTreshold || luma > 236
 }
 
 export const pickBrightest = (palette: Palette) => {

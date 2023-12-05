@@ -1,24 +1,26 @@
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, SunMoon } from 'lucide-react'
 import useTheme from '../hooks/useTheme'
+import { Theme } from '../atoms/settings'
 
 type Props = {
-  size?: 'sm' | 'md'
   className?: string
 }
 
-export default function ThemeToggler({ size = 'md', className }: Props) {
+const states: Record<Theme, JSX.Element> = {
+  dark: <Moon size={16} />,
+  light: <Sun size={16} />,
+  system: <SunMoon size={16} />
+}
+
+export default function ThemeToggler({ className }: Props) {
   const { theme, toggler } = useTheme()
 
   return (
     <button
-      className={`border dark:border-neutral-600 rounded-lg p-1.5 ${className}`}
+      className={`border dark:border-neutral-700 rounded-lg p-1.5 ${className}`}
       onClick={() => toggler()}
     >
-      {
-        theme === 'light'
-          ? <Moon size={size === 'sm' ? 12 : 16} />
-          : <Sun size={size === 'sm' ? 12 : 16} />
-      }
+      {states[theme]}
     </button>
   )
 }

@@ -1,4 +1,4 @@
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { themeState } from '../atoms/settings'
 import { Palette } from '../types'
 import { pickBrightest } from '../utils/colors'
@@ -9,11 +9,12 @@ type Props = {
 }
 
 export const AlbumPalette: React.FC<Props> = ({ children, palette }) => {
-  const [theme] = useRecoilState(themeState)
+  const theme = useRecoilValue(themeState)
 
   const generateGradient = (from?: string) =>
-    theme === 'dark'
-      ? `linear-gradient(180deg, ${from ?? 'black'} 0%, black 100%)`
+    theme === 'dark' ||
+      (theme == 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ? `linear-gradient(180deg, ${from ?? 'black'} 0%, #0a0a0a 100%)`
       : `linear-gradient(180deg, ${from ?? 'white'} 0%, white 100%)`
 
   return (

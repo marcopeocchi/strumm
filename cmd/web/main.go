@@ -1,15 +1,20 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"flag"
 	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/glebarez/sqlite"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -18,6 +23,7 @@ import (
 	"github.com/marcopeocchi/strumm/internal/middlewares"
 	"github.com/marcopeocchi/strumm/internal/stream"
 	"github.com/marcopeocchi/strumm/internal/track"
+	"github.com/marcopeocchi/strumm/pkg/seed"
 	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 )
@@ -26,12 +32,14 @@ var (
 	//go:embed ui/dist
 	app    embed.FS
 	port   int
+	root   string
 	static string
 	dbpath string
 )
 
 func init() {
 	flag.IntVar(&port, "p", 8080, "port to listen at")
+	flag.StringVar(&root, "r", ".", "path of music directory")
 	flag.StringVar(&static, "c", ".cache", "path of cache directory")
 	flag.StringVar(&dbpath, "d", "data.db", "path of database")
 	flag.Parse()
@@ -43,10 +51,44 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	httpClient := http.DefaultClient
-	defer httpClient.CloseIdleConnections()
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	sharedCache := cache.New(2*time.Hour, 10*time.Minute)
+	defer watcher.Close()
+
+	go func() {
+		for {
+			select {
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				if event.Has(fsnotify.Write) || event.Has(fsnotify.Remove) {
+					seed.Scan(db, root, static)
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				log.Println("filewatcher error:", err)
+			}
+		}
+	}()
+
+	if err := watcher.Add(root); err != nil {
+		log.Fatalln(err)
+	}
+
+	seed.Scan(db, root, static)
+
+	var (
+		httpClient  = http.DefaultClient
+		sharedCache = cache.New(2*time.Hour, 10*time.Minute)
+	)
+
+	defer httpClient.CloseIdleConnections()
 
 	build, err := fs.Sub(app, "ui/dist")
 	if err != nil {
@@ -100,5 +142,38 @@ func main() {
 
 	r.Get("/*", http.FileServer(http.FS(build)).ServeHTTP)
 
-	http.ListenAndServe(fmt.Sprintf(":%d", port), r)
+	s := &http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
+		Handler: r,
+	}
+
+	go gracefulShutdown(s, db)
+
+	s.ListenAndServe()
+}
+
+func gracefulShutdown(s *http.Server, db *gorm.DB) {
+	ctx, stop := signal.NotifyContext(context.Background(),
+		os.Interrupt,
+		syscall.SIGTERM,
+		syscall.SIGQUIT,
+	)
+
+	go func() {
+		<-ctx.Done()
+		log.Println("shutdown signal received")
+
+		ctxTimeout, cancel := context.WithTimeout(
+			context.Background(),
+			5*time.Second,
+		)
+
+		defer func() {
+			stop()
+			cancel()
+			fmt.Println("shutdown completed")
+		}()
+
+		s.Shutdown(ctxTimeout)
+	}()
 }

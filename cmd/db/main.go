@@ -3,10 +3,8 @@ package main
 import (
 	"flag"
 	"log"
-	"os"
 
 	"github.com/glebarez/sqlite"
-	"github.com/marcopeocchi/strumm/internal/domain"
 	"github.com/marcopeocchi/strumm/pkg/seed"
 	"gorm.io/gorm"
 )
@@ -30,10 +28,5 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	os.Mkdir(cache, os.ModePerm)
-
-	db.AutoMigrate(domain.Track{})
-	db.AutoMigrate(domain.Album{})
-
-	seed.SeedDatabase(db, root, cache)
+	seed.Scan(db, root, cache)
 }

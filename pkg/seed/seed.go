@@ -113,3 +113,12 @@ func seedTracks(db *gorm.DB, root, cache string) {
 func SeedDatabase(db *gorm.DB, root, cache string) {
 	seedTracks(db, root, cache)
 }
+
+func Scan(db *gorm.DB, root, cache string) {
+	os.Mkdir(cache, os.ModePerm)
+
+	db.AutoMigrate(domain.Track{})
+	db.AutoMigrate(domain.Album{})
+
+	SeedDatabase(db, root, cache)
+}

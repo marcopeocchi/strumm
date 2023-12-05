@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/buckket/go-blurhash v1.1.0
 	github.com/dhowden/tag v0.0.0-20230630033851-978a0926ee25
+	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gabriel-vasile/mimetype v1.4.3
 	github.com/glebarez/sqlite v1.10.0
 	github.com/go-chi/chi/v5 v5.0.10

@@ -32,7 +32,7 @@ export default function Search() {
       <h1 className="font-semibold text-2xl">
         Results for "{query}"
       </h1>
-      <div className='border-b dark:border-neutral-600 pt-4' />
+      <div className='border-b dark:border-neutral-700 pt-4' />
       <div className={`
         pt-6 ${albums.pages > 1 ? 'pb-8' : 'pb-32 '}
         grid 

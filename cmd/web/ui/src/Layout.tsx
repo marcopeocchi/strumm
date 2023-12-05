@@ -20,8 +20,8 @@ export default function Layout() {
 
   return (
     <main className="
-      bg-white dark:bg-black 
-      text-neutral-900 dark:text-neutral-100 
+      bg-white dark:bg-neutral-950
+      text-neutral-900 dark:text-neutral-200 
       h-screen"
     >
       <ThemeLoader>

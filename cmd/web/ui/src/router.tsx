@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import { createHashRouter } from 'react-router-dom'
 import Layout from './Layout'
 import Loader from './components/Loader'
 import Home from './views/Home'
@@ -13,7 +13,7 @@ const Search = lazy(() => import('./views/Search'))
 
 const Settings = lazy(() => import('./views/Settings'))
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     Component: () => <Layout />,

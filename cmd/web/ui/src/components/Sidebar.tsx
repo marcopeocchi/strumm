@@ -7,7 +7,7 @@ namespace Sidebar {
     return (
       <div className="
         border-r 
-        dark:border-neutral-600 
+        dark:border-neutral-700 
         hidden 
         sm:flex md:w-1/6 
         h-[calc(100vh-3rem)] 

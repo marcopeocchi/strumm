@@ -42,7 +42,7 @@ const Queue: React.FC = () => {
   return (
     <div className={`
       w-1/4 p-6 
-      border-l dark:border-neutral-600 
+      border-l dark:border-neutral-700 
       ${isPlaying
         ? 'xl:flex flex-col gap-4 hidden'
         : 'hidden'

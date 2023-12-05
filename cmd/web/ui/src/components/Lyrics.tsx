@@ -1,6 +1,5 @@
 import clsx from "clsx"
 import { Palette } from "../types"
-import { pickBrightest } from "../utils/colors"
 
 type Props = {
   className?: string
@@ -17,7 +16,7 @@ const Lyrics: React.FC<Props> = ({ className, lyrics, show, palette }) => {
         'w-full sm:w-5/6 xl:w-2/3 h-[calc(100vh-8rem)]',
         'bg-neutral-50 dark:bg-neutral-900',
         'z-10',
-        'border-r dark:border-neutral-600',
+        'border-r dark:border-neutral-700',
         'p-8 overflow-y-auto',
         className
       )}

@@ -7,7 +7,7 @@ export default function Navbar() {
     <div className="
       flex flex-row 
       pl-6 py-2 
-      border-b dark:border-neutral-600
+      border-b dark:border-neutral-700
       w-full 
       justify-between items-center"
     >

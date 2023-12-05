@@ -29,7 +29,7 @@ export default function Home() {
         <h2 className="">
           Latest albums
         </h2>
-        <div className='border-b dark:border-neutral-600 pt-4' />
+        <div className='border-b dark:border-neutral-700 pt-4' />
       </div>
       <div className="
         pt-6 px-8 pb-32 

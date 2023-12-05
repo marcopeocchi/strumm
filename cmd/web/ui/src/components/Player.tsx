@@ -100,11 +100,11 @@ export default function Player() {
     <div className="
       fixed bottom-0 
       flex flex-row px-2 py-2 gap-4
-      border-t dark:border-neutral-600 
+      border-t dark:border-neutral-700 
       w-full
       justify-between items-center 
       min-h-24
-      bg-white dark:bg-black"
+      bg-white dark:bg-neutral-950"
     >
       <div className="sm:w-1/4 flex gap-4">
         <RemoteImage

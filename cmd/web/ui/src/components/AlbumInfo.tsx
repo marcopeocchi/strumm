@@ -18,7 +18,7 @@ const AlbumInfo: React.FC<Props> = ({ album }) => {
         size="full"
       />
       <div>
-        <h1 className="text-6xl sm:text-7xl font-bold">
+        <h1 className="text-6xl sm:text-7xl font-black">
           {album.title}
         </h1>
         <h5 className="font-semibold pt-2">

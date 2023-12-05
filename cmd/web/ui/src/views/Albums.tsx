@@ -29,7 +29,7 @@ export default function Albums() {
       <h1 className="font-semibold text-2xl">
         Albums
       </h1>
-      <div className='border-b pt-4 dark:border-neutral-600' />
+      <div className='border-b pt-4 dark:border-neutral-700' />
       <div className="
         pt-6 pb-8 
         grid 
