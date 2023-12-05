@@ -81,7 +81,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	seed.Scan(db, root, static)
+	go seed.Scan(db, root, static)
 
 	var (
 		httpClient  = http.DefaultClient
