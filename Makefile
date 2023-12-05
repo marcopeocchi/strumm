@@ -15,4 +15,4 @@ multiarch:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/strumm-amd64 cmd/web/main.go
 
 docker:
-	docker buildx build --push -t marcobaobao/mayoi --platform linux/amd64,linux/arm64 .
+	docker buildx build --push -t marcobaobao/strumm --platform linux/amd64,linux/arm64 .
