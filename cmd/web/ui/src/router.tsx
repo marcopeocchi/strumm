@@ -3,6 +3,7 @@ import { createHashRouter } from 'react-router-dom'
 import Layout from './Layout'
 import Loader from './components/Loader'
 import Home from './views/Home'
+import Login from './views/Login'
 
 const Album = lazy(() => import('./views/Album'))
 const Albums = lazy(() => import('./views/Albums'))
@@ -67,6 +68,14 @@ export const router = createHashRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <Settings />
+          </Suspense>
+        )
+      },
+      {
+        path: '/login',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Login />
           </Suspense>
         )
       },

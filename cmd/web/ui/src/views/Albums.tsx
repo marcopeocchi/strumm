@@ -5,9 +5,12 @@ import Paginator from "../components/Paginator"
 import { Album, Paginated } from "../types"
 import { getHTTPEndpoint } from "../utils/url"
 import Loader from "../components/Loader"
+import { useNavigate } from 'react-router-dom'
 
 export default function Albums() {
   const [page, setPage] = useState(1)
+
+  const navigate = useNavigate()
 
   const fetcher = async (url: string) => {
     const res = await fetch(url)
@@ -15,10 +18,14 @@ export default function Albums() {
     return data
   }
 
-  const { data: albums } = useSWR<Paginated<Album>>(
+  const { data: albums, error } = useSWR<Paginated<Album>>(
     `${getHTTPEndpoint()}/api/album/all?page=${page}`,
     fetcher
   )
+
+  if (error) {
+    navigate('/login')
+  }
 
   if (!albums) {
     return <Loader />

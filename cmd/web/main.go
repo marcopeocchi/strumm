@@ -18,6 +18,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/marcopeocchi/strumm/internal/album"
+	"github.com/marcopeocchi/strumm/internal/auth"
 	"github.com/marcopeocchi/strumm/internal/metadata"
 	"github.com/marcopeocchi/strumm/internal/middlewares"
 	"github.com/marcopeocchi/strumm/internal/stream"
@@ -31,12 +32,13 @@ import (
 
 var (
 	//go:embed ui/dist
-	app    embed.FS
-	port   int
-	root   string
-	static string
-	dbpath string
-	lastfm string
+	app         embed.FS
+	port        int
+	root        string
+	static      string
+	dbpath      string
+	lastfm      string
+	authEnabled bool
 )
 
 func init() {
@@ -45,6 +47,7 @@ func init() {
 	flag.StringVar(&static, "c", ".cache", "path of cache directory")
 	flag.StringVar(&dbpath, "d", "data.db", "path of database")
 	flag.StringVar(&lastfm, "lfm", os.Getenv("LASTFM_APIKEY"), "lastfm api key")
+	flag.BoolVar(&authEnabled, "auth", true, "enable authentication")
 	flag.Parse()
 }
 
@@ -53,6 +56,8 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	seed.InitUser(db)
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -104,6 +109,7 @@ func main() {
 
 	// Dependency Injection containers
 	var (
+		authContainer     = auth.Container(db)
 		albumContainer    = album.Container(db)
 		trackContainer    = track.Container(db)
 		streamContainer   = stream.Container(db)
@@ -114,6 +120,9 @@ func main() {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
 
 		r.Route("/album", func(r chi.Router) {
+			if authEnabled {
+				r.Use(middlewares.Authenticated)
+			}
 			r.Get("/all", albumContainer.FindAllAlbums())
 			r.Get("/latest", albumContainer.Latest())
 			r.Get("/random", albumContainer.RandomAlbum())
@@ -138,6 +147,9 @@ func main() {
 			r.Get("/{name}", metadataContainer.GetAlbumMetadata())
 		})
 	})
+
+	r.Post("/login", authContainer.Login())
+	r.Get("/logout", authContainer.Logout())
 
 	r.Route("/static", func(r chi.Router) {
 		r.Get("/img/{id}", func(w http.ResponseWriter, r *http.Request) {

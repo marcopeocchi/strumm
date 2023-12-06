@@ -15,6 +15,7 @@ require (
 	github.com/ncruces/go-sqlite3 v0.10.5
 	github.com/ncruces/go-sqlite3/gormlite v0.10.5
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	golang.org/x/crypto v0.16.0
 	golang.org/x/image v0.14.0
 	gorm.io/gorm v1.25.5
 )

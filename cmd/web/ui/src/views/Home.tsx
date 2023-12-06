@@ -3,18 +3,25 @@ import AlbumCard from '../components/AlbumCard'
 import { Album } from '../types'
 import { getHTTPEndpoint } from '../utils/url'
 import Loader from '../components/Loader'
+import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
+  const navigate = useNavigate()
+
   const fetcher = async (url: string) => {
     const res = await fetch(url)
     const data: Album[] = await res.json()
     return data.slice(0, 36)
   }
 
-  const { data: albums } = useSWR<Album[]>(
+  const { data: albums, error } = useSWR<Album[]>(
     `${getHTTPEndpoint()}/api/album/latest`,
     fetcher
   )
+
+  if (error) {
+    navigate('/login')
+  }
 
   if (!albums) {
     return <Loader />

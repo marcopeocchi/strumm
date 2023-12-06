@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import useSWR from 'swr'
 import AlbumCard from "../components/AlbumCard"
 import Loader from "../components/Loader"
@@ -11,6 +11,8 @@ export default function Search() {
   const [page, setPage] = useState(1)
 
   const { query } = useParams()
+  const navigate = useNavigate()
+
 
   const fetcher = async (url: string) => {
     const res = await fetch(url)
@@ -18,10 +20,14 @@ export default function Search() {
     return data
   }
 
-  const { data: albums } = useSWR(
+  const { data: albums, error } = useSWR(
     `${getHTTPEndpoint()}/api/album/any/${query}?page=${page}`,
     fetcher
   )
+
+  if (error) {
+    navigate('/login')
+  }
 
   if (!albums) {
     return <Loader />

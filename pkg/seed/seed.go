@@ -12,6 +12,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/marcopeocchi/strumm/internal/domain"
 	"github.com/marcopeocchi/strumm/pkg/utils"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -113,6 +114,29 @@ func seedTracks(db *gorm.DB, root, cache string) {
 
 func SeedDatabase(db *gorm.DB, root, cache string) {
 	seedTracks(db, root, cache)
+}
+
+func InitUser(db *gorm.DB) error {
+	if err := db.AutoMigrate(domain.User{}); err != nil {
+		return err
+	}
+
+	p := uuid.NewString()
+	hashedP, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	if err := db.Create(&domain.User{
+		Username: "admin",
+		Password: string(hashedP),
+	}).Error; err != nil {
+		return err
+	}
+
+	log.Printf("username: %s password: %s", "admin", p)
+
+	return nil
 }
 
 func Scan(db *gorm.DB, root, cache string) {

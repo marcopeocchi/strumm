@@ -14,9 +14,8 @@ const (
 
 type User struct {
 	gorm.Model
-	Username string
+	Username string `gorm:"uniqueIndex"`
 	Password string
-	Picture  string
 	Role     int
 }
 
@@ -26,11 +25,7 @@ type LoginForm struct {
 }
 
 type AuthRepository interface {
-	Login(ctx context.Context, username, password string) (User, error)
-}
-
-type AuthService interface {
-	Login(ctx context.Context, username, password string) (User, error)
+	Login(ctx context.Context, form *LoginForm) (User, error)
 }
 
 type AuthHandler interface {

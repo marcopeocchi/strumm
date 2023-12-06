@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useRecoilState } from "recoil"
 import useSWR from 'swr'
 import { currentIndexState, playingQueueState } from "../atoms/player"
@@ -18,15 +18,20 @@ export default function AlbumView() {
   const [index] = useRecoilState(currentIndexState)
 
   const params = useParams()
+  const navigate = useNavigate()
 
   const fetcher = (url: string) =>
     fetch(url)
       .then(res => res.json())
 
-  const { data: album } = useSWR<Album>(
+  const { data: album, error } = useSWR<Album>(
     `${getHTTPEndpoint()}/api/album/id/${params.id ?? ''}`,
     fetcher
   )
+
+  if (error) {
+    navigate('/login')
+  }
 
   if (!album) {
     return <Loader />

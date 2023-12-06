@@ -3,3 +3,7 @@ export function getHTTPEndpoint() {
     ? 'http://localhost:8080'
     : ''
 }
+
+export function hostFmt(strings: TemplateStringsArray) {
+  return `${getHTTPEndpoint()}${strings[0]}`
+}
