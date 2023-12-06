@@ -44,7 +44,7 @@ func init() {
 	flag.StringVar(&root, "r", ".", "path of music directory")
 	flag.StringVar(&static, "c", ".cache", "path of cache directory")
 	flag.StringVar(&dbpath, "d", "data.db", "path of database")
-	flag.StringVar(&lastfm, "lfm", "", "lastfm api key")
+	flag.StringVar(&lastfm, "lfm", os.Getenv("LASTFM_APIKEY"), "lastfm api key")
 	flag.Parse()
 }
 

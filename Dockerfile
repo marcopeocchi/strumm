@@ -16,7 +16,7 @@ RUN pnpm run build
 # -----------------------------------------------------------------------------
 
 # Go --------------------------------------------------------------------------
-FROM golang AS build
+FROM golang:alpine AS build
 
 COPY . /usr/src/strumm
 COPY --from=ui /usr/src/strumm/cmd/web/ui/dist /usr/src/strumm/cmd/web/ui/dist
@@ -35,9 +35,10 @@ WORKDIR /app
 
 COPY --from=build /usr/src/strumm/strumm /app
 COPY --from=build /usr/src/strumm/dbseed /app
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 ENV JWT_SECRET=secretW
 ENV LASTFM_APIKEY=apikey
 
 EXPOSE 8080
-ENTRYPOINT [ "./strumm", "-c", "/cache/images", "-d", "/cache/data.db", "-r", "/music", "-lfm", "${LASTFM_APIKEY}" ]
+ENTRYPOINT [ "./strumm", "-c", "/cache/images", "-d", "/cache/data.db", "-r", "/music"]
