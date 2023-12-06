@@ -18,11 +18,12 @@ var (
 	handlerOnce    sync.Once
 )
 
-func ProvideRepository(client *http.Client, cache *cache.Cache) *Repository {
+func ProvideRepository(client *http.Client, cache *cache.Cache, apikey string) *Repository {
 	repositoryOnce.Do(func() {
 		repository = &Repository{
 			client: client,
 			cache:  cache,
+			apikey: apikey,
 		}
 	})
 	return repository

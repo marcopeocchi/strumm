@@ -7,11 +7,11 @@ import (
 	"github.com/patrickmn/go-cache"
 )
 
-func Container(client *http.Client, cache *cache.Cache) (domain.MetadataHandler, domain.MetadataService) {
+func Container(client *http.Client, cache *cache.Cache, apikey string) domain.MetadataHandler {
 	var (
-		repository = ProvideRepository(client, cache)
+		repository = ProvideRepository(client, cache, apikey)
 		service    = ProvideService(repository)
 		handler    = ProvideHandler(service)
 	)
-	return handler, service
+	return handler
 }

@@ -7,19 +7,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 
 	"github.com/marcopeocchi/strumm/internal/domain"
 	"github.com/patrickmn/go-cache"
 )
 
-var (
-	LASTFM_APIKEY = os.Getenv("LASTFM_APIKEY")
-)
-
 type Repository struct {
 	client *http.Client
 	cache  *cache.Cache
+	apikey string
 }
 
 func (r *Repository) GetDeezerMetadata(ctx context.Context, artist string) (domain.DeezerAPIResponse, error) {
@@ -55,7 +51,7 @@ func (r *Repository) GetDeezerMetadata(ctx context.Context, artist string) (doma
 }
 
 func (r *Repository) GetLastFMScrobble(ctx context.Context, artist string) (domain.LastFMScrobble, error) {
-	url := buildQueryLastFM(artist)
+	url := r.buildQueryLastFM(artist)
 
 	cached, found := r.cache.Get(url)
 	if found {
@@ -93,10 +89,10 @@ func buildQueryDeezer(artist string) string {
 	)
 }
 
-func buildQueryLastFM(artist string) string {
+func (r *Repository) buildQueryLastFM(artist string) string {
 	return fmt.Sprintf(
 		"https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&api_key=%s&format=json",
 		url.QueryEscape(artist),
-		LASTFM_APIKEY,
+		r.apikey,
 	)
 }

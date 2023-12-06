@@ -36,6 +36,7 @@ var (
 	root   string
 	static string
 	dbpath string
+	lastfm string
 )
 
 func init() {
@@ -43,6 +44,8 @@ func init() {
 	flag.StringVar(&root, "r", ".", "path of music directory")
 	flag.StringVar(&static, "c", ".cache", "path of cache directory")
 	flag.StringVar(&dbpath, "d", "data.db", "path of database")
+	flag.StringVar(&dbpath, "d", "data.db", "path of database")
+	flag.StringVar(&lastfm, "lfm", "", "lastfm api key")
 	flag.Parse()
 }
 
@@ -101,10 +104,12 @@ func main() {
 	r.Use(middleware.Logger)
 
 	// Dependency Injection containers
-	albumContainer := album.Container(db)
-	trackContainer := track.Container(db)
-	streamContainer := stream.Container(db)
-	metadataContainer, _ := metadata.Container(httpClient, sharedCache)
+	var (
+		albumContainer    = album.Container(db)
+		trackContainer    = track.Container(db)
+		streamContainer   = stream.Container(db)
+		metadataContainer = metadata.Container(httpClient, sharedCache, lastfm)
+	)
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
