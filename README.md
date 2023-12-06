@@ -8,7 +8,10 @@ docker run -d \
   -p 8080:8080 \
   -v /music/directory:/music \
   -v /config/directory:/config \
+  -e LASTFM_APIKEY=yourapikey \
   marcobaobao/strumm
+
+# an api key is obtainable at https://www.last.fm/api/accounts
 
 # optionally run the library scanner (the first time is auto-invoked) (also upon a change in the music directory)
 docker exec -it strumm /app/dbseed -r /music -d /cache/data.db -c /cache/images
