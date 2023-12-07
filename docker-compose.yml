@@ -2,6 +2,8 @@ strumm:
   image: marcobaobao/strumm
   container_name: strumm
   restart: unless-stopped
+  command:
+    - "--auth"
   ports:
     - "8084:8080"
   volumes:
