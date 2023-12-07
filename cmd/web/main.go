@@ -47,7 +47,7 @@ func init() {
 	flag.StringVar(&static, "c", ".cache", "path of cache directory")
 	flag.StringVar(&dbpath, "d", "data.db", "path of database")
 	flag.StringVar(&lastfm, "lfm", os.Getenv("LASTFM_APIKEY"), "lastfm api key")
-	flag.BoolVar(&authEnabled, "auth", true, "enable authentication")
+	flag.BoolVar(&authEnabled, "auth", false, "enable authentication")
 	flag.Parse()
 }
 
@@ -58,6 +58,7 @@ func main() {
 	}
 
 	seed.InitUser(db)
+	go seed.Scan(db, root, static)
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -88,8 +89,6 @@ func main() {
 	if err := watcher.Add(root); err != nil {
 		log.Fatalln(err)
 	}
-
-	go seed.Scan(db, root, static)
 
 	var (
 		httpClient  = http.DefaultClient
