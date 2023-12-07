@@ -11,6 +11,21 @@ docker run -d \
   -e LASTFM_APIKEY=yourapikey \
   marcobaobao/strumm
 
+# with authentication enabled
+# default credentials:
+# username: admin
+# password: adminadminadmin
+# for security reasons change it in the 'Server settings' section
+
+docker run -d \
+  --name strumm \
+  -p 8080:8080 \
+  -v /music/directory:/music \
+  -v /config/directory:/config \
+  -e LASTFM_APIKEY=yourapikey \
+  marcobaobao/strumm --auth
+
+# Regarding lastFM
 # an api key is obtainable at https://www.last.fm/api/accounts
 
 # optionally run the library scanner (the first time is auto-invoked) (also upon a change in the music directory)

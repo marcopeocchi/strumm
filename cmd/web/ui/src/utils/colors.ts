@@ -9,8 +9,6 @@ export const isColorTooDark = (hexValue: string, lumaTreshold = 60) => {
 
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b
 
-  console.log(luma, lumaTreshold, luma < lumaTreshold)
-
   return luma < lumaTreshold || luma > 236
 }
 

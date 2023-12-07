@@ -3,7 +3,7 @@ import { createHashRouter } from 'react-router-dom'
 import Layout from './Layout'
 import Loader from './components/Loader'
 import Home from './views/Home'
-import Login from './views/Login'
+
 
 const Album = lazy(() => import('./views/Album'))
 const Albums = lazy(() => import('./views/Albums'))
@@ -12,7 +12,10 @@ const Artists = lazy(() => import('./views/Artists'))
 const Songs = lazy(() => import('./views/Songs'))
 const Search = lazy(() => import('./views/Search'))
 
-const Settings = lazy(() => import('./views/Settings'))
+const Login = lazy(() => import('./views/Login'))
+
+const ClientSettings = lazy(() => import('./views/ClientSettings'))
+const ServerSettings = lazy(() => import('./views/ServerSettings'))
 
 export const router = createHashRouter([
   {
@@ -67,7 +70,15 @@ export const router = createHashRouter([
         path: '/settings',
         element: (
           <Suspense fallback={<Loader />}>
-            <Settings />
+            <ClientSettings />
+          </Suspense>
+        )
+      },
+      {
+        path: '/serversettings',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <ServerSettings />
           </Suspense>
         )
       },

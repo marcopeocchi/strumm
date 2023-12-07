@@ -121,7 +121,7 @@ func InitUser(db *gorm.DB) error {
 		return err
 	}
 
-	p := uuid.NewString()
+	p := "adminadminadmin"
 	hashedP, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 	if err != nil {
 		return err

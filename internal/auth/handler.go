@@ -31,11 +31,6 @@ func (h *Handler) Login() http.HandlerFunc {
 			return
 		}
 
-		if err := json.NewEncoder(w).Encode(user); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"username":  user.Username,
 			"role":      user.Role,
@@ -49,23 +44,27 @@ func (h *Handler) Login() http.HandlerFunc {
 		}
 
 		cookie := http.Cookie{
-			Name:     "jwt",
+			Name:     "strumm-jwt",
 			HttpOnly: true,
 			Secure:   false,
 			Expires:  time.Now().Add(time.Hour * 24 * 30),
 			Value:    tokenString,
 			Path:     "/",
 		}
+
 		http.SetCookie(w, &cookie)
 
-		w.Write([]byte(tokenString))
+		if err := json.NewEncoder(w).Encode(user); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
 func (h *Handler) Logout() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{
-			Name:     "jwt",
+			Name:     "strumm-jwt",
 			HttpOnly: true,
 			Expires:  time.Now(),
 			Value:    "",

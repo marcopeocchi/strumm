@@ -4,6 +4,6 @@ export function getHTTPEndpoint() {
     : ''
 }
 
-export function hostFmt(strings: TemplateStringsArray) {
-  return `${getHTTPEndpoint()}${strings[0]}`
+export function hostFmt(strings: TemplateStringsArray, ...rest: any[]) {
+  return `${getHTTPEndpoint()}${strings[0]}${rest.reduce((prev, curr) => `${prev}${curr}`, '')}`
 }

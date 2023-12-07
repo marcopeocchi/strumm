@@ -23,6 +23,7 @@ import (
 	"github.com/marcopeocchi/strumm/internal/middlewares"
 	"github.com/marcopeocchi/strumm/internal/stream"
 	"github.com/marcopeocchi/strumm/internal/track"
+	"github.com/marcopeocchi/strumm/internal/user"
 	"github.com/marcopeocchi/strumm/pkg/seed"
 	_ "github.com/ncruces/go-sqlite3/embed"
 	"github.com/ncruces/go-sqlite3/gormlite"
@@ -112,16 +113,18 @@ func main() {
 		albumContainer    = album.Container(db)
 		trackContainer    = track.Container(db)
 		streamContainer   = stream.Container(db)
+		userContainer     = user.NewUserHandler(db)
 		metadataContainer = metadata.Container(httpClient, sharedCache, lastfm)
 	)
 
 	r.Route("/api", func(r chi.Router) {
+		if authEnabled {
+			r.Use(middlewares.Authenticated)
+		}
+
 		r.Get("/stream/{id}", streamContainer.StreamFromStorage())
 
 		r.Route("/album", func(r chi.Router) {
-			if authEnabled {
-				r.Use(middlewares.Authenticated)
-			}
 			r.Get("/all", albumContainer.FindAllAlbums())
 			r.Get("/latest", albumContainer.Latest())
 			r.Get("/random", albumContainer.RandomAlbum())
@@ -144,6 +147,10 @@ func main() {
 
 		r.Route("/metadata", func(r chi.Router) {
 			r.Get("/{name}", metadataContainer.GetAlbumMetadata())
+		})
+
+		r.Route("/user", func(r chi.Router) {
+			r.Patch("/password", userContainer.ChangePassword())
 		})
 	})
 

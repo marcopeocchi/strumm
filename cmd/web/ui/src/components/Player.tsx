@@ -1,6 +1,6 @@
 
 import { Mic2 } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
@@ -11,23 +11,26 @@ import {
   volumePercentState,
   volumeState
 } from '../atoms/player'
+import { showLyricsState } from '../atoms/ui'
 import { ellipsis } from '../utils/strings'
 import { getHTTPEndpoint } from '../utils/url'
 import RemoteImage from './Image/RemoteImage'
 import MiniPlayer from './MiniPlayer'
-import { showLyricsState } from '../atoms/ui'
+import { BehaviorSubject } from 'rxjs'
 
 export default function Player() {
   const [showLyrics, setShowLyrics] = useRecoilState(showLyricsState)
   const [, setCurrentIndex] = useRecoilState(currentIndexState)
   const [volume, setVolume] = useRecoilState(volumeState)
   const [queue, setQueue] = useRecoilState(playingQueueState)
-  const [metadata] = useRecoilState(albumMetadataState)
 
+  const metadata = useRecoilValue(albumMetadataState)
   const isPlaying = useRecoilValue(isPlayingState)
   const volumePercent = useRecoilValue(volumePercentState)
 
   const playerRef = useRef<HTMLAudioElement>(null)
+
+  const currentTime$ = useMemo(() => new BehaviorSubject(0), [])
 
   const [seek, setSeek] = useState(0)
   const [index, setIndex] = useState(0)
@@ -87,8 +90,9 @@ export default function Player() {
       if (playerRef.current) {
         const seek = playerRef.current.currentTime / playerRef.current.duration
         setSeek(Math.ceil(seek * 100))
+        currentTime$.next(playerRef.current.currentTime)
       }
-    }, 250)
+    }, 500)
     return () => clearInterval(interval)
   }, [metadata.id])
 
@@ -148,7 +152,7 @@ export default function Player() {
         onPlayToggle={togglePlayPause}
         seekValue={seek}
         paused={playerRef.current?.paused}
-        currentTime={playerRef.current?.currentTime}
+        currentTime$={currentTime$}
         duration={playerRef.current?.duration}
       />
       <div />

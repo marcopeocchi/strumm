@@ -8,6 +8,8 @@ import {
   SkipForward
 } from 'lucide-react'
 import { formatMMSS } from '../utils/time'
+import { Observable } from 'rxjs'
+import { useEffect, useState } from 'react'
 
 type Props = {
   onSeek: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -17,13 +19,20 @@ type Props = {
   onFastForward: () => void
   onRewind: () => void
   duration?: number
-  currentTime?: number
+  currentTime$: Observable<number>
   seekValue: number
   paused?: boolean
 }
 
 const MiniPlayer: React.FC<Props> = (props) => {
-  if (!props.currentTime || !props.duration) {
+  const [currentTime, setCurrentTime] = useState(0)
+
+  useEffect(() => {
+    const sub = props.currentTime$.subscribe((v) => setCurrentTime(v))
+    return () => sub.unsubscribe()
+  }, [props.currentTime$])
+
+  if (!currentTime || !props.duration) {
     return <div className='animate-spin'>
       <LoaderIcon />
     </div>
@@ -33,7 +42,7 @@ const MiniPlayer: React.FC<Props> = (props) => {
     <div className="flex flex-col gap-2">
       <div className="flex justify-between gap-1.5">
         <div className="text-sm">
-          {formatMMSS(props.currentTime)}
+          {formatMMSS(currentTime)}
         </div>
         <input
           type="range"

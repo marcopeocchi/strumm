@@ -13,7 +13,7 @@ const Settings: React.FC = () => {
   return (
     <div className="px-8 pt-8">
       <h1 className="font-semibold text-2xl">
-        Settings
+        Client Settings
       </h1>
       <div className='border-b pt-4 dark:border-neutral-700' />
       <div className="pt-6 grid grid-cols-4 gap-1.5">
@@ -41,7 +41,7 @@ const Settings: React.FC = () => {
           Version
         </div>
         <div className="col-span-3">
-          v0.9
+          v1.0.5
         </div>
       </div>
     </div>

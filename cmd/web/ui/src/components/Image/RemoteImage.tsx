@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import useFetch from '../../hooks/useFetch'
 import { Album } from '../../types'
-import { getHTTPEndpoint } from '../../utils/url'
+import { hostFmt } from '../../utils/url'
 import Image from './Image'
 
 type Props = Omit<React.ComponentProps<typeof Image>, 'src'> & {
@@ -8,20 +8,9 @@ type Props = Omit<React.ComponentProps<typeof Image>, 'src'> & {
 }
 
 const RemoteImage: React.FC<Props> = (props) => {
-  const [src, setSrc] = useState<string>()
+  const { data } = useFetch<Album>(hostFmt`/api/album/id/${props.albumId}`)
 
-  const fetcher = async (url: string) => {
-    const res = await fetch(url)
-    const data: Album = await res.json()
-    return `${getHTTPEndpoint()}/static/img/${data.picture}`
-  }
-
-  useEffect(() => {
-    fetcher(`${getHTTPEndpoint()}/api/album/id/${props.albumId}`)
-      .then(setSrc)
-  }, [props.albumId])
-
-  if (!src || !props.albumId) {
+  if (!data || !props.albumId) {
     return null
   }
 
@@ -31,7 +20,7 @@ const RemoteImage: React.FC<Props> = (props) => {
       blurhash={props.blurhash}
       rounded={props.rounded}
       size={props.size}
-      src={src}
+      src={hostFmt`/static/img/${data.picture}`}
     />
   )
 }

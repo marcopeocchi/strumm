@@ -73,11 +73,13 @@ export default function Layout() {
                   Client settings
                 </Sidebar.Action>
               </Link>
-              <Sidebar.Action
-                icon={<ServerCog size={16} />}
-              >
-                Server settings
-              </Sidebar.Action>
+              <Link to="/serversettings">
+                <Sidebar.Action
+                  icon={<ServerCog size={16} />}
+                >
+                  Server settings
+                </Sidebar.Action>
+              </Link>
             </Sidebar.Section>
             <Credits className='p-6 h-full flex items-end' />
           </Sidebar.Container>

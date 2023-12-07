@@ -15,7 +15,7 @@ const Credits: React.FC<Props> = ({ className }) => {
           flex items-center 
           underline"
       >
-        <Github size={16} /> github.com/marcopeocchi/strumm
+        <Github size={16} /> strumm
       </a>
     </div>
   )

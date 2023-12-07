@@ -20,7 +20,7 @@ func Authenticated(next http.Handler) http.Handler {
 			return
 		}
 
-		cookie, err := r.Cookie("jwt")
+		cookie, err := r.Cookie("strumm-jwt")
 
 		if err != nil {
 			http.Error(w, "invalid token", http.StatusBadRequest)

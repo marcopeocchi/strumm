@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import SearchButton from './SearchButton'
 import ThemeToggler from './ThemeToggler'
+import LogoutButton from './LogoutButton'
 
 export default function Navbar() {
   return (
@@ -22,7 +23,8 @@ export default function Navbar() {
 
       <div className='flex gap-1'>
         <SearchButton />
-        <ThemeToggler className='mr-2' />
+        <ThemeToggler />
+        <LogoutButton className='mr-2' />
       </div>
     </div>
   )
